@@ -22,6 +22,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/state-in-constructor': [0, 'always'],
     'react/jsx-props-no-spreading': 'off',
+    "react/destructuring-assignment": [1, "always", { "ignoreClassFields": true }],
   },
   settings: {
     'import/resolver': {

@@ -1,11 +1,10 @@
-import React from 'react';
+import React , {Fragment} from 'react';
 
 import classes from './Modal.css';
-import Aux from '../../../hoc/Aux';
 import Backdrop from '../Backdrop/Backdrop';
 
 const modal = ( props ) => (
-    <Aux>
+    <Fragment>
         <Backdrop show={props.show} clicked={props.modalClosed} />
         <div
             className={classes.Modal}
@@ -15,7 +14,7 @@ const modal = ( props ) => (
             }}>
             {props.children}
         </div>
-    </Aux>
+    </Fragment>
 );
 
 export default modal;
