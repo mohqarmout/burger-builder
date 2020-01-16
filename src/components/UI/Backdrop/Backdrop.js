@@ -1,9 +1,17 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
-import classes from './Backdrop.css';
+import classes from './Backdrop.module.css';
 
-const backdrop = (props) => (
-    props.show ? <div className={classes.Backdrop} onClick={props.clicked}></div> : null
-);
+const backdrop = ({ show, clicked }) =>
+  show ? (
+    <div
+      className={classes.Backdrop}
+      role="button"
+      tabIndex={0}
+      onClick={clicked}
+      onKeyPress={clicked}
+    />
+  ) : null;
 
 export default backdrop;
