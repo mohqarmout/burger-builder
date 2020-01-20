@@ -1,9 +1,11 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
+import axios from 'axios-order';
 import Modal from 'components/UI/Modal/Modal';
 import OrderSummary from 'components/Burger/OrderSummary/OrderSummary';
 import BuildControls from 'components/Burger/BuildControls/BuildControls';
 import Burger from 'components/Burger/Burger';
+import Spinner from 'components/UI/Spinner/Spinner';
 
 const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -23,12 +25,33 @@ class BurgerBuilder extends Component {
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
+    loading: false,
   };
 
-  purchaseContinueHandler = () => {
-    // for now ! ==> MVP
-    // eslint-disable-next-line no-alert
-    alert('You continue!');
+  purchaseContinueHandler = async () => {
+    this.setState({ loading: true });
+    const orders = {
+      ingredinets: this.state.ingredients,
+      price: this.state.totalPrice,
+      customer: {
+        name: 'Mohammed-Q96',
+        address: {
+          street: 'Al-nacer',
+          zipCode: '970',
+          city: 'gaza',
+        },
+      },
+      email: 'mhmmade@gmail.com',
+      deliveryMethod: 'fastest',
+    };
+    try {
+      await axios.post('orders.json', {
+        ...orders,
+      });
+      this.setState({ loading: false, purchasing: false });
+    } catch (err) {
+      this.setState({ loading: false, purchasing: false });
+    }
   };
 
   purchaseCancelHandler = () => {
@@ -80,26 +103,34 @@ class BurgerBuilder extends Component {
   };
 
   render() {
+    const { purchasing, ingredients, totalPrice, purchasable } = this.state;
+
+    let orderSummary = (
+      <OrderSummary
+        ingredients={ingredients}
+        price={totalPrice}
+        purchaseCancelled={this.purchaseCancelHandler}
+        purchaseContinued={this.purchaseContinueHandler}
+      />
+    );
+
+    if (this.state.loading) {
+      orderSummary = <Spinner />; // override the orderSummary
+    }
+
     const disabledInfo = {
       ...this.state.ingredients,
     };
-
     for (const key in disabledInfo) {
       if ({}.hasOwnProperty.call(disabledInfo, key)) {
         disabledInfo[key] = disabledInfo[key] <= 0;
       }
     }
 
-    const { purchasing, ingredients, totalPrice, purchasable } = this.state;
     return (
       <>
         <Modal show={purchasing} modalClosed={this.purchaseCancelHandler}>
-          <OrderSummary
-            ingredients={ingredients}
-            price={totalPrice}
-            purchaseCancelled={this.purchaseCancelHandler}
-            purchaseContinued={this.purchaseContinueHandler}
-          />
+          {orderSummary}
         </Modal>
         <Burger ingredients={ingredients} />
         <BuildControls
