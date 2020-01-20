@@ -2,13 +2,6 @@ import React from 'react';
 
 import Button from '../../UI/Button/Button';
 
-// ingredients: {
-//     salad: 0,
-//     bacon: 0,
-//     cheese: 0,
-//     meat: 0,
-//   },
-
 const orderSummary = ({
   ingredients,
   price,
