@@ -9,19 +9,25 @@ const withErrorHandler = (WarppedComponent, axios) =>
     };
 
     componentDidMount() {
-      axios.interceptors.request.use(req => {
-        this.setState({
-          error: null,
-        });
-        return req;
-      }, null);
+      axios.interceptors.request.use(
+        req => {
+          this.setState({
+            error: null,
+          });
+          return req;
+        },
+        err => err,
+      );
 
-      axios.interceptors.response.use(null, error => {
-        this.setState({
-          error,
-        });
-        return Promise.reject(error);
-      });
+      axios.interceptors.response.use(
+        res => res,
+        error => {
+          this.setState({
+            error,
+          });
+          return Promise.reject(error);
+        },
+      );
     }
 
     errorHandler = () => {
