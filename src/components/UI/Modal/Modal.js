@@ -13,13 +13,15 @@ const modal = ({ show, modalClosed, children }) => {
 
   return (
     <>
-      <Backdrop show={show} clicked={modalClosed} />
-      <div className={attachedClasses.join(' ')}>{children}</div>
+      <Backdrop show={show} clicked={modalClosed} /> {/* also a div ? null */}
+      {/* It will be above the screen  */}
+      <div className={attachedClasses.join(' ')}>{children}</div>{' '}
     </>
   );
 };
 
 export default memo(modal);
+
 // another way to do so  -_-
 //
 // style={{

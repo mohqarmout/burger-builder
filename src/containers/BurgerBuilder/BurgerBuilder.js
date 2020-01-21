@@ -1,6 +1,7 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
 import axios from 'axios-order';
+import withErrorHandler from 'HOC/withErrorHandler';
 import Modal from 'components/UI/Modal/Modal';
 import OrderSummary from 'components/Burger/OrderSummary/OrderSummary';
 import BuildControls from 'components/Burger/BuildControls/BuildControls';
@@ -146,4 +147,4 @@ class BurgerBuilder extends Component {
   }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
