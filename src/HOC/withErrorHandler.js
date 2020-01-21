@@ -14,7 +14,7 @@ const withErrorHandler = (WarppedComponent, axios) =>
           error: null,
         });
         return req;
-      });
+      }, null);
 
       axios.interceptors.response.use(null, error => {
         this.setState({
@@ -35,7 +35,7 @@ const withErrorHandler = (WarppedComponent, axios) =>
       return (
         <>
           <Modal modalClosed={this.errorHandler} show={error}>
-            {error.message}
+            {error ? error.message : null}
           </Modal>
           <WarppedComponent {...this.props} />
         </>
