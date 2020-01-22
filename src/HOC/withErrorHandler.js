@@ -4,11 +4,16 @@ import Modal from 'components/UI/Modal/Modal';
 
 const withErrorHandler = (WarppedComponent, axios) =>
   class ErrorHoc extends Component {
+    constructor(props) {
+      super(props);
+      this.setinterceptors();
+    }
+
     state = {
       error: false,
     };
 
-    componentDidMount() {
+    setinterceptors = () => {
       axios.interceptors.request.use(
         req => {
           this.setState({
@@ -16,7 +21,12 @@ const withErrorHandler = (WarppedComponent, axios) =>
           });
           return req;
         },
-        err => err,
+        error => {
+          this.setState({
+            error,
+          });
+          return Promise.reject(error);
+        },
       );
 
       axios.interceptors.response.use(
@@ -28,7 +38,7 @@ const withErrorHandler = (WarppedComponent, axios) =>
           return Promise.reject(error);
         },
       );
-    }
+    };
 
     errorHandler = () => {
       this.setState({
