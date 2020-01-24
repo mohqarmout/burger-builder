@@ -27,10 +27,12 @@ class BurgerBuilder extends Component {
 
   async componentDidMount() {
     try {
-      const { data } = await axios.get('ingredient.json');
-      this.setState({
-        ingredients: data,
-      });
+      const { data, status } = await axios.get('ingredient.json');
+      if (status === 200 && {}.hasOwnProperty.call(data, 'bacon')) {
+        this.setState({
+          ingredients: data,
+        });
+      }
     } catch (error) {
       this.setState({ error: true });
     }

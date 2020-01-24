@@ -4,17 +4,16 @@ import Modal from 'components/UI/Modal/Modal';
 
 const withErrorHandler = (WarppedComponent, axios) =>
   class ErrorHoc extends Component {
+    // for education purpose
+    // eslint-disable-next-line no-useless-constructor
     constructor(props) {
       super(props);
-      this.setinterceptors();
+      // this.setinterceptors(); // Hmmm this is new mate,to replace componentWillMount
     }
 
     state = {
       error: false,
-    };
-
-    setinterceptors = () => {
-      axios.interceptors.request.use(
+      axiosRequest: axios.interceptors.request.use(
         req => {
           this.setState({
             error: null,
@@ -27,9 +26,8 @@ const withErrorHandler = (WarppedComponent, axios) =>
           });
           return Promise.reject(error);
         },
-      );
-
-      axios.interceptors.response.use(
+      ),
+      axiosResponse: axios.interceptors.response.use(
         res => res,
         error => {
           this.setState({
@@ -37,7 +35,39 @@ const withErrorHandler = (WarppedComponent, axios) =>
           });
           return Promise.reject(error);
         },
-      );
+      ),
+    };
+
+    componentWillUnmount() {
+      const { axiosRequest, axiosResponse } = this.state;
+      axios.interceptors.request.eject(axiosRequest);
+      axios.interceptors.response.eject(axiosResponse);
+    }
+
+    setinterceptors = () => {
+      // this.axiosRequest = axios.interceptors.request.use(
+      //   req => {
+      //     this.setState({
+      //       error: null,
+      //     });
+      //     return req;
+      //   },
+      //   error => {
+      //     this.setState({
+      //       error,
+      //     });
+      //     return Promise.reject(error);
+      //   },
+      // );
+      // this.axiosResponse = axios.interceptors.response.use(
+      //   res => res,
+      //   error => {
+      //     this.setState({
+      //       error,
+      //     });
+      //     return Promise.reject(error);
+      //   },
+      // );
     };
 
     errorHandler = () => {
