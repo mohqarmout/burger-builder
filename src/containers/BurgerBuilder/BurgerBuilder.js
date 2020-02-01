@@ -39,29 +39,32 @@ class BurgerBuilder extends Component {
   }
 
   purchaseContinueHandler = async () => {
-    this.setState({ loading: true });
-    const orders = {
-      ingredinets: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Mohammed-Q96',
-        address: {
-          street: 'Al-nacer',
-          zipCode: '970',
-          city: 'gaza',
-        },
-      },
-      email: 'mhmmade@gmail.com',
-      deliveryMethod: 'fastest',
-    };
-    try {
-      await axios.post('orders.json', {
-        ...orders,
-      });
-      this.setState({ loading: false, purchasing: false });
-    } catch (err) {
-      this.setState({ loading: false, purchasing: false });
-    }
+    const { push } = this.props.history;
+    push('/checkout');
+
+    // this.setState({ loading: true });
+    // const orders = {
+    //   ingredinets: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: 'Mohammed-Q96',
+    //     address: {
+    //       street: 'Al-nacer',
+    //       zipCode: '970',
+    //       city: 'gaza',
+    //     },
+    //   },
+    //   email: 'mhmmade@gmail.com',
+    //   deliveryMethod: 'fastest',
+    // };
+    // try {
+    //   await axios.post('orders.json', {
+    //     ...orders,
+    //   });
+    //   this.setState({ loading: false, purchasing: false });
+    // } catch (err) {
+    //   this.setState({ loading: false, purchasing: false });
+    // }
   };
 
   purchaseCancelHandler = () => {
@@ -134,8 +137,8 @@ class BurgerBuilder extends Component {
         <OrderSummary
           ingredients={ingredients}
           price={totalPrice}
-          purchaseCancelled={this.purchaseCancelHandler}
           purchaseContinued={this.purchaseContinueHandler}
+          purchaseCancelled={this.purchaseCancelHandler}
         />
       );
       burger = (
