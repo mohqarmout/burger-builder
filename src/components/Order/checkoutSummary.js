@@ -3,7 +3,7 @@ import Burger from 'components/Burger/Burger';
 import Button from '../UI/Button/Button';
 import classes from './CheckoutSummary.module.css';
 
-const checkoutSummary = ({ ingredients }) => {
+const checkoutSummary = ({ ingredients, checkoutCancel, checkoutContinue }) => {
   return (
     <div className={classes.CheckoutSummary}>
       <h1>We hope it taste well!</h1>
@@ -15,10 +15,10 @@ const checkoutSummary = ({ ingredients }) => {
       >
         <Burger ingredients={ingredients} />
       </div>
-      <Button clicked btnType="Danger">
+      <Button clicked={checkoutCancel} btnType="Danger">
         Cancel
       </Button>
-      <Button clicked btnType="Success">
+      <Button clicked={checkoutContinue} btnType="Success">
         Continue
       </Button>
     </div>
