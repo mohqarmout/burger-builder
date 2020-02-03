@@ -17,7 +17,7 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: null,
+    ingredients: {},
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
@@ -28,6 +28,7 @@ class BurgerBuilder extends Component {
   async componentDidMount() {
     try {
       const { data, status } = await axios.get('ingredient.json');
+
       if (status === 200 && {}.hasOwnProperty.call(data, 'bacon')) {
         this.setState({
           ingredients: data,
@@ -36,8 +37,13 @@ class BurgerBuilder extends Component {
     } catch (error) {
       this.setState({ error: true });
     }
+  }
+
+  componentDidUpdate(_, { ingredients: prevIngredients }) {
     const { ingredients } = this.state;
-    this.updatePurchaseState(ingredients);
+    if (ingredients !== prevIngredients) {
+      this.updatePurchaseState(ingredients);
+    }
   }
 
   purchaseContinueHandler = async () => {
@@ -92,6 +98,7 @@ class BurgerBuilder extends Component {
   };
 
   updatePurchaseState = ingredients => {
+    console.log(ingredients);
     const sum = Object.keys(ingredients)
       .map(igKey => {
         return ingredients[igKey];
@@ -111,7 +118,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice + priceAddition;
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
-    this.updatePurchaseState(updatedIngredients); // update
+    this.updatePurchaseState(updatedIngredients);
   };
 
   removeIngredientHandler = type => {
@@ -128,7 +135,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice - priceDeduction;
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
-    this.updatePurchaseState(updatedIngredients); // update
+    this.updatePurchaseState(updatedIngredients);
   };
 
   render() {
@@ -148,7 +155,7 @@ class BurgerBuilder extends Component {
       ...ingredients,
     };
 
-    if (ingredients) {
+    if (Object.keys(ingredients).length) {
       orderSummary = (
         <OrderSummary
           ingredients={ingredients}
