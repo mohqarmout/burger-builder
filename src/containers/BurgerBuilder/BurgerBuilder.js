@@ -36,6 +36,8 @@ class BurgerBuilder extends Component {
     } catch (error) {
       this.setState({ error: true });
     }
+    const { ingredients } = this.state;
+    this.updatePurchaseState(ingredients);
   }
 
   purchaseContinueHandler = async () => {
@@ -55,6 +57,7 @@ class BurgerBuilder extends Component {
     });
 
     // ===> just for reference !!
+
     // this.setState({ loading: true });
     // const orders = {
     //   ingredinets: this.state.ingredients,
@@ -108,7 +111,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice + priceAddition;
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
-    this.updatePurchaseState(updatedIngredients);
+    this.updatePurchaseState(updatedIngredients); // update
   };
 
   removeIngredientHandler = type => {
@@ -125,7 +128,7 @@ class BurgerBuilder extends Component {
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice - priceDeduction;
     this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
-    this.updatePurchaseState(updatedIngredients);
+    this.updatePurchaseState(updatedIngredients); // update
   };
 
   render() {
