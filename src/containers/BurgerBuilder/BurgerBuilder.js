@@ -46,7 +46,7 @@ class BurgerBuilder extends Component {
     }
   }
 
-  purchaseContinueHandler = async () => {
+  purchaseContinueHandler = () => {
     const { push } = this.props.history;
     const { ingredients } = this.state;
 
@@ -98,7 +98,6 @@ class BurgerBuilder extends Component {
   };
 
   updatePurchaseState = ingredients => {
-    console.log(ingredients);
     const sum = Object.keys(ingredients)
       .map(igKey => {
         return ingredients[igKey];
