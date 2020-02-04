@@ -2,6 +2,7 @@
 // I guess eslint is not smart enough
 
 import React, { Component } from 'react';
+import axios from 'axios-order';
 import Button from 'components/UI/Button/Button';
 import classes from './ContactData.module.css';
 
@@ -13,11 +14,35 @@ class ContactData extends Component {
       street: '',
       postalCode: '',
     },
+    loading: false,
   };
 
-  handleSubmit = event => {
+  orderHandler = async event => {
     event.preventDefault();
-    // Do something useful
+    const { ingredients, totalPrice } = this.props;
+    this.setState({ loading: true });
+    const orders = {
+      ingredinets: ingredients,
+      price: totalPrice,
+      customer: {
+        name: 'Mohammed-Q96',
+        address: {
+          street: 'Al-nacer',
+          zipCode: '970',
+          city: 'gaza',
+        },
+      },
+      email: 'mhmmade@gmail.com',
+      deliveryMethod: 'fastest',
+    };
+    try {
+      await axios.post('orders.json', {
+        ...orders,
+      });
+      this.setState({ loading: false });
+    } catch (err) {
+      this.setState({ loading: false });
+    }
   };
 
   handleInputChange = ({ target: { name, value } }) => {
@@ -69,7 +94,7 @@ class ContactData extends Component {
             name="postalCode"
             placeholder="Your postalCode"
           />
-          <Button btnType="Success" clicked={this.handleSubmit}>
+          <Button btnType="Success" clicked={this.orderHandler}>
             ORDER
           </Button>
         </form>
