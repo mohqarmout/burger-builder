@@ -1,15 +1,17 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Checkout from 'containers/BurgerBuilder/Checkout/checkout';
+import Orders from 'containers/Orders/Orders';
 import Layout from './components/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
-// consder there is now state ?
+
 const App = () => {
   return (
     <div>
       <Layout>
         <Switch>
           <Route path="/checkout" component={Checkout} />
+          <Route path="/orders" component={Orders} />
           <Route exact path="/" component={BurgerBuilder} />
           <Redirect to="/" />
         </Switch>
