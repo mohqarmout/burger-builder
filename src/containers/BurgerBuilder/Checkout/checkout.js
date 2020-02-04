@@ -4,28 +4,32 @@ import CheckoutSummary from 'components/Order/checkoutSummary';
 import ContactData from './ContacrData/ContactData';
 
 class Checkout extends Component {
-  state = {
-    ingredients: {},
-    totalPrice: null,
-  };
+  // we need old school method ==> becouse of the initaly null ingredients
+  constructor(props) {
+    super(props);
+    this.initialConstructor();
+  }
 
-  componentDidMount() {
+  // you can use componentWillMount but it is a leagacy method
+  initialConstructor = () => {
     const { search } = this.props.history.location;
     const urlParams = new URLSearchParams(search);
     const ingredients = {};
+    let totalPrice = 0;
     for (const [key, value] of urlParams.entries()) {
       if (key === 'totalPrice') {
-        this.setState({
-          totalPrice: value,
-        });
+        totalPrice = Number(value).toFixed(2);
       } else {
         ingredients[key] = +value;
       }
     }
-    this.setState({
+
+    // eslint-disable-next-line react/no-direct-mutation-state
+    this.state = {
+      totalPrice,
       ingredients,
-    });
-  }
+    };
+  };
 
   checkoutCancelHandler = () => {
     const { goBack } = this.props.history;
