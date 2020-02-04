@@ -11,7 +11,7 @@ const App = () => {
         <Switch>
           <Route path="/checkout" component={Checkout} />
           <Route exact path="/" component={BurgerBuilder} />
-          {/* <Redirect to="/" /> */}
+          <Redirect to="/" />
         </Switch>
       </Layout>
     </div>
