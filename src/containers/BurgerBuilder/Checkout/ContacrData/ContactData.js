@@ -2,6 +2,7 @@
 // I guess eslint is not smart enough
 
 import React, { Component } from 'react';
+import Spinner from 'components/UI/Spinner/Spinner';
 import axios from 'axios-order';
 import Button from 'components/UI/Button/Button';
 import classes from './ContactData.module.css';
@@ -19,6 +20,7 @@ class ContactData extends Component {
 
   orderHandler = async event => {
     event.preventDefault();
+    const { push } = this.props.history;
     const { ingredients, totalPrice } = this.props;
     this.setState({ loading: true });
     const orders = {
@@ -39,6 +41,7 @@ class ContactData extends Component {
       await axios.post('orders.json', {
         ...orders,
       });
+      push('/');
       this.setState({ loading: false });
     } catch (err) {
       this.setState({ loading: false });
@@ -62,42 +65,49 @@ class ContactData extends Component {
   };
 
   render() {
+    const { loading } = this.state;
+    let form = (
+      <form onSubmit={this.handleSubmit}>
+        <input
+          className={classes.Input}
+          onChange={this.handleInputChange}
+          type="text"
+          name="name"
+          placeholder="Your name"
+        />
+        <input
+          className={classes.Input}
+          onChange={this.handleInputChange}
+          type="email"
+          name="email"
+          placeholder="Your Mail"
+        />
+        <input
+          className={classes.Input}
+          onChange={this.handleInputChange}
+          type="text"
+          name="street"
+          placeholder="Your street"
+        />
+        <input
+          className={classes.Input}
+          onChange={this.handleInputChange}
+          type="text"
+          name="postalCode"
+          placeholder="Your postalCode"
+        />
+        <Button btnType="Success" clicked={this.orderHandler}>
+          ORDER
+        </Button>
+      </form>
+    );
+    if (loading) {
+      form = <Spinner />;
+    }
     return (
       <div className={classes.ContactData}>
         <h4>Enter your Contact data</h4>
-        <form onSubmit={this.handleSubmit}>
-          <input
-            className={classes.Input}
-            onChange={this.handleInputChange}
-            type="text"
-            name="name"
-            placeholder="Your name"
-          />
-          <input
-            className={classes.Input}
-            onChange={this.handleInputChange}
-            type="email"
-            name="email"
-            placeholder="Your Mail"
-          />
-          <input
-            className={classes.Input}
-            onChange={this.handleInputChange}
-            type="text"
-            name="street"
-            placeholder="Your street"
-          />
-          <input
-            className={classes.Input}
-            onChange={this.handleInputChange}
-            type="text"
-            name="postalCode"
-            placeholder="Your postalCode"
-          />
-          <Button btnType="Success" clicked={this.orderHandler}>
-            ORDER
-          </Button>
-        </form>
+        {form}
       </div>
     );
   }

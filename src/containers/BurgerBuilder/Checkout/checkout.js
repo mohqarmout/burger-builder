@@ -24,6 +24,7 @@ class Checkout extends Component {
       }
     }
 
+    // also eslint not smart enogth
     // eslint-disable-next-line react/no-direct-mutation-state
     this.state = {
       totalPrice,
