@@ -4,8 +4,6 @@ import Modal from 'components/UI/Modal/Modal';
 
 const withErrorHandler = (WarppedComponent, axios) =>
   class ErrorHoc extends Component {
-    // for education purpose
-    // eslint-disable-next-line no-useless-constructor
     constructor(props) {
       super(props);
       this.setinterceptors();
