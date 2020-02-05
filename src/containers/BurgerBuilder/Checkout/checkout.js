@@ -44,6 +44,7 @@ class Checkout extends Component {
 
   render() {
     const { ingredients, totalPrice } = this.state;
+    // eslint-disable-next-line react/destructuring-assignment
     const { path } = this.props.match;
     return (
       <div>

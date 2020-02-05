@@ -7,19 +7,18 @@ import Order from 'components/Order/Order';
 class Orders extends Component {
   state = {
     data: [],
-    lodaing: false,
+    loading: false,
   };
 
   async componentDidMount() {
     this.setState({
       loading: true,
     });
-
     const { data, status } = await axios.get('orders.json');
-
     try {
       if (status === 200) {
         const cache = [];
+        // eslint-disable-next-line array-callback-return
         Object.keys(data).map(orderID => {
           cache.push({ id: orderID, ...data[orderID] });
         });
@@ -34,15 +33,13 @@ class Orders extends Component {
   }
 
   render() {
-    const { lodaing, data } = this.state;
+    const { loading, data } = this.state;
     let orders = data.map(({ id, ingredinets, price }) => (
       <Order key={id} price={price} ingredinets={ingredinets} />
     ));
-
-    if (lodaing) {
+    if (loading) {
       orders = <Spinner />;
     }
-
     return <div>{orders}</div>;
   }
 }
