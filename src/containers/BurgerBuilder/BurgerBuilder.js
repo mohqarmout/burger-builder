@@ -1,6 +1,6 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
-import axios from 'axios-order';
+import axios from 'axiosInstances';
 import withErrorHandler from 'HOC/withErrorHandler';
 import Modal from 'components/UI/Modal/Modal';
 import OrderSummary from 'components/Burger/OrderSummary/OrderSummary';

@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react';
 import Spinner from 'components/UI/Spinner/Spinner';
-import axios from 'axios-order';
+import axios from 'axiosInstances';
 import Button from 'components/UI/Button/Button';
 import classes from './ContactData.module.css';
 
