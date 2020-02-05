@@ -41,8 +41,8 @@ class ContactData extends Component {
       await axios.post('orders.json', {
         ...orders,
       });
-      push('/');
       this.setState({ loading: false });
+      push('/');
     } catch (err) {
       this.setState({ loading: false });
     }
