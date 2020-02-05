@@ -8,12 +8,20 @@ const withErrorHandler = (WarppedComponent, axios) =>
     // eslint-disable-next-line no-useless-constructor
     constructor(props) {
       super(props);
-      // this.setinterceptors(); // Hmmm this is new mate,to replace componentWillMount
+      this.setinterceptors();
     }
 
     state = {
       error: false,
-      axiosRequest: axios.interceptors.request.use(
+    };
+
+    componentWillUnmount() {
+      axios.interceptors.request.eject(this.axiosRequest);
+      axios.interceptors.response.eject(this.axiosResponse);
+    }
+
+    setinterceptors = () => {
+      this.axiosRequest = axios.interceptors.request.use(
         req => {
           this.setState({
             error: null,
@@ -26,8 +34,8 @@ const withErrorHandler = (WarppedComponent, axios) =>
           });
           return Promise.reject(error);
         },
-      ),
-      axiosResponse: axios.interceptors.response.use(
+      );
+      this.axiosResponse = axios.interceptors.response.use(
         res => res,
         error => {
           this.setState({
@@ -35,39 +43,7 @@ const withErrorHandler = (WarppedComponent, axios) =>
           });
           return Promise.reject(error);
         },
-      ),
-    };
-
-    componentWillUnmount() {
-      const { axiosRequest, axiosResponse } = this.state;
-      axios.interceptors.request.eject(axiosRequest);
-      axios.interceptors.response.eject(axiosResponse);
-    }
-
-    setinterceptors = () => {
-      // this.axiosRequest = axios.interceptors.request.use(
-      //   req => {
-      //     this.setState({
-      //       error: null,
-      //     });
-      //     return req;
-      //   },
-      //   error => {
-      //     this.setState({
-      //       error,
-      //     });
-      //     return Promise.reject(error);
-      //   },
-      // );
-      // this.axiosResponse = axios.interceptors.response.use(
-      //   res => res,
-      //   error => {
-      //     this.setState({
-      //       error,
-      //     });
-      //     return Promise.reject(error);
-      //   },
-      // );
+      );
     };
 
     errorHandler = () => {
