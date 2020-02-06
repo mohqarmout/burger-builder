@@ -9,41 +9,68 @@ import Input from 'components/UI/Input/Input';
 import classes from './ContactData.module.css';
 
 const factoryObject = ({
-  elementType = 'text',
-  type = 'text',
+  elementtype = 'input',
   placeholder,
-  value,
+  value = '',
   option,
+  htmlFor,
+  id,
+  type = 'text',
 }) => {
-  if (type === 'select') {
+  if (elementtype === 'select') {
     return {
-      name: {
-        elementType,
-        elementConfig: {
-          option,
-        },
+      elementtype,
+      elementConfig: {
+        option,
+      },
       },
     };
   }
   return {
-    name: {
-      elementType,
-      elementConfig: {
-        type,
-        placeholder,
-      },
-      value,
+    elementtype,
+    elementConfig: {
+      type,
+      placeholder,
     },
+    value,
+    htmlFor,
+    id,
   };
 };
 class ContactData extends Component {
   state = {
     orderForm: {
-      name: factoryObject({ placeholder: 'Your Name', value: '' }),
-      street: factoryObject({ placeholder: 'Your Street', value: '' }),
-      zipCode: factoryObject({ placeholder: 'Zip code', value: '' }),
-      city: factoryObject({ placeholder: 'Mohammed-Q96', value: '' }),
-      email: factoryObject({ placeholder: 'E-mail', value: '', type: 'email' }),
+      name: factoryObject({
+        placeholder: 'Your Name',
+        id: 'name',
+        htmlFor: 'name',
+      }),
+      street: factoryObject({
+        placeholder: 'Your Street',
+        id: 'street',
+        htmlFor: 'street',
+      }),
+      zipCode: factoryObject({
+        placeholder: 'Zip code',
+        id: 'zipCode',
+        htmlFor: 'zipCode',
+      }),
+      city: factoryObject({
+        placeholder: 'Mohammed-Q96',
+        id: 'city',
+        htmlFor: 'city',
+      }),
+      country: factoryObject({
+        placeholder: 'Country',
+        id: 'country',
+        htmlFor: 'country',
+      }),
+      email: factoryObject({
+        placeholder: 'E-mail',
+        type: 'email',
+        id: 'email',
+        htmlFor: 'email',
+      }),
       deliveryMethod: factoryObject({
         option: [
           { value: 'fastest', displayValue: 'Fastest' },
@@ -94,6 +121,13 @@ class ContactData extends Component {
 
   render() {
     const { loading } = this.state;
+    const { orderForm } = this.state;
+    const formElementArray = Object.keys(orderForm).map(formItem => {
+      return {
+        id: formItem,
+        config: orderForm[formItem],
+      };
+    });
     let form = (
       <form onSubmit={this.handleSubmit}>
         <Input
