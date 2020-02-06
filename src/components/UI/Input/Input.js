@@ -1,12 +1,12 @@
 import React from 'react';
 import classes from './Input.module.css';
 
-const Input = ({ type, htmlFor, ...rest }) => {
-  let inputType = null;
+const Input = ({ inputType, htmlFor, ...rest }) => {
+  let inputElement = null;
 
-  switch (type) {
+  switch (inputType) {
     case 'textarea':
-      inputType = (
+      inputElement = (
         <>
           <label className={classes.Label} htmlFor={htmlFor}>
             <textarea className={classes.InputElement} {...rest} />
@@ -15,7 +15,7 @@ const Input = ({ type, htmlFor, ...rest }) => {
       );
       break;
     default:
-      inputType = (
+      inputElement = (
         <>
           <label className={classes.Label} htmlFor={htmlFor}>
             <input className={classes.InputElement} {...rest} />
@@ -23,7 +23,7 @@ const Input = ({ type, htmlFor, ...rest }) => {
         </>
       );
   }
-  return <div className={classes.Input}>{inputType}</div>;
+  return <div className={classes.Input}>{inputElement}</div>;
 };
 
 export default Input;
