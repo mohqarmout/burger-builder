@@ -3,10 +3,10 @@ import classes from './Input.module.css';
 
 const Input = ({
   elementtype,
-  elementConfig,
+  elementConfig: { type },
   value,
   htmlFor,
-  type,
+  elementConfig,
   ...rest
 }) => {
   let inputElement = null;
@@ -41,6 +41,7 @@ const Input = ({
         </>
       );
   }
+
   return <div className={classes.Input}>{inputElement}</div>;
 };
 
