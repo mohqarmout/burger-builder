@@ -7,6 +7,7 @@ const Input = ({
   value,
   htmlFor,
   elementConfig,
+  handleInputChange,
   ...rest
 }) => {
   let inputElement = null;
@@ -15,7 +16,11 @@ const Input = ({
     case 'textarea':
       inputElement = (
         <>
-          <label className={classes.Label} htmlFor={htmlFor}>
+          <label
+            className={classes.Label}
+            onChange={handleInputChange}
+            htmlFor={htmlFor}
+          >
             <textarea
               className={classes.InputElement}
               value={value}
@@ -30,7 +35,13 @@ const Input = ({
       inputElement = (
         <>
           <label className={classes.Label} htmlFor={htmlFor}>
-            <select value={value} className={classes.InputElement} {...rest}>
+            <select
+              onBlur={handleInputChange}
+              onChange={handleInputChange}
+              value={value}
+              className={classes.InputElement}
+              {...rest}
+            >
               {option.map(({ value: optionValue, displayValue }) => {
                 return (
                   <option key={optionValue} value={optionValue}>
@@ -48,6 +59,7 @@ const Input = ({
         <>
           <label className={classes.Label} htmlFor={htmlFor}>
             <input
+              onChange={handleInputChange}
               type={type}
               className={classes.InputElement}
               value={value}
