@@ -23,7 +23,7 @@ const factoryObject = ({
       elementConfig: {
         option,
       },
-      },
+      value,
     };
   }
   return {
@@ -72,12 +72,12 @@ class ContactData extends Component {
         htmlFor: 'email',
       }),
       deliveryMethod: factoryObject({
+        elementtype: 'select',
         option: [
           { value: 'fastest', displayValue: 'Fastest' },
-          { value: 'chepest', displayValue: 'Fastest' },
+          { value: 'chepest', displayValue: 'Chepest' },
         ],
-
-        type: 'select',
+        value: 'fastest',
       }),
     },
     loading: false,
@@ -122,6 +122,7 @@ class ContactData extends Component {
   render() {
     const { loading } = this.state;
     const { orderForm } = this.state;
+    // I need it formElementArray to take this shape [{ id ,config }] for every form Element
     const formElementArray = Object.keys(orderForm).map(formItem => {
       return {
         id: formItem,
@@ -130,50 +131,19 @@ class ContactData extends Component {
     });
     let form = (
       <form onSubmit={this.handleSubmit}>
-        <Input
-          inputType="input"
-          htmlFor="name"
-          id="name"
-          onChange={this.handleInputChange}
-          type="text"
-          name="name"
-          placeholder="Your name"
-        />
-        <Input
-          inputType="input"
-          htmlFor="email"
-          id="email"
-          onChange={this.handleInputChange}
-          type="email"
-          name="email"
-          placeholder="Your Mail"
-        />
-        <Input
-          inputType="input"
-          htmlFor="street"
-          id="street"
-          onChange={this.handleInputChange}
-          type="text"
-          name="street"
-          placeholder="Your street"
-        />
-        <Input
-          inputType="input"
-          htmlFor="postalCode"
-          id="postalCode"
-          onChange={this.handleInputChange}
-          type="text"
-          name="postalCode"
-          placeholder="Your postalCode"
-        />
+        {formElementArray.map(({ id, config }) => (
+          <Input key={id} {...config} />
+        ))}
         <Button btnType="Success" clicked={this.orderHandler}>
           ORDER
         </Button>
       </form>
     );
+
     if (loading) {
       form = <Spinner />;
     }
+
     return (
       <div className={classes.ContactData}>
         <h4>Enter your Contact data</h4>
