@@ -37,49 +37,51 @@ const factoryObject = ({
     id,
   };
 };
+
+const orderForm = {
+  name: factoryObject({
+    placeholder: 'Your Name',
+    id: 'name',
+    htmlFor: 'name',
+  }),
+  street: factoryObject({
+    placeholder: 'Your Street',
+    id: 'street',
+    htmlFor: 'street',
+  }),
+  zipCode: factoryObject({
+    placeholder: 'Zip code',
+    id: 'zipCode',
+    htmlFor: 'zipCode',
+  }),
+  city: factoryObject({
+    placeholder: 'Mohammed-Q96',
+    id: 'city',
+    htmlFor: 'city',
+  }),
+  country: factoryObject({
+    placeholder: 'Country',
+    id: 'country',
+    htmlFor: 'country',
+  }),
+  email: factoryObject({
+    placeholder: 'E-mail',
+    type: 'email',
+    id: 'email',
+    htmlFor: 'email',
+  }),
+  deliveryMethod: factoryObject({
+    elementtype: 'select',
+    option: [
+      { value: 'fastest', displayValue: 'Fastest' },
+      { value: 'chepest', displayValue: 'Chepest' },
+    ],
+    value: 'fastest',
+  }),
+};
 class ContactData extends Component {
   state = {
-    orderForm: {
-      name: factoryObject({
-        placeholder: 'Your Name',
-        id: 'name',
-        htmlFor: 'name',
-      }),
-      street: factoryObject({
-        placeholder: 'Your Street',
-        id: 'street',
-        htmlFor: 'street',
-      }),
-      zipCode: factoryObject({
-        placeholder: 'Zip code',
-        id: 'zipCode',
-        htmlFor: 'zipCode',
-      }),
-      city: factoryObject({
-        placeholder: 'Mohammed-Q96',
-        id: 'city',
-        htmlFor: 'city',
-      }),
-      country: factoryObject({
-        placeholder: 'Country',
-        id: 'country',
-        htmlFor: 'country',
-      }),
-      email: factoryObject({
-        placeholder: 'E-mail',
-        type: 'email',
-        id: 'email',
-        htmlFor: 'email',
-      }),
-      deliveryMethod: factoryObject({
-        elementtype: 'select',
-        option: [
-          { value: 'fastest', displayValue: 'Fastest' },
-          { value: 'chepest', displayValue: 'Chepest' },
-        ],
-        value: 'fastest',
-      }),
-    },
+    formvalues: {},
     loading: false,
   };
 
@@ -121,7 +123,7 @@ class ContactData extends Component {
 
   render() {
     const { loading } = this.state;
-    const { orderForm } = this.state;
+
     // I need it formElementArray to take this shape [{ id ,config }] for every form Element
     const formElementArray = Object.keys(orderForm).map(formItem => {
       return {
@@ -132,7 +134,11 @@ class ContactData extends Component {
     let form = (
       <form onSubmit={this.handleSubmit}>
         {formElementArray.map(({ id, config }) => (
-          <Input key={id} {...config} />
+          <Input
+            key={id}
+            handleInputChange={this.handleInputChange}
+            {...config}
+          />
         ))}
         <Button btnType="Success" clicked={this.orderHandler}>
           ORDER
