@@ -3,7 +3,7 @@ import classes from './Input.module.css';
 
 const Input = ({
   elementtype,
-  elementConfig: { type },
+  elementConfig: { type, option },
   value,
   htmlFor,
   elementConfig,
@@ -22,6 +22,19 @@ const Input = ({
               {...elementConfig}
               {...rest}
             />
+          </label>
+        </>
+      );
+      break;
+    case 'select':
+      inputElement = (
+        <>
+          <label className={classes.Label} htmlFor={htmlFor}>
+            <select value={value} className={classes.InputElement} {...rest}>
+              {option.map(({ value: optionValue, displayValue }) => {
+                return <option value={optionValue}>{displayValue}</option>;
+              })}
+            </select>
           </label>
         </>
       );
@@ -46,5 +59,3 @@ const Input = ({
 };
 
 export default Input;
-
-// rest ==> id value
