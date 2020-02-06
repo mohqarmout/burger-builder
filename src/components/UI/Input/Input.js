@@ -1,15 +1,27 @@
 import React from 'react';
 import classes from './Input.module.css';
 
-const Input = ({ inputType, htmlFor, ...rest }) => {
+const Input = ({
+  elementtype,
+  elementConfig,
+  value,
+  htmlFor,
+  type,
+  ...rest
+}) => {
   let inputElement = null;
 
-  switch (inputType) {
+  switch (elementtype) {
     case 'textarea':
       inputElement = (
         <>
           <label className={classes.Label} htmlFor={htmlFor}>
-            <textarea className={classes.InputElement} {...rest} />
+            <textarea
+              className={classes.InputElement}
+              value={value}
+              {...elementConfig}
+              {...rest}
+            />
           </label>
         </>
       );
@@ -18,7 +30,13 @@ const Input = ({ inputType, htmlFor, ...rest }) => {
       inputElement = (
         <>
           <label className={classes.Label} htmlFor={htmlFor}>
-            <input className={classes.InputElement} {...rest} />
+            <input
+              type={type}
+              className={classes.InputElement}
+              value={value}
+              {...elementConfig}
+              {...rest}
+            />
           </label>
         </>
       );
@@ -27,3 +45,5 @@ const Input = ({ inputType, htmlFor, ...rest }) => {
 };
 
 export default Input;
+
+// rest ==> id value
