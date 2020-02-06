@@ -5,15 +5,53 @@ import React, { Component } from 'react';
 import Spinner from 'components/UI/Spinner/Spinner';
 import axios from 'axiosInstances';
 import Button from 'components/UI/Button/Button';
+import Input from 'components/UI/Input/Input';
 import classes from './ContactData.module.css';
 
+const factoryObject = ({
+  elementType = 'text',
+  type = 'text',
+  placeholder,
+  value,
+  option,
+}) => {
+  if (type === 'select') {
+    return {
+      name: {
+        elementType,
+        elementConfig: {
+          option,
+        },
+      },
+    };
+  }
+  return {
+    name: {
+      elementType,
+      elementConfig: {
+        type,
+        placeholder,
+      },
+      value,
+    },
+  };
+};
 class ContactData extends Component {
   state = {
-    name: '',
-    email: '',
-    address: {
-      street: '',
-      postalCode: '',
+    orderForm: {
+      name: factoryObject({ placeholder: 'Your Name', value: '' }),
+      street: factoryObject({ placeholder: 'Your Street', value: '' }),
+      zipCode: factoryObject({ placeholder: 'Zip code', value: '' }),
+      city: factoryObject({ placeholder: 'Mohammed-Q96', value: '' }),
+      email: factoryObject({ placeholder: 'E-mail', value: '', type: 'email' }),
+      deliveryMethod: factoryObject({
+        option: [
+          { value: 'fastest', displayValue: 'Fastest' },
+          { value: 'chepest', displayValue: 'Fastest' },
+        ],
+
+        type: 'select',
+      }),
     },
     loading: false,
   };
@@ -24,18 +62,8 @@ class ContactData extends Component {
     const { ingredients, totalPrice } = this.props;
     this.setState({ loading: true });
     const orders = {
-      ingredinets: ingredients,
+      ingredients,
       price: totalPrice,
-      customer: {
-        name: 'Mohammed-Q96',
-        address: {
-          street: 'Al-nacer',
-          zipCode: '970',
-          city: 'gaza',
-        },
-      },
-      email: 'mhmmade@gmail.com',
-      deliveryMethod: 'fastest',
     };
     try {
       await axios.post('orders.json', {
@@ -68,29 +96,37 @@ class ContactData extends Component {
     const { loading } = this.state;
     let form = (
       <form onSubmit={this.handleSubmit}>
-        <input
-          className={classes.Input}
+        <Input
+          inputType="input"
+          htmlFor="name"
+          id="name"
           onChange={this.handleInputChange}
           type="text"
           name="name"
           placeholder="Your name"
         />
-        <input
-          className={classes.Input}
+        <Input
+          inputType="input"
+          htmlFor="email"
+          id="email"
           onChange={this.handleInputChange}
           type="email"
           name="email"
           placeholder="Your Mail"
         />
-        <input
-          className={classes.Input}
+        <Input
+          inputType="input"
+          htmlFor="street"
+          id="street"
           onChange={this.handleInputChange}
           type="text"
           name="street"
           placeholder="Your street"
         />
-        <input
-          className={classes.Input}
+        <Input
+          inputType="input"
+          htmlFor="postalCode"
+          id="postalCode"
           onChange={this.handleInputChange}
           type="text"
           name="postalCode"
