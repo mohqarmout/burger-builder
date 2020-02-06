@@ -32,7 +32,11 @@ const Input = ({
           <label className={classes.Label} htmlFor={htmlFor}>
             <select value={value} className={classes.InputElement} {...rest}>
               {option.map(({ value: optionValue, displayValue }) => {
-                return <option value={optionValue}>{displayValue}</option>;
+                return (
+                  <option key={optionValue} value={optionValue}>
+                    {displayValue}
+                  </option>
+                );
               })}
             </select>
           </label>
