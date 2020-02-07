@@ -53,7 +53,7 @@ const orderForm = {
     htmlFor: 'zipCode',
   }),
   city: factoryObject({
-    placeholder: 'Mohammed-Q96',
+    placeholder: 'City',
     id: 'city',
     htmlFor: 'city',
   }),
@@ -92,6 +92,7 @@ class ContactData extends Component {
   };
 
   orderHandler = async event => {
+    console.log('run from orderHandler event');
     event.preventDefault();
     const { push } = this.props.history;
     const { ingredients, totalPrice } = this.props;
@@ -100,6 +101,7 @@ class ContactData extends Component {
     const orders = {
       ingredients,
       price: totalPrice,
+      orederDate: formValues,
     };
     try {
       await axios.post('orders.json', {
@@ -150,7 +152,9 @@ class ContactData extends Component {
             {...config}
           />
         ))}
-        <Button btnType="Success">ORDER</Button>
+        <Button type="submit" btnType="Success">
+          ORDER
+        </Button>
       </form>
     );
 
