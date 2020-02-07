@@ -92,7 +92,6 @@ class ContactData extends Component {
   };
 
   orderHandler = async event => {
-    console.log('run from orderHandler event');
     event.preventDefault();
     const { push } = this.props.history;
     const { ingredients, totalPrice } = this.props;
