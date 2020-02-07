@@ -111,20 +111,20 @@ class ContactData extends Component {
     }
   };
 
-  handleInputChange = ({ target: { name, value } }) => {
+  handleInputChange = ({ target: { value } }, id) => {
     const { formValues } = this.state;
-    if (name) {
+    if (id === 'deliveryMethod') {
       this.setState({
         formValues: {
           ...formValues,
-          [name]: value,
+          deliveryMethod: value,
         },
       });
     } else {
       this.setState({
         formValues: {
           ...formValues,
-          deliveryMethod: value,
+          [id]: value,
         },
       });
     }
@@ -132,9 +132,6 @@ class ContactData extends Component {
 
   render() {
     const { loading, formValues } = this.state;
-
-    // I need it formElementArray to take this shape [{ id ,config }] for every form Element
-
     const formElementArray = Object.keys(orderForm).map(formItem => {
       return {
         id: formItem,
@@ -146,8 +143,10 @@ class ContactData extends Component {
         {formElementArray.map(({ id, config }) => (
           <Input
             key={id}
-            handleInputChange={this.handleInputChange}
-            {...config} // open the config
+            handleInputChange={event => {
+              this.handleInputChange(event, id);
+            }}
+            {...config}
           />
         ))}
         <Button btnType="Success" clicked={this.orderHandler}>

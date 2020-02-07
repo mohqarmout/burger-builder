@@ -8,7 +8,6 @@ const Input = ({
   htmlFor,
   elementConfig,
   handleInputChange,
-  name,
   ...rest
 }) => {
   let inputElement = null;
@@ -24,7 +23,6 @@ const Input = ({
           >
             <textarea
               className={classes.InputElement}
-              name={name}
               value={value}
               {...elementConfig}
               {...rest}
@@ -67,7 +65,6 @@ const Input = ({
               type={type}
               className={classes.InputElement}
               value={value}
-              name={name}
               {...elementConfig}
               {...rest}
             />
