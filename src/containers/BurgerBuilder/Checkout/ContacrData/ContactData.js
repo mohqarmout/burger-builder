@@ -8,7 +8,7 @@ import Button from 'components/UI/Button/Button';
 import Input from 'components/UI/Input/Input';
 import classes from './ContactData.module.css';
 
-const factoryObject = ({
+const objectFactory = ({
   elementtype = 'input',
   placeholder,
   option,
@@ -37,38 +37,38 @@ const factoryObject = ({
 };
 
 const orderForm = {
-  name: factoryObject({
+  name: objectFactory({
     placeholder: 'Your Name',
     id: 'name',
     htmlFor: 'name',
   }),
-  street: factoryObject({
+  street: objectFactory({
     placeholder: 'Your Street',
     id: 'street',
     htmlFor: 'street',
   }),
-  zipCode: factoryObject({
+  zipCode: objectFactory({
     placeholder: 'Zip code',
     id: 'zipCode',
     htmlFor: 'zipCode',
   }),
-  city: factoryObject({
+  city: objectFactory({
     placeholder: 'City',
     id: 'city',
     htmlFor: 'city',
   }),
-  country: factoryObject({
+  country: objectFactory({
     placeholder: 'Country',
     id: 'country',
     htmlFor: 'country',
   }),
-  email: factoryObject({
+  email: objectFactory({
     placeholder: 'E-mail',
     type: 'email',
     id: 'email',
     htmlFor: 'email',
   }),
-  deliveryMethod: factoryObject({
+  deliveryMethod: objectFactory({
     elementtype: 'select',
     option: [
       { value: 'fastest', displayValue: 'Fastest' },
@@ -79,12 +79,36 @@ const orderForm = {
 class ContactData extends Component {
   state = {
     formValues: {
-      name: { value: '', validation: { required: true } },
-      street: { value: '', validation: { required: true } },
-      zipCode: { value: '', validation: { required: true } },
-      city: { value: '', validation: { required: true } },
-      country: { value: '', validation: { required: true } },
-      email: { value: '', validation: { required: true } },
+      name: {
+        value: '',
+        validation: { required: true },
+        valid: false,
+      },
+      street: {
+        value: '',
+        validation: { required: true },
+        valid: false,
+      },
+      zipCode: {
+        value: '',
+        validation: { required: true },
+        valid: false,
+      },
+      city: {
+        value: '',
+        validation: { required: true },
+        valid: false,
+      },
+      country: {
+        value: '',
+        validation: { required: true },
+        valid: false,
+      },
+      email: {
+        value: '',
+        validation: { required: true },
+        valid: false,
+      },
       deliveryMethod: { value: 'fastest' },
     },
     loading: false,
@@ -119,14 +143,16 @@ class ContactData extends Component {
 
   handleInputChange = ({ target: { value } }, id) => {
     const { formValues } = this.state;
-    const { validation } = formValues[id];
+    const { validation, valid } = formValues[id];
     this.setState({
       formValues: {
         ...formValues,
-        [id]: { value, validation },
+        [id]: { value, validation, valid },
       },
     });
   };
+
+  checkValidity = (value, rule) => {};
 
   render() {
     const { loading, formValues } = this.state;
