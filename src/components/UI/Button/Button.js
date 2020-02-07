@@ -2,11 +2,12 @@ import React from 'react';
 
 import classes from './Button.module.css';
 
-const button = ({ btnType, clicked, children }) => (
+const button = ({ btnType, clicked, children, type = 'button' }) => (
+  // eslint-disable-next-line react/button-has-type
   <button
     className={[classes.Button, classes[btnType]].join(' ')}
     onClick={clicked}
-    type="button"
+    type={type}
   >
     {children}
   </button>
