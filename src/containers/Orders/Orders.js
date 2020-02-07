@@ -34,9 +34,9 @@ class Orders extends Component {
 
   render() {
     const { loading, data } = this.state;
-    let orders = data.map(({ id, ingredinets, price }) => (
-      <Order key={id} price={price} ingredinets={ingredinets} />
-    ));
+    let orders = data.map(({ id, ingredinets = {}, price }) => {
+      return <Order key={id} price={price} ingredinets={ingredinets} />;
+    });
     if (loading) {
       orders = <Spinner />;
     }
