@@ -20,7 +20,8 @@ class Orders extends Component {
         const cache = [];
         // eslint-disable-next-line array-callback-return
         Object.keys(data).map(orderID => {
-          cache.push({ id: orderID, ...data[orderID] });
+          const { orederDate, ...rest } = data[orderID];
+          cache.push({ id: orderID, ...rest });
         });
 
         this.setState({ data: cache, loading: false });
@@ -34,8 +35,8 @@ class Orders extends Component {
 
   render() {
     const { loading, data } = this.state;
-    let orders = data.map(({ id, ingredinets = {}, price }) => {
-      return <Order key={id} price={price} ingredinets={ingredinets} />;
+    let orders = data.map(({ id, ingredients = {}, price }) => {
+      return <Order key={id} price={price} ingredinets={ingredients} />;
     });
     if (loading) {
       orders = <Spinner />;
