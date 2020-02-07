@@ -95,6 +95,7 @@ class ContactData extends Component {
     event.preventDefault();
     const { push } = this.props.history;
     const { ingredients, totalPrice } = this.props;
+    const { formValues } = this.state;
     this.setState({ loading: true });
     const orders = {
       ingredients,
@@ -139,7 +140,7 @@ class ContactData extends Component {
       };
     });
     let form = (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.orderHandler}>
         {formElementArray.map(({ id, config }) => (
           <Input
             key={id}
@@ -149,9 +150,7 @@ class ContactData extends Component {
             {...config}
           />
         ))}
-        <Button btnType="Success" clicked={this.orderHandler}>
-          ORDER
-        </Button>
+        <Button btnType="Success">ORDER</Button>
       </form>
     );
 
