@@ -23,7 +23,6 @@ class Orders extends Component {
           const { orederDate, ...rest } = data[orderID];
           cache.push({ id: orderID, ...rest });
         });
-
         this.setState({ data: cache, loading: false });
       }
     } catch (error) {

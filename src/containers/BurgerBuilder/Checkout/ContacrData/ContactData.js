@@ -74,19 +74,18 @@ const orderForm = {
       { value: 'fastest', displayValue: 'Fastest' },
       { value: 'chepest', displayValue: 'Chepest' },
     ],
-    value: 'fastest',
   }),
 };
 class ContactData extends Component {
   state = {
     formValues: {
-      name: '',
-      street: '',
-      zipCode: '',
-      city: '',
-      country: '',
-      email: '',
-      deliveryMethod: 'fastest',
+      name: { value: '', validation: { required: true } },
+      street: { value: '', validation: { required: true } },
+      zipCode: { value: '', validation: { required: true } },
+      city: { value: '', validation: { required: true } },
+      country: { value: '', validation: { required: true } },
+      email: { value: '', validation: { required: true } },
+      deliveryMethod: { value: 'fastest' },
     },
     loading: false,
   };
@@ -97,10 +96,15 @@ class ContactData extends Component {
     const { ingredients, totalPrice } = this.props;
     const { formValues } = this.state;
     this.setState({ loading: true });
+    const cache = {};
+    // eslint-disable-next-line array-callback-return
+    Object.keys(formValues).map(key => {
+      cache[key] = formValues[key].value;
+    });
     const orders = {
       ingredients,
       price: totalPrice,
-      orederDate: formValues,
+      orederDate: cache,
     };
     try {
       await axios.post('orders.json', {
@@ -115,21 +119,13 @@ class ContactData extends Component {
 
   handleInputChange = ({ target: { value } }, id) => {
     const { formValues } = this.state;
-    if (id === 'deliveryMethod') {
-      this.setState({
-        formValues: {
-          ...formValues,
-          deliveryMethod: value,
-        },
-      });
-    } else {
-      this.setState({
-        formValues: {
-          ...formValues,
-          [id]: value,
-        },
-      });
-    }
+    const { validation } = formValues[id];
+    this.setState({
+      formValues: {
+        ...formValues,
+        [id]: { value, validation },
+      },
+    });
   };
 
   render() {
@@ -137,7 +133,7 @@ class ContactData extends Component {
     const formElementArray = Object.keys(orderForm).map(formItem => {
       return {
         id: formItem,
-        config: { value: formValues[formItem], ...orderForm[formItem] },
+        config: { value: formValues[formItem].value, ...orderForm[formItem] },
       };
     });
     let form = (
