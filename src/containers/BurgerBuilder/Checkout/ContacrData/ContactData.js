@@ -11,7 +11,6 @@ import classes from './ContactData.module.css';
 const factoryObject = ({
   elementtype = 'input',
   placeholder,
-  value = '',
   option,
   htmlFor,
   id,
@@ -23,7 +22,6 @@ const factoryObject = ({
       elementConfig: {
         option,
       },
-      value,
     };
   }
   return {
@@ -32,7 +30,7 @@ const factoryObject = ({
       type,
       placeholder,
     },
-    value,
+    name: id,
     htmlFor,
     id,
   };
@@ -81,7 +79,15 @@ const orderForm = {
 };
 class ContactData extends Component {
   state = {
-    formvalues: {},
+    formValues: {
+      name: '',
+      street: '',
+      zipCode: '',
+      city: '',
+      country: '',
+      email: '',
+      deliveryMethod: 'fastest',
+    },
     loading: false,
   };
 
@@ -106,29 +112,33 @@ class ContactData extends Component {
   };
 
   handleInputChange = ({ target: { name, value } }) => {
-    if (!(name === 'street' || name === 'postalCode')) {
+    const { formValues } = this.state;
+    if (name) {
       this.setState({
-        [name]: value,
+        formValues: {
+          ...formValues,
+          [name]: value,
+        },
       });
     } else {
-      const { address } = this.state;
       this.setState({
-        address: {
-          ...address,
-          [name]: value,
+        formValues: {
+          ...formValues,
+          deliveryMethod: value,
         },
       });
     }
   };
 
   render() {
-    const { loading } = this.state;
+    const { loading, formValues } = this.state;
 
     // I need it formElementArray to take this shape [{ id ,config }] for every form Element
+
     const formElementArray = Object.keys(orderForm).map(formItem => {
       return {
         id: formItem,
-        config: orderForm[formItem],
+        config: { value: formValues[formItem], ...orderForm[formItem] },
       };
     });
     let form = (
@@ -137,7 +147,7 @@ class ContactData extends Component {
           <Input
             key={id}
             handleInputChange={this.handleInputChange}
-            {...config}
+            {...config} // open the config
           />
         ))}
         <Button btnType="Success" clicked={this.orderHandler}>
