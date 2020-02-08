@@ -83,31 +83,37 @@ class ContactData extends Component {
         value: '',
         validation: { required: true },
         valid: false,
+        touched: false,
       },
       street: {
         value: '',
         validation: { required: true },
         valid: false,
+        touched: false,
       },
       zipCode: {
         value: '',
         validation: { required: true, minLength: 5, maxLength: 5 },
         valid: false,
+        touched: false,
       },
       city: {
         value: '',
         validation: { required: true },
         valid: false,
+        touched: false,
       },
       country: {
         value: '',
         validation: { required: true },
         valid: false,
+        touched: false,
       },
       email: {
         value: '',
         validation: { required: true },
         valid: false,
+        touched: false,
       },
       deliveryMethod: { value: 'fastest' },
     },
@@ -162,6 +168,7 @@ class ContactData extends Component {
             value,
             validation,
             valid: this.checkValidity(value, validation),
+            touched: true,
           },
         },
       });
@@ -187,9 +194,6 @@ class ContactData extends Component {
   render() {
     const { loading, formValues } = this.state;
     const formElementArray = Object.keys(orderForm).map(formItem => {
-      // ! formItem ==> state
-      // ? orderForm
-      // console.log(formValues[formItem].valid);
       return {
         id: formItem,
         config: {
@@ -197,6 +201,7 @@ class ContactData extends Component {
           ...orderForm[formItem],
           valid: formValues[formItem].valid,
           shouldValidate: formValues[formItem].validation,
+          touched: formValues[formItem].touched,
         },
       };
     });
