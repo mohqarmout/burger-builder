@@ -128,8 +128,7 @@ class ContactData extends Component {
     const { formValues } = this.state;
     this.setState({ loading: true });
     const cache = {};
-    // eslint-disable-next-line array-callback-return
-    Object.keys(formValues).map(key => {
+    Object.keys(formValues).forEach(key => {
       cache[key] = formValues[key].value;
     });
     const orders = {
@@ -182,7 +181,8 @@ class ContactData extends Component {
 
   updateCanSubmitState = formValues => {
     const cache = [];
-    Object.keys(formValues).map(formItem => {
+
+    Object.keys(formValues).forEach(formItem => {
       formValues[formItem].validation && cache.push(formValues[formItem].valid);
     });
     return cache.every(item => item);
