@@ -118,6 +118,7 @@ class ContactData extends Component {
       deliveryMethod: { value: 'fastest' },
     },
     loading: false,
+    canSubmit: false,
   };
 
   orderHandler = async event => {
@@ -136,7 +137,6 @@ class ContactData extends Component {
       price: totalPrice,
       orederDate: cache,
     };
-    // ! we need another check before posting data
     try {
       await axios.post('orders.json', {
         ...orders,
@@ -173,6 +173,19 @@ class ContactData extends Component {
         },
       });
     }
+
+    // eslint-disable-next-line no-shadow
+    this.setState(({ formValues }) => ({
+      canSubmit: this.updateCanSubmitState(formValues),
+    }));
+  };
+
+  updateCanSubmitState = formValues => {
+    const cache = [];
+    Object.keys(formValues).map(formItem => {
+      formValues[formItem].validation && cache.push(formValues[formItem].valid);
+    });
+    return cache.every(item => item);
   };
 
   checkValidity = (value, rule) => {
@@ -192,7 +205,7 @@ class ContactData extends Component {
   };
 
   render() {
-    const { loading, formValues } = this.state;
+    const { loading, formValues, canSubmit } = this.state;
     const formElementArray = Object.keys(orderForm).map(formItem => {
       return {
         id: formItem,
@@ -216,7 +229,7 @@ class ContactData extends Component {
             {...config}
           />
         ))}
-        <Button type="submit" btnType="Success">
+        <Button active={canSubmit} type="submit" btnType="Success">
           ORDER
         </Button>
       </form>
