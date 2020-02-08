@@ -15,7 +15,7 @@ const Input = ({
 }) => {
   let inputElement;
   const inputClass = [classes.InputElement];
-  if (!valid && shouldValidate) {
+  if (!valid && shouldValidate && touched) {
     inputClass.push(classes.Invalid);
   }
 
