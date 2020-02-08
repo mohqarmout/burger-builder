@@ -9,6 +9,7 @@ const Input = ({
   elementConfig,
   handleInputChange,
   valid,
+  touched,
   shouldValidate,
   ...rest
 }) => {
