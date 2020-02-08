@@ -91,7 +91,7 @@ class ContactData extends Component {
       },
       zipCode: {
         value: '',
-        validation: { required: true },
+        validation: { required: true, minLength: 5, maxLength: 5 },
         valid: false,
       },
       city: {
@@ -130,6 +130,7 @@ class ContactData extends Component {
       price: totalPrice,
       orederDate: cache,
     };
+    // ! we need another check before posting data
     try {
       await axios.post('orders.json', {
         ...orders,
@@ -154,14 +155,13 @@ class ContactData extends Component {
         },
       });
     } else {
-      const { validation: required } = validation;
       this.setState({
         formValues: {
           ...formValues,
           [id]: {
             value,
             validation,
-            valid: this.checkValidity(value, required),
+            valid: this.checkValidity(value, validation),
           },
         },
       });
@@ -169,8 +169,19 @@ class ContactData extends Component {
   };
 
   checkValidity = (value, rule) => {
-    // console.log(rule.required ? value.trim('') !== '' : false);
-    return rule ? value.trim('') !== '' : false;
+    let isValid = true;
+    if (rule.required) {
+      isValid = value.trim() !== '' && isValid;
+    }
+
+    if (rule.minLength) {
+      isValid = value.length >= rule.minLength && isValid;
+    }
+
+    if (rule.maxLength) {
+      isValid = value.length <= rule.minLength && isValid;
+    }
+    return isValid;
   };
 
   render() {
