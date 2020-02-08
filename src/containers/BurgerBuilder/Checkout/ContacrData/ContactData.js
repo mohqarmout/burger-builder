@@ -187,9 +187,16 @@ class ContactData extends Component {
   render() {
     const { loading, formValues } = this.state;
     const formElementArray = Object.keys(orderForm).map(formItem => {
+      // ! formItem ==> state
+      // ? orderForm
+      // console.log(formValues[formItem].valid);
       return {
         id: formItem,
-        config: { value: formValues[formItem].value, ...orderForm[formItem] },
+        config: {
+          value: formValues[formItem].value,
+          ...orderForm[formItem],
+          valid: formValues[formItem].valid,
+        },
       };
     });
     let form = (

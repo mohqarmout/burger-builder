@@ -8,9 +8,14 @@ const Input = ({
   htmlFor,
   elementConfig,
   handleInputChange,
+  valid,
   ...rest
 }) => {
-  let inputElement = null;
+  let inputElement;
+  const inputClass = [classes.InputElement];
+  if (!valid) {
+    inputClass.push(classes.Invalid);
+  }
 
   switch (elementtype) {
     case 'textarea':
@@ -37,10 +42,10 @@ const Input = ({
         <>
           <label className={classes.Label} htmlFor={htmlFor}>
             <select
+              className={classes.InputElement}
               onBlur={handleInputChange}
               onChange={handleInputChange}
               value={value}
-              className={classes.InputElement}
               {...rest}
             >
               {option.map(({ value: optionValue, displayValue }) => {
@@ -61,9 +66,9 @@ const Input = ({
         <>
           <label className={classes.Label} htmlFor={htmlFor}>
             <input
+              className={inputClass.join(' ')}
               onChange={handleInputChange}
               type={type}
-              className={classes.InputElement}
               value={value}
               {...elementConfig}
               {...rest}
