@@ -196,6 +196,7 @@ class ContactData extends Component {
           value: formValues[formItem].value,
           ...orderForm[formItem],
           valid: formValues[formItem].valid,
+          shouldValidate: formValues[formItem].validation,
         },
       };
     });
