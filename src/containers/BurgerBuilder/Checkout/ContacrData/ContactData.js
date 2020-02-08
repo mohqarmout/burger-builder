@@ -143,16 +143,35 @@ class ContactData extends Component {
 
   handleInputChange = ({ target: { value } }, id) => {
     const { formValues } = this.state;
-    const { validation, valid } = formValues[id];
-    this.setState({
-      formValues: {
-        ...formValues,
-        [id]: { value, validation, valid },
-      },
-    });
+    const { validation } = formValues[id];
+    if (id === 'deliveryMethod') {
+      this.setState({
+        formValues: {
+          ...formValues,
+          [id]: {
+            value,
+          },
+        },
+      });
+    } else {
+      const { validation: required } = validation;
+      this.setState({
+        formValues: {
+          ...formValues,
+          [id]: {
+            value,
+            validation,
+            valid: this.checkValidity(value, required),
+          },
+        },
+      });
+    }
   };
 
-  checkValidity = (value, rule) => {};
+  checkValidity = (value, rule) => {
+    // console.log(rule.required ? value.trim('') !== '' : false);
+    return rule ? value.trim('') !== '' : false;
+  };
 
   render() {
     const { loading, formValues } = this.state;
