@@ -10,6 +10,10 @@
     font-weight: bold;
 }
 
+.Button:disabled{
+    color: #ccc;
+    cursor: not-allowed;
+}
 .Button:first-of-type {
     margin-left: 0;
     padding-left: 0;
