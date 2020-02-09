@@ -125,7 +125,7 @@ class ContactData extends Component {
     event.preventDefault();
     const { push } = this.props.history;
     const { ingredients, totalPrice } = this.props;
-    const { formValues } = this.state;
+    const { formValues, canSubmit } = this.state;
     this.setState({ loading: true });
     const cache = {};
     Object.keys(formValues).forEach(key => {
@@ -136,14 +136,16 @@ class ContactData extends Component {
       price: totalPrice,
       orederDate: cache,
     };
-    try {
-      await axios.post('orders.json', {
-        ...orders,
-      });
-      this.setState({ loading: false });
-      push('/');
-    } catch (err) {
-      this.setState({ loading: false });
+    if (canSubmit) {
+      try {
+        await axios.post('orders.json', {
+          ...orders,
+        });
+        this.setState({ loading: false });
+        push('/');
+      } catch (err) {
+        this.setState({ loading: false });
+      }
     }
   };
 
@@ -172,7 +174,6 @@ class ContactData extends Component {
         },
       });
     }
-
     // eslint-disable-next-line no-shadow
     this.setState(({ formValues }) => ({
       canSubmit: this.updateCanSubmitState(formValues),
