@@ -4,7 +4,7 @@ import CheckoutSummary from 'components/Order/checkoutSummary/checkoutSummary';
 import ContactData from './ContacrData/ContactData';
 
 class Checkout extends Component {
-  // we need old school method ==> becouse of the initaly null ingredients
+  // we need oldschool method ==> because of the initaly null ingredients
   constructor(props) {
     super(props);
     this.initialConstructor();

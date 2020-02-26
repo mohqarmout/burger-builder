@@ -1,6 +1,3 @@
-/* eslint-disable react/no-unused-state */
-// I guess eslint is not smart enough
-
 import React, { Component } from 'react';
 import Spinner from 'components/UI/Spinner/Spinner';
 import axios from 'axiosInstances';
