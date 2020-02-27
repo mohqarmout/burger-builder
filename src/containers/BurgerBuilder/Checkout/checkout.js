@@ -44,7 +44,7 @@ class Checkout extends Component {
   };
 
   render() {
-    const { ingredients, totalPrice } = this.props;
+    const { ingredients } = this.props;
     // eslint-disable-next-line react/destructuring-assignment
     const { path } = this.props.match;
     return (
@@ -54,24 +54,14 @@ class Checkout extends Component {
           checkoutContinue={this.checkoutContinueHandler}
           ingredients={ingredients}
         />
-        <Route
-          path={`${path}/contact-data`}
-          render={routeProps => (
-            <ContactData
-              {...routeProps}
-              totalPrice={totalPrice}
-              ingredients={ingredients}
-            />
-          )}
-        />
+        <Route path={`${path}/contact-data`} component={ContactData} />
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ ingredients, totalPrice }, ownProps) => ({
+const mapStateToProps = ({ ingredients }) => ({
   ingredients,
-  totalPrice,
 });
 
 export default connect(mapStateToProps)(Checkout);
