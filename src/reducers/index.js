@@ -15,15 +15,23 @@ const rootRuducer = (
   { type, payload: { ingredient, newPrice } },
 ) => {
   switch (type) {
-    // type of ingredient
     case burgerAction.addIngredient:
       return {
         ...state,
-        ingredient,
         totalPrice: newPrice,
+        ingredient,
         ingredients: {
           ...state.ingredients,
           ingredient: state.ingredients[ingredient] + 1,
+        },
+      };
+    case burgerAction.removeIngredient:
+      return {
+        ...state,
+        totalPrice: newPrice,
+        ingredients: {
+          ...state.ingredients,
+          ingredient: state.ingredients[ingredient] - 1,
         },
       };
 
