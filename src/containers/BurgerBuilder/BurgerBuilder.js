@@ -10,7 +10,7 @@ import BuildControls from 'components/Burger/BuildControls/BuildControls';
 import Burger from 'components/Burger/Burger';
 import Spinner from 'components/UI/Spinner/Spinner';
 
-const INGREDIENT_PRICES = {
+export const INGREDIENT_PRICES = {
   salad: 0.5,
   cheese: 0.4,
   meat: 1.3,
@@ -20,7 +20,6 @@ const INGREDIENT_PRICES = {
 class BurgerBuilder extends Component {
   state = {
     purchasable: false,
-    totalPrice: 4, // redux case
     purchasing: false,
     loading: false,
     error: false,
@@ -79,50 +78,47 @@ class BurgerBuilder extends Component {
     this.setState({ purchasable: sum > 0 });
   };
 
-  // ! handle as action
   addIngredientHandler = type => {
-    const {
-      ingredients,
-      totalPrice: oldPrice,
-      // eslint-disable-next-line no-shadow
-      addIngredient,
-    } = this.props;
-    const oldCount = ingredients[type];
-    const updatedCount = oldCount + 1;
-    const updatedIngredients = {
-      ...this.state.ingredients,
-    };
-    updatedIngredients[type] = updatedCount;
-    const priceAddition = INGREDIENT_PRICES[type];
-    const newPrice = oldPrice + priceAddition;
-    this.setState({ totalPrice: newPrice }); // ! this must dispatched as action
-    console.log(addIngredient);
-    addIngredient(type);
-    this.updatePurchaseState(updatedIngredients);
+    // const { ingredients, totalPrice: oldPrice, addIngredient } = this.props;
+    // const oldCount = ingredients[type];
+    // const updatedCount = oldCount + 1;
+    // const updatedIngredients = {
+    //   ...this.state.ingredients,
+    // };
+    // updatedIngredients[type] = updatedCount;
+    // const priceAddition = INGREDIENT_PRICES[type];
+    // const newPrice = oldPrice + priceAddition;
+    // this.setState({ totalPrice: newPrice }); // ! this must dispatched as action
+    // addIngredient(type);
+    // this.updatePurchaseState(updatedIngredients);
   };
 
-  // ! handle as action
   removeIngredientHandler = type => {
-    const { ingredients, totalPrice: oldPrice, removeIngredient } = this.props;
-
-    const oldCount = ingredients[type];
-    if (oldCount <= 0) {
-      return;
-    }
-    const updatedCount = oldCount - 1;
-    const updatedIngredients = {
-      ...this.state.ingredients,
-    };
-    updatedIngredients[type] = updatedCount;
-    const priceDeduction = INGREDIENT_PRICES[type];
-    const newPrice = oldPrice - priceDeduction;
-    this.setState({ totalPrice: newPrice, ingredients: updatedIngredients }); // ! this must dispatched as action
-    this.updatePurchaseState(updatedIngredients);
+    // const { ingredients, totalPrice: oldPrice, removeIngredient } = this.props;
+    // const oldCount = ingredients[type];
+    // if (oldCount <= 0) {
+    //   return;
+    // }
+    // const updatedCount = oldCount - 1;
+    // const updatedIngredients = {
+    //   ...this.state.ingredients,
+    // };
+    // updatedIngredients[type] = updatedCount;
+    // const priceDeduction = INGREDIENT_PRICES[type];
+    // const newPrice = oldPrice - priceDeduction;
+    // this.setState({ totalPrice: newPrice }); // ! this must dispatched as action
+    // removeIngredient(type);
+    // this.updatePurchaseState(updatedIngredients);
   };
 
   render() {
     const { purchasing, purchasable, error, loading } = this.state;
-    const { ingredients, totalPrice } = this.props;
+    const {
+      ingredients,
+      totalPrice,
+      removeIngredient,
+      addIngredient,
+    } = this.props;
 
     let orderSummary = null;
     let burger = <Spinner />;
@@ -144,8 +140,8 @@ class BurgerBuilder extends Component {
         <>
           <Burger ingredients={ingredients} />
           <BuildControls
-            ingredientAdded={this.addIngredientHandler}
-            ingredientRemoved={this.removeIngredientHandler}
+            ingredientAdded={addIngredient}
+            ingredientRemoved={removeIngredient}
             disabled={disabledInfo}
             purchasable={purchasable}
             ordered={this.purchaseHandler}
@@ -185,7 +181,7 @@ const mapStateToProps = ({ ingredients, totalPrice }) => ({
 
 const mapDispatchToProps = {
   addIngredient: addIngredientAction,
-  removeIngredien: removeIngredientAction,
+  removeIngredient: removeIngredientAction,
 };
 
 export default connect(
