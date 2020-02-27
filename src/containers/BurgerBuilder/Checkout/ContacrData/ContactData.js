@@ -114,8 +114,8 @@ class ContactData extends Component {
       },
       deliveryMethod: { value: 'fastest' },
     },
-    loading: false,
-    canSubmit: false,
+    loading: false, // UI state
+    canSubmit: false, // UI state
   };
 
   orderHandler = async event => {
@@ -123,6 +123,7 @@ class ContactData extends Component {
     const { push } = this.props.history;
     const { ingredients, totalPrice } = this.props;
     const { formValues, canSubmit } = this.state;
+    // ? =====> loading setState
     this.setState({ loading: true });
     const cache = {};
     Object.keys(formValues).forEach(key => {

@@ -6,8 +6,8 @@ import Order from 'components/Order/Order';
 
 class Orders extends Component {
   state = {
-    data: [],
-    loading: false,
+    data: [], // redux case
+    loading: false, // UI state
   };
 
   async componentDidMount() {

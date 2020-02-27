@@ -17,26 +17,25 @@ const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: {},
-    totalPrice: 4,
-    purchasable: false,
-    purchasing: false,
-    loading: false,
-    error: false,
+    ingredients: {}, // redux case
+    totalPrice: 4, // redux case
+    purchasable: false, // also UI state
+    purchasing: false, // local UI state
+    loading: false, // local UI state
+    error: false, // local UI state
   };
 
   async componentDidMount() {
-    try {
-      const { data, status } = await axios.get('ingredient.json');
-
-      if (status === 200 && {}.hasOwnProperty.call(data, 'bacon')) {
-        this.setState({
-          ingredients: data,
-        });
-      }
-    } catch (error) {
-      this.setState({ error: true });
-    }
+    // try {
+    //   const { data, status } = await axios.get('ingredient.json');
+    //   if (status === 200 && {}.hasOwnProperty.call(data, 'bacon')) {
+    //     this.setState({
+    //       ingredients: data,
+    //     });
+    //   }
+    // } catch (error) {
+    //   this.setState({ error: true });
+    // }
   }
 
   componentDidUpdate(_, { ingredients: prevIngredients }) {
@@ -79,6 +78,7 @@ class BurgerBuilder extends Component {
     this.setState({ purchasable: sum > 0 });
   };
 
+  // ! handle as action
   addIngredientHandler = type => {
     const oldCount = this.state.ingredients[type];
     const updatedCount = oldCount + 1;
@@ -89,10 +89,11 @@ class BurgerBuilder extends Component {
     const priceAddition = INGREDIENT_PRICES[type];
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice + priceAddition;
-    this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
+    this.setState({ totalPrice: newPrice, ingredients: updatedIngredients }); // ! this must dispatched as action
     this.updatePurchaseState(updatedIngredients);
   };
 
+  // ! handle as action
   removeIngredientHandler = type => {
     const oldCount = this.state.ingredients[type];
     if (oldCount <= 0) {
@@ -106,7 +107,7 @@ class BurgerBuilder extends Component {
     const priceDeduction = INGREDIENT_PRICES[type];
     const oldPrice = this.state.totalPrice;
     const newPrice = oldPrice - priceDeduction;
-    this.setState({ totalPrice: newPrice, ingredients: updatedIngredients });
+    this.setState({ totalPrice: newPrice, ingredients: updatedIngredients }); // ! this must dispatched as action
     this.updatePurchaseState(updatedIngredients);
   };
 

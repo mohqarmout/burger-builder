@@ -24,11 +24,11 @@ class Checkout extends Component {
       }
     }
 
-    // also eslint not smart enogth
+    // also eslint not smart enogth to figure it out
     // eslint-disable-next-line react/no-direct-mutation-state
     this.state = {
-      totalPrice,
-      ingredients,
+      totalPrice, // redux case
+      ingredients, // redux case
     };
   };
 
