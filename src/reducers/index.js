@@ -10,28 +10,22 @@ const initialState = {
   totalPrice: 4,
 };
 
-const rootRuducer = (
-  state = initialState,
-  { type, payload: { ingredient, newPrice } },
-) => {
+const rootRuducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case burgerAction.addIngredient:
       return {
         ...state,
-        totalPrice: newPrice,
-        ingredient,
         ingredients: {
           ...state.ingredients,
-          ingredient: state.ingredients[ingredient] + 1,
+          [payload.ingredient]: state.ingredients[payload.ingredient] + 1,
         },
       };
     case burgerAction.removeIngredient:
       return {
         ...state,
-        totalPrice: newPrice,
         ingredients: {
           ...state.ingredients,
-          ingredient: state.ingredients[ingredient] - 1,
+          [payload.ingredient]: state.ingredients[payload.ingredient] - 1,
         },
       };
 
