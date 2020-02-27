@@ -1,4 +1,5 @@
 import { burgerAction } from 'actions';
+import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 
 const initialState = {
   ingredients: {
@@ -15,6 +16,7 @@ const rootRuducer = (state = initialState, { type, payload }) => {
     case burgerAction.addIngredient:
       return {
         ...state,
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[payload.ingredient],
         ingredients: {
           ...state.ingredients,
           [payload.ingredient]: state.ingredients[payload.ingredient] + 1,
@@ -23,6 +25,7 @@ const rootRuducer = (state = initialState, { type, payload }) => {
     case burgerAction.removeIngredient:
       return {
         ...state,
+        totalPrice: state.totalPrice - INGREDIENT_PRICES[payload.ingredient],
         ingredients: {
           ...state.ingredients,
           [payload.ingredient]: state.ingredients[payload.ingredient] - 1,
