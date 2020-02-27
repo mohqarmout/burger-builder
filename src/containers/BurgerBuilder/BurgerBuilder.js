@@ -46,18 +46,19 @@ class BurgerBuilder extends Component {
 
   purchaseContinueHandler = () => {
     const { push } = this.props.history;
-    const { ingredients, totalPrice } = this.props;
+    // const { ingredients, totalPrice } = this.props;
 
-    const queryString = Object.keys({ ...ingredients }).map(
-      key =>
-        `${encodeURIComponent(key)}=${encodeURIComponent(ingredients[key])}`,
-    );
-    queryString.push(`totalPrice=${totalPrice}`);
+    // const queryString = Object.keys({ ...ingredients }).map(
+    //   key =>
+    //     `${encodeURIComponent(key)}=${encodeURIComponent(ingredients[key])}`,
+    // );
+    // queryString.push(`totalPrice=${totalPrice}`);
 
-    push({
-      pathname: '/checkout',
-      search: queryString.join('&'),
-    });
+    // push({
+    //   pathname: '/checkout',
+    //   // search: queryString.join('&'),
+    // });
+    push('/checkout');
   };
 
   purchaseCancelHandler = () => {
@@ -68,7 +69,8 @@ class BurgerBuilder extends Component {
     this.setState({ purchasing: true });
   };
 
-  updatePurchaseState = ingredients => {
+  updatePurchaseState = () => {
+    const { ingredients } = this.props;
     const sum = Object.keys(ingredients)
       .map(igKey => {
         return ingredients[igKey];
@@ -109,7 +111,7 @@ class BurgerBuilder extends Component {
             ingredientAdded={addIngredient}
             ingredientRemoved={removeIngredient}
             disabled={disabledInfo}
-            purchasable={this.updatePurchaseState(ingredients)}
+            purchasable={this.updatePurchaseState()}
             ordered={this.purchaseHandler}
             price={totalPrice}
           />
