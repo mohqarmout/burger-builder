@@ -15,8 +15,17 @@ const rootRuducer = (
   { type, payload: { ingredient, newPrice } },
 ) => {
   switch (type) {
+    // type of ingredient
     case burgerAction.addIngredient:
-      return { ...state, ingredient, totalPrice: newPrice };
+      return {
+        ...state,
+        ingredient,
+        totalPrice: newPrice,
+        ingredients: {
+          ...state.ingredients,
+          ingredient: state.ingredients[ingredient] + 1,
+        },
+      };
 
     default:
       return state;
