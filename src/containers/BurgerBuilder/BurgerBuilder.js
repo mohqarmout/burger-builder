@@ -19,7 +19,6 @@ export const INGREDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
   state = {
-    purchasable: false,
     purchasing: false,
     loading: false,
     error: false,
@@ -75,44 +74,11 @@ class BurgerBuilder extends Component {
         return ingredients[igKey];
       })
       .reduce((acc, curr) => acc + curr, 0);
-    this.setState({ purchasable: sum > 0 });
-  };
-
-  addIngredientHandler = type => {
-    // const { ingredients, totalPrice: oldPrice, addIngredient } = this.props;
-    // const oldCount = ingredients[type];
-    // const updatedCount = oldCount + 1;
-    // const updatedIngredients = {
-    //   ...this.state.ingredients,
-    // };
-    // updatedIngredients[type] = updatedCount;
-    // const priceAddition = INGREDIENT_PRICES[type];
-    // const newPrice = oldPrice + priceAddition;
-    // this.setState({ totalPrice: newPrice }); // ! this must dispatched as action
-    // addIngredient(type);
-    // this.updatePurchaseState(updatedIngredients);
-  };
-
-  removeIngredientHandler = type => {
-    // const { ingredients, totalPrice: oldPrice, removeIngredient } = this.props;
-    // const oldCount = ingredients[type];
-    // if (oldCount <= 0) {
-    //   return;
-    // }
-    // const updatedCount = oldCount - 1;
-    // const updatedIngredients = {
-    //   ...this.state.ingredients,
-    // };
-    // updatedIngredients[type] = updatedCount;
-    // const priceDeduction = INGREDIENT_PRICES[type];
-    // const newPrice = oldPrice - priceDeduction;
-    // this.setState({ totalPrice: newPrice }); // ! this must dispatched as action
-    // removeIngredient(type);
-    // this.updatePurchaseState(updatedIngredients);
+    return sum > 0;
   };
 
   render() {
-    const { purchasing, purchasable, error, loading } = this.state;
+    const { purchasing, error, loading } = this.state;
     const {
       ingredients,
       totalPrice,
@@ -143,7 +109,7 @@ class BurgerBuilder extends Component {
             ingredientAdded={addIngredient}
             ingredientRemoved={removeIngredient}
             disabled={disabledInfo}
-            purchasable={purchasable}
+            purchasable={this.updatePurchaseState(ingredients)}
             ordered={this.purchaseHandler}
             price={totalPrice}
           />
