@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Spinner from 'components/UI/Spinner/Spinner';
 import axios from 'axiosInstances';
 import Button from 'components/UI/Button/Button';
@@ -114,15 +115,15 @@ class ContactData extends Component {
       },
       deliveryMethod: { value: 'fastest' },
     },
-    loading: false, // UI state
-    canSubmit: false, // UI state
+    loading: false,
+    canSubmit: false,
   };
 
   orderHandler = async event => {
     event.preventDefault();
     const { push } = this.props.history;
     const { ingredients, totalPrice } = this.props;
-    const { formValues, canSubmit } = this.state;
+    const { formValues, canSubmit } = this.state; //!  set formValues to redux store  ==> after submit
     // ? =====> loading setState
     this.setState({ loading: true });
     const cache = {};
@@ -247,4 +248,9 @@ class ContactData extends Component {
   }
 }
 
-export default ContactData;
+const mapStateToProps = ({ ingredients, totalPrice }) => ({
+  ingredients,
+  totalPrice,
+});
+
+export default connect(mapStateToProps)(ContactData);
