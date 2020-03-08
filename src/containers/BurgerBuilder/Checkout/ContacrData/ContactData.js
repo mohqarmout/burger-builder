@@ -123,11 +123,11 @@ class ContactData extends Component {
 
   orderHandler = async event => {
     event.preventDefault();
+    this.setState({ loading: true });
     const { push } = this.props.history;
     const { ingredients, totalPrice, postOreder } = this.props;
     const { formValues, canSubmit } = this.state; //!  set formValues to redux store  ==> after submit
     // ? =====> loading setState
-    this.setState({ loading: true });
     const cache = {};
     Object.keys(formValues).forEach(key => {
       cache[key] = formValues[key].value;

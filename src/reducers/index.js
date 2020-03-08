@@ -23,7 +23,7 @@ const order = (state = { orders: [] }, { type, payload }) => {
 
 const BurgerBuilder = (
   state = {
-    ingredients: {},
+    ingredients: null,
     totalPrice: 4,
   },
   { type, payload },

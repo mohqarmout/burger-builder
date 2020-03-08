@@ -13,7 +13,6 @@ import OrderSummary from 'components/Burger/OrderSummary/OrderSummary';
 import BuildControls from 'components/Burger/BuildControls/BuildControls';
 import Burger from 'components/Burger/Burger';
 import Spinner from 'components/UI/Spinner/Spinner';
-import { object } from 'prop-types';
 
 export const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -99,7 +98,7 @@ class BurgerBuilder extends Component {
       ...ingredients,
     };
 
-    if (Object.keys(ingredients).length) {
+    if (ingredients) {
       orderSummary = (
         <OrderSummary
           ingredients={ingredients}
@@ -124,7 +123,7 @@ class BurgerBuilder extends Component {
     } else {
       orderSummary = <Spinner />;
     }
-    // ! fix it for later mate !
+
     if (error) {
       burger = <p>sorry something went wrong</p>;
     }
