@@ -53,6 +53,7 @@ const BurgerBuilder = (
           salad: payload.ingredients.salad,
           ...payload.ingredients,
         },
+        totalPrice: 4,
       };
 
     default:
