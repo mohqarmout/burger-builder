@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { postOrederThunk } from 'actions';
 import Spinner from 'components/UI/Spinner/Spinner';
+import withErrorHandler from 'HOC/withErrorHandler';
+import axios from 'axiosInstances';
 import Button from 'components/UI/Button/Button';
 import Input from 'components/UI/Input/Input';
 import classes from './ContactData.module.css';
@@ -254,4 +256,7 @@ const mapStateToProps = ({ ingredients, totalPrice }) => ({
   totalPrice,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactData);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withErrorHandler(ContactData, axios));
