@@ -48,6 +48,7 @@ class BurgerBuilder extends Component {
   purchaseContinueHandler = () => {
     const { push } = this.props.history;
     // ! for reference only
+
     // const { ingredients, totalPrice } = this.props;
 
     // const queryString = Object.keys({ ...ingredients }).map(

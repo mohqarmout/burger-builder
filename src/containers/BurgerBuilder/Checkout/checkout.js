@@ -45,8 +45,9 @@ class Checkout extends Component {
 
   render() {
     const { ingredients } = this.props;
-    // eslint-disable-next-line react/destructuring-assignment
-    const { path } = this.props.match;
+    const {
+      match: { path },
+    } = this.props;
     return (
       <div>
         <CheckoutSummary
