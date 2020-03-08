@@ -1,12 +1,33 @@
-import { burgerActionNames } from 'actions';
+import { combineReducers } from 'redux';
+import { burgerActionNames, orderActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 
-const initialState = {
-  ingredients: {},
-  totalPrice: 4,
+const order = (state = { orders: [] }, { type, payload }) => {
+  switch (type) {
+    case orderActionNames.postOrder:
+      return {
+        ...state,
+        order: [
+          ...state.orders,
+          {
+            id: payload.id,
+            ordersData: payload.ordersData,
+          },
+        ],
+      };
+
+    default:
+      return state;
+  }
 };
 
-const rootRuducer = (state = initialState, { type, payload }) => {
+const BurgerBuilder = (
+  state = {
+    ingredients: {},
+    totalPrice: 4,
+  },
+  { type, payload },
+) => {
   switch (type) {
     case burgerActionNames.addIngredient:
       return {
@@ -40,4 +61,7 @@ const rootRuducer = (state = initialState, { type, payload }) => {
   }
 };
 
-export default rootRuducer;
+export default combineReducers({
+  BurgerBuilder,
+  order,
+});

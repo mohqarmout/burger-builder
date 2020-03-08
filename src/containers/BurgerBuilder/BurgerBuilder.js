@@ -13,6 +13,7 @@ import OrderSummary from 'components/Burger/OrderSummary/OrderSummary';
 import BuildControls from 'components/Burger/BuildControls/BuildControls';
 import Burger from 'components/Burger/Burger';
 import Spinner from 'components/UI/Spinner/Spinner';
+import { object } from 'prop-types';
 
 export const INGREDIENT_PRICES = {
   salad: 0.5,
@@ -98,7 +99,7 @@ class BurgerBuilder extends Component {
       ...ingredients,
     };
 
-    if (ingredients) {
+    if (Object.keys(ingredients).length) {
       orderSummary = (
         <OrderSummary
           ingredients={ingredients}
@@ -144,7 +145,7 @@ class BurgerBuilder extends Component {
   }
 }
 
-const mapStateToProps = ({ ingredients, totalPrice }) => ({
+const mapStateToProps = ({ BurgerBuilder: { ingredients, totalPrice } }) => ({
   ingredients,
   totalPrice,
 });

@@ -61,7 +61,7 @@ class Checkout extends Component {
   }
 }
 
-const mapStateToProps = ({ ingredients }) => ({
+const mapStateToProps = ({ BurgerBuilder: { ingredients } }) => ({
   ingredients,
 });
 

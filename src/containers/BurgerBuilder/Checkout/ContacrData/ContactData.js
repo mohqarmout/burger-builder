@@ -251,7 +251,7 @@ const mapDispatchToProps = {
   postOreder: postOrederThunk,
 };
 
-const mapStateToProps = ({ ingredients, totalPrice }) => ({
+const mapStateToProps = ({ BurgerBuilder: { ingredients, totalPrice } }) => ({
   ingredients,
   totalPrice,
 });
