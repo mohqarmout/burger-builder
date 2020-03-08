@@ -4,6 +4,7 @@ import { makeSynActionCreator } from 'utils';
 export const burgerActionNames = {
   addIngredient: 'ADD_INGREDIENT',
   removeIngredient: 'REMOVE_INGREDIENT',
+  setIngredients: 'SET_INGREDIENTS',
 };
 
 export const addIngredientAction = makeSynActionCreator(
@@ -15,3 +16,20 @@ export const removeIngredientAction = makeSynActionCreator(
   burgerActionNames.removeIngredient,
   'ingredient',
 );
+
+export const setIngredientAction = makeSynActionCreator(
+  burgerActionNames.setIngredients,
+  'ingredients',
+);
+
+// eslint-disable-next-line consistent-return
+export const inintIngredientThunk = () => async (dispatch, _, { axios }) => {
+  const { data, status } = await axios.get('ingredient.json');
+  try {
+    if (status === 200 && {}.hasOwnProperty.call(data, 'bacon')) {
+      return dispatch(setIngredientAction(data));
+    }
+  } catch (error) {
+    return error;
+  }
+};

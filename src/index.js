@@ -5,6 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import axios from 'axiosInstances';
 import rootReducer from 'reducers';
 import './index.css';
 import App from './App';
@@ -12,7 +13,7 @@ import * as serviceWorker from './serviceWorker';
 
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk)),
+  composeWithDevTools(applyMiddleware(thunk.withExtraArgument({ axios }))),
 );
 
 ReactDOM.render(

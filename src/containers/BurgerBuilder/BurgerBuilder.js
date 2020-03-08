@@ -1,7 +1,11 @@
 /* eslint-disable react/no-access-state-in-setstate */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addIngredientAction, removeIngredientAction } from 'actions';
+import {
+  addIngredientAction,
+  removeIngredientAction,
+  inintIngredientThunk,
+} from 'actions';
 import axios from 'axiosInstances';
 import withErrorHandler from 'HOC/withErrorHandler';
 import Modal from 'components/UI/Modal/Modal';
@@ -20,11 +24,11 @@ export const INGREDIENT_PRICES = {
 class BurgerBuilder extends Component {
   state = {
     purchasing: false,
-    loading: false,
     error: false,
   };
 
   async componentDidMount() {
+    // ! need to dispache Async action
     // try {
     //   const { data, status } = await axios.get('ingredient.json');
     //   if (status === 200 && {}.hasOwnProperty.call(data, 'bacon')) {
@@ -35,6 +39,14 @@ class BurgerBuilder extends Component {
     // } catch (error) {
     //   this.setState({ error: true });
     // }
+    const { inintIngredient } = this.props;
+    try {
+      await inintIngredient();
+    } catch (error) {
+      this.setState({
+        error: true,
+      });
+    }
   }
 
   componentDidUpdate(_, { ingredients: prevIngredients }) {
@@ -46,6 +58,7 @@ class BurgerBuilder extends Component {
 
   purchaseContinueHandler = () => {
     const { push } = this.props.history;
+    // ! for reference only
     // const { ingredients, totalPrice } = this.props;
 
     // const queryString = Object.keys({ ...ingredients }).map(
@@ -80,7 +93,7 @@ class BurgerBuilder extends Component {
   };
 
   render() {
-    const { purchasing, error, loading } = this.state;
+    const { purchasing, error } = this.state;
     const {
       ingredients,
       totalPrice,
@@ -95,7 +108,7 @@ class BurgerBuilder extends Component {
       ...ingredients,
     };
 
-    if (Object.keys(ingredients).length) {
+    if (ingredients) {
       orderSummary = (
         <OrderSummary
           ingredients={ingredients}
@@ -117,11 +130,10 @@ class BurgerBuilder extends Component {
           />
         </>
       );
-    }
-
-    if (loading) {
+    } else {
       orderSummary = <Spinner />;
     }
+    // ! fix it for later mate !
     if (error) {
       burger = <p>sorry something went wrong</p>;
     }
@@ -150,6 +162,7 @@ const mapStateToProps = ({ ingredients, totalPrice }) => ({
 const mapDispatchToProps = {
   addIngredient: addIngredientAction,
   removeIngredient: removeIngredientAction,
+  inintIngredient: inintIngredientThunk,
 };
 
 export default connect(

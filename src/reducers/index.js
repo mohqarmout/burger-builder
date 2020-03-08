@@ -2,12 +2,7 @@ import { burgerActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 
 const initialState = {
-  ingredients: {
-    salad: 0,
-    bacon: 0,
-    cheese: 0,
-    meat: 0,
-  },
+  ingredients: null,
   totalPrice: 4,
 };
 
@@ -30,6 +25,11 @@ const rootRuducer = (state = initialState, { type, payload }) => {
           ...state.ingredients,
           [payload.ingredient]: state.ingredients[payload.ingredient] - 1,
         },
+      };
+    case burgerActionNames.setIngredients:
+      return {
+        ...state,
+        ingredients: payload.ingredients,
       };
 
     default:
