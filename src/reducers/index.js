@@ -5,7 +5,7 @@ import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 const order = (state = [], { type, payload }) => {
   switch (type) {
     case orderActionNames.postOrder:
-      return {
+      return [
         ...state,
         ...[
           {
@@ -13,8 +13,9 @@ const order = (state = [], { type, payload }) => {
             ordersData: payload.ordersData,
           },
         ],
-      };
-
+      ];
+    case orderActionNames.getPost:
+      return [...state, ...payload.orders];
     default:
       return state;
   }
