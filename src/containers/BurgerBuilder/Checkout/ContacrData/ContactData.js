@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { postOrederThunk } from 'actions';
 import Spinner from 'components/UI/Spinner/Spinner';
-import axios from 'axiosInstances';
 import Button from 'components/UI/Button/Button';
 import Input from 'components/UI/Input/Input';
 import classes from './ContactData.module.css';
@@ -122,7 +122,7 @@ class ContactData extends Component {
   orderHandler = async event => {
     event.preventDefault();
     const { push } = this.props.history;
-    const { ingredients, totalPrice } = this.props;
+    const { ingredients, totalPrice, postOreder } = this.props;
     const { formValues, canSubmit } = this.state; //!  set formValues to redux store  ==> after submit
     // ? =====> loading setState
     this.setState({ loading: true });
@@ -137,9 +137,7 @@ class ContactData extends Component {
     };
     if (canSubmit) {
       try {
-        await axios.post('orders.json', {
-          ...orders,
-        });
+        await postOreder(orders);
         this.setState({ loading: false });
         push('/');
       } catch (err) {
@@ -247,10 +245,13 @@ class ContactData extends Component {
     );
   }
 }
+const mapDispatchToProps = {
+  postOreder: postOrederThunk,
+};
 
 const mapStateToProps = ({ ingredients, totalPrice }) => ({
   ingredients,
   totalPrice,
 });
 
-export default connect(mapStateToProps)(ContactData);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactData);

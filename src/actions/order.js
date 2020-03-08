@@ -15,8 +15,7 @@ export const postOrederThunk = ordersData => async (dispatch, _, { axios }) => {
     const { data } = await axios.post('orders.json', {
       ...ordersData,
     });
-    console.log(data);
-    return dispatch(purchaseBurger(data, ordersData));
+    return dispatch(purchaseBurger(data.name, ordersData));
   } catch (err) {
     return err;
   }

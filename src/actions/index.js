@@ -5,4 +5,4 @@ export {
   inintIngredientThunk,
 } from './burgerBurger';
 
-export { orderActionNames, postOrederThunk } from './oreder';
+export { orderActionNames, postOrederThunk } from './order';

@@ -2,7 +2,7 @@ import { burgerActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 
 const initialState = {
-  ingredients: null,
+  ingredients: {},
   totalPrice: 4,
 };
 
