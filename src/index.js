@@ -11,9 +11,11 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 10 });
+
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk.withExtraArgument({ axios }))),
+  composeEnhancers(applyMiddleware(thunk.withExtraArgument({ axios }))),
 );
 
 ReactDOM.render(
