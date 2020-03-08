@@ -29,7 +29,10 @@ const rootRuducer = (state = initialState, { type, payload }) => {
     case burgerActionNames.setIngredients:
       return {
         ...state,
-        ingredients: payload.ingredients,
+        ingredients: {
+          salad: payload.ingredients.salad,
+          ...payload.ingredients,
+        },
       };
 
     default:

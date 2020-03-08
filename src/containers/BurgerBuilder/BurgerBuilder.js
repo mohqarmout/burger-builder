@@ -28,17 +28,6 @@ class BurgerBuilder extends Component {
   };
 
   async componentDidMount() {
-    // ! need to dispache Async action
-    // try {
-    //   const { data, status } = await axios.get('ingredient.json');
-    //   if (status === 200 && {}.hasOwnProperty.call(data, 'bacon')) {
-    //     this.setState({
-    //       ingredients: data,
-    //     });
-    //   }
-    // } catch (error) {
-    //   this.setState({ error: true });
-    // }
     const { inintIngredient } = this.props;
     try {
       await inintIngredient();
