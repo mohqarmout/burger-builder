@@ -13,7 +13,6 @@ const checkoutSummary = ({ ingredients, checkoutCancel, checkoutContinue }) => {
           margin: 'auto',
         }}
       >
-        {/* leade to error */}
         <Burger ingredients={ingredients} />
       </div>
       <Button clicked={checkoutCancel} btnType="Danger">

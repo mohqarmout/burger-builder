@@ -2,13 +2,12 @@ import { combineReducers } from 'redux';
 import { burgerActionNames, orderActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 
-const order = (state = { orders: [] }, { type, payload }) => {
+const order = (state = [], { type, payload }) => {
   switch (type) {
     case orderActionNames.postOrder:
       return {
         ...state,
-        order: [
-          ...state.orders,
+        ...[
           {
             id: payload.id,
             ordersData: payload.ordersData,

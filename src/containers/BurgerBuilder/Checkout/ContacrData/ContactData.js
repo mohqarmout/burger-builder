@@ -126,8 +126,7 @@ class ContactData extends Component {
     this.setState({ loading: true });
     const { push } = this.props.history;
     const { ingredients, totalPrice, postOreder } = this.props;
-    const { formValues, canSubmit } = this.state; //!  set formValues to redux store  ==> after submit
-    // ? =====> loading setState
+    const { formValues, canSubmit } = this.state;
     const cache = {};
     Object.keys(formValues).forEach(key => {
       cache[key] = formValues[key].value;
