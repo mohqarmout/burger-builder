@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import { burgerActionNames, orderActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
+import { getUnique } from 'utils';
 
 const order = (state = [], { type, payload }) => {
   switch (type) {
@@ -15,7 +16,7 @@ const order = (state = [], { type, payload }) => {
         ],
       ];
     case orderActionNames.getPost:
-      return [...state, ...payload.orders];
+      return getUnique([...state, ...payload.orders], 'id'); //
     default:
       return state;
   }

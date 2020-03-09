@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 // ? I think this what called partial application
 
 export const makeSynActionCreator = (type, ...argNames) => {
@@ -9,4 +8,12 @@ export const makeSynActionCreator = (type, ...argNames) => {
     });
     return action;
   };
+};
+
+export const getUnique = (arr, comp) => {
+  return arr
+    .map(e => e[comp])
+    .map((e, i, final) => final.indexOf(e) === i && i)
+    .filter(e => arr[e])
+    .map(e => arr[e]);
 };
