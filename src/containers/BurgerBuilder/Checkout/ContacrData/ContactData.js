@@ -1,8 +1,8 @@
-/* eslint-disable react/no-unused-state */
-// I guess eslint is not smart enough
-
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { postOrederThunk } from 'actions';
 import Spinner from 'components/UI/Spinner/Spinner';
+import withErrorHandler from 'HOC/withErrorHandler';
 import axios from 'axiosInstances';
 import Button from 'components/UI/Button/Button';
 import Input from 'components/UI/Input/Input';
@@ -123,10 +123,10 @@ class ContactData extends Component {
 
   orderHandler = async event => {
     event.preventDefault();
-    const { push } = this.props.history;
-    const { ingredients, totalPrice } = this.props;
-    const { formValues, canSubmit } = this.state;
     this.setState({ loading: true });
+    const { push } = this.props.history;
+    const { ingredients, totalPrice, postOreder } = this.props;
+    const { formValues, canSubmit } = this.state;
     const cache = {};
     Object.keys(formValues).forEach(key => {
       cache[key] = formValues[key].value;
@@ -138,9 +138,7 @@ class ContactData extends Component {
     };
     if (canSubmit) {
       try {
-        await axios.post('orders.json', {
-          ...orders,
-        });
+        await postOreder(orders);
         this.setState({ loading: false });
         push('/');
       } catch (err) {
@@ -248,5 +246,16 @@ class ContactData extends Component {
     );
   }
 }
+const mapDispatchToProps = {
+  postOreder: postOrederThunk,
+};
 
-export default ContactData;
+const mapStateToProps = ({ BurgerBuilder: { ingredients, totalPrice } }) => ({
+  ingredients,
+  totalPrice,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withErrorHandler(ContactData, axios));

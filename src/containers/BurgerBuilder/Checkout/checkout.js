@@ -1,36 +1,37 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Route, Redirect } from 'react-router-dom';
 import CheckoutSummary from 'components/Order/checkoutSummary/checkoutSummary';
 import ContactData from './ContacrData/ContactData';
 
 class Checkout extends Component {
-  // we need old school method ==> becouse of the initaly null ingredients
-  constructor(props) {
-    super(props);
-    this.initialConstructor();
-  }
+  // we need oldschool method ==> because of the initaly null ingredients
+  // constructor(props) {
+  //   super(props);
+  //   this.initialConstructor();
+  // }
 
-  // you can use componentWillMount but it is a leagacy method
-  initialConstructor = () => {
-    const { search } = this.props.history.location;
-    const urlParams = new URLSearchParams(search);
-    const ingredients = {};
-    let totalPrice = 0;
-    for (const [key, value] of urlParams.entries()) {
-      if (key === 'totalPrice') {
-        totalPrice = Number(value).toFixed(2);
-      } else {
-        ingredients[key] = +value;
-      }
-    }
+  // // you can use componentWillMount but it is a leagacy method
+  // initialConstructor = () => {
+  //   const { search } = this.props.history.location;
+  //   const urlParams = new URLSearchParams(search);
+  //   const ingredients = {};
+  //   let totalPrice = 0;
+  //   for (const [key, value] of urlParams.entries()) {
+  //     if (key === 'totalPrice') {
+  //       totalPrice = Number(value).toFixed(2);
+  //     } else {
+  //       ingredients[key] = +value;
+  //     }
+  //   }
 
-    // also eslint not smart enogth
-    // eslint-disable-next-line react/no-direct-mutation-state
-    this.state = {
-      totalPrice,
-      ingredients,
-    };
-  };
+  //   // also eslint not smart enogth to figure it out
+  //   // eslint-disable-next-line react/no-direct-mutation-state
+  //   this.state = {
+  //     totalPrice,
+  //     ingredients,
+  //   };
+  // };
 
   checkoutCancelHandler = () => {
     const { goBack } = this.props.history;
@@ -43,29 +44,31 @@ class Checkout extends Component {
   };
 
   render() {
-    const { ingredients, totalPrice } = this.state;
-    // eslint-disable-next-line react/destructuring-assignment
-    const { path } = this.props.match;
-    return (
+    const { ingredients } = this.props;
+    const {
+      match: { path },
+    } = this.props;
+    let checkoutSummary = (
       <div>
         <CheckoutSummary
           checkoutCancel={this.checkoutCancelHandler}
           checkoutContinue={this.checkoutContinueHandler}
           ingredients={ingredients}
         />
-        <Route
-          path={`${path}/contact-data`}
-          render={routeProps => (
-            <ContactData
-              {...routeProps}
-              totalPrice={totalPrice}
-              ingredients={ingredients}
-            />
-          )}
-        />
+        <Route path={`${path}/contact-data`} component={ContactData} />
       </div>
     );
+
+    if (!ingredients) {
+      checkoutSummary = <Redirect to="/" />;
+    }
+
+    return checkoutSummary;
   }
 }
 
-export default Checkout;
+const mapStateToProps = ({ BurgerBuilder: { ingredients } }) => ({
+  ingredients,
+});
+
+export default connect(mapStateToProps)(Checkout);

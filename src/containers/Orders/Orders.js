@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { getOrederThunk } from 'actions';
 import withErrorHandler from 'HOC/withErrorHandler';
 import Spinner from 'components/UI/Spinner/Spinner';
 import axios from 'axiosInstances';
@@ -6,25 +8,19 @@ import Order from 'components/Order/Order';
 
 class Orders extends Component {
   state = {
-    data: [],
-    loading: false,
+    loading: false, //! UI state
   };
 
   async componentDidMount() {
+    const { fetchOrder } = this.props;
     this.setState({
       loading: true,
     });
-    const { data, status } = await axios.get('orders.json');
+
     try {
-      if (status === 200) {
-        const cache = [];
-        // eslint-disable-next-line array-callback-return
-        Object.keys(data).map(orderID => {
-          const { orederDate, ...rest } = data[orderID];
-          cache.push({ id: orderID, ...rest });
-        });
-        this.setState({ data: cache, loading: false });
-      }
+      await fetchOrder();
+
+      this.setState({ loading: false });
     } catch (error) {
       this.setState({
         loading: false,
@@ -33,7 +29,9 @@ class Orders extends Component {
   }
 
   render() {
-    const { loading, data } = this.state;
+    const { loading } = this.state;
+    const { data } = this.props;
+
     let orders = data.map(({ id, ingredients = {}, price }) => {
       return <Order key={id} price={price} ingredinets={ingredients} />;
     });
@@ -44,4 +42,15 @@ class Orders extends Component {
   }
 }
 
-export default withErrorHandler(Orders, axios);
+const mapStateToProps = ({ order }) => {
+  return { data: order };
+};
+
+const mapDispatchToProps = {
+  fetchOrder: getOrederThunk,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(withErrorHandler(Orders, axios));
