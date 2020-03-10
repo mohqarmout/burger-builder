@@ -5,18 +5,21 @@ import { getUnique } from 'utils';
 
 const order = (state = [], { type, payload }) => {
   switch (type) {
-    case orderActionNames.postOrder:
-      return [
-        ...state,
-        ...[
-          {
-            id: payload.id,
-            ordersData: payload.ordersData,
-          },
-        ],
-      ];
+    // case orderActionNames.postOrder:
+    //   return getUnique(
+    //     [
+    //       ...state,
+    //       ...[
+    //         {
+    //           id: payload.id,
+    //           ordersData: payload.ordersData,
+    //         },
+    //       ],
+    //     ],
+    //     'id',
+    //   );
     case orderActionNames.getPost:
-      return getUnique([...state, ...payload.orders], 'id'); //
+      return getUnique([...state, ...payload.orders], 'id');
     default:
       return state;
   }

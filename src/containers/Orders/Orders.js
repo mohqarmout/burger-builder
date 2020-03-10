@@ -8,7 +8,7 @@ import Order from 'components/Order/Order';
 
 class Orders extends Component {
   state = {
-    loading: false, //! UI state
+    loading: false, //* UI state
   };
 
   async componentDidMount() {
