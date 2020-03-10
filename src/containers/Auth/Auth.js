@@ -3,7 +3,6 @@ import Button from 'components/UI/Button/Button';
 import Input from 'components/UI/Input/Input';
 import { objectFactory } from '../BurgerBuilder/Checkout/ContacrData/ContactData';
 
-// ! obj
 const authForm = {
   email: objectFactory({
     placeholder: 'E-mail',
@@ -18,7 +17,6 @@ const authForm = {
     htmlFor: 'password',
   }),
 };
-
 class Auth extends Component {
   state = {
     formItems: {
@@ -35,6 +33,22 @@ class Auth extends Component {
         touched: false,
       },
     },
+  };
+
+  handleInputChange = ({ target: { value } }, id) => {
+    const { formItems } = this.state;
+    const { validation } = formItems[id];
+    this.setState({
+      formItems: {
+        ...formItems,
+        [id]: {
+          value,
+          validation,
+          valid: this.checkValidity(value, validation),
+          touched: true,
+        },
+      },
+    });
   };
 
   checkValidity = (value, rule) => {
@@ -56,37 +70,37 @@ class Auth extends Component {
   render() {
     const { formItems } = this.state;
 
-    const formElementArray = Object.keys(formItems).map(formItem => {
+    const formElementArray = Object.keys(authForm).map(formItem => {
       return {
         id: formItem,
         config: {
-          value: authForm[formItem].value,
-          valid: authForm[formItem].valid,
-          shouldValidate: authForm[formItem].validation,
-          touched: authForm[formItem].touched,
+          value: formItems[formItem].value,
+          valid: formItems[formItem].valid,
+          shouldValidate: formItems[formItem].validation,
+          touched: formItems[formItem].touched,
           ...authForm[formItem],
         },
       };
     });
-    const form = (
-      <form onSubmit={this.orderHandler}>
-        {formElementArray.map(({ id, config }) => (
-          <Input
-            key={id}
-            handleInputChange={event => {
-              this.handleInputChange(event, id);
-            }}
-            {...config}
-          />
-        ))}
-        <Button active={canSubmit} type="submit" btnType="Success">
-          ORDER
-        </Button>
-      </form>
-    );
+    // console.log(formElementArray);
+    const form = formElementArray.map(({ id, config }) => (
+      <Input
+        key={id}
+        handleInputChange={event => {
+          this.handleInputChange(event, id);
+        }}
+        {...config}
+      />
+    ));
+    // ! this.orderHandler need to setup
     return (
       <div>
-        <form />
+        <form onSubmit={this.orderHandler}>
+          {form}
+          <Button type="submit" btnType="Success">
+            SUBMIT
+          </Button>
+        </form>
       </div>
     );
   }
