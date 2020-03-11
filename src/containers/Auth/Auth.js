@@ -75,8 +75,23 @@ class Auth extends Component {
   orderHandler = async event => {
     const { formItems } = this.state;
     const { getAuth } = this.props;
+    const {
+      formItems: {
+        email: { value: email },
+        password: { value: password },
+      },
+      canSubmit,
+      isSignedUp,
+    } = this.state;
+
     event.preventDefault();
     this.setState({ loading: true });
+
+    if (canSubmit) {
+      console.log(isSignedUp);
+      await getAuth(email, password, isSignedUp);
+      this.setState({ loading: false });
+    }
   };
 
   SwitchAuthModeHandler = () => {
