@@ -12,14 +12,14 @@ const authForm = {
     placeholder: 'E-mail',
     type: 'email',
     id: 'email',
-    htmlFor: 'email',
+    htmlFor: 'email'
   }),
   password: objectFactory({
     placeholder: 'password',
     type: 'password',
     id: 'password',
-    htmlFor: 'password',
-  }),
+    htmlFor: 'password'
+  })
 };
 class Auth extends Component {
   state = {
@@ -28,18 +28,18 @@ class Auth extends Component {
         value: '',
         validation: { required: true },
         valid: false,
-        touched: false,
+        touched: false
       },
       password: {
         value: '',
         validation: { required: true, minLength: 6, maxLength: 8 },
         valid: false,
-        touched: false,
-      },
+        touched: false
+      }
     },
     canSubmit: false,
     loading: false,
-    isSignedUp: true,
+    isSignedUp: true
   };
 
   handleInputChange = ({ target: { value } }, id) => {
@@ -52,13 +52,13 @@ class Auth extends Component {
           value,
           validation,
           valid: this.checkValidity(value, validation),
-          touched: true,
-        },
-      },
+          touched: true
+        }
+      }
     });
     // eslint-disable-next-line no-shadow
     this.setState(({ formItems }) => ({
-      canSubmit: this.updateCanSubmitState(formItems),
+      canSubmit: this.updateCanSubmitState(formItems)
     }));
   };
 
@@ -92,17 +92,16 @@ class Auth extends Component {
     const {
       formItems: {
         email: { value: email },
-        password: { value: password },
+        password: { value: password }
       },
       canSubmit,
-      isSignedUp,
+      isSignedUp
     } = this.state;
 
     event.preventDefault();
     this.setState({ loading: true });
 
     if (canSubmit) {
-      console.log(isSignedUp);
       await getAuth(email, password, isSignedUp);
       this.setState({ loading: false });
     }
@@ -125,8 +124,8 @@ class Auth extends Component {
           valid: formItems[formItem].valid,
           shouldValidate: formItems[formItem].validation,
           touched: formItems[formItem].touched,
-          ...authForm[formItem],
-        },
+          ...authForm[formItem]
+        }
       };
     });
 
@@ -147,10 +146,10 @@ class Auth extends Component {
       <div className={classes.Auth}>
         <form onSubmit={this.submitHandler}>
           {form}
-          <Button active={canSubmit} type="submit" btnType="Success">
+          <Button active={canSubmit} type='submit' btnType='Success'>
             SUBMIT
           </Button>
-          <Button btnType="Danger" clicked={this.SwitchAuthModeHandler}>
+          <Button btnType='Danger' clicked={this.SwitchAuthModeHandler}>
             SWITCH TO {isSignedUp ? 'SINGIN' : 'SINGUP'}
           </Button>
         </form>
