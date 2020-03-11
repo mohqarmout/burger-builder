@@ -82,7 +82,7 @@ class Auth extends Component {
         },
       };
     });
-    // console.log(formElementArray);
+
     const form = formElementArray.map(({ id, config }) => (
       <Input
         key={id}
