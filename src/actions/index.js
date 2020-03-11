@@ -6,3 +6,4 @@ export {
 } from './burgerBurger';
 
 export { orderActionNames, postOrederThunk, getOrederThunk } from './order';
+export { authActionNames, postAuthThunk } from './auth';

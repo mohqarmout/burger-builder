@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { postAuthThunk } from 'actions';
 import Button from 'components/UI/Button/Button';
+import Spinner from 'components/UI/Spinner/Spinner';
 import Input from 'components/UI/Input/Input';
 import { objectFactory } from '../BurgerBuilder/Checkout/ContacrData/ContactData';
 
@@ -33,6 +36,7 @@ class Auth extends Component {
         touched: false,
       },
     },
+    loading: false,
   };
 
   handleInputChange = ({ target: { value } }, id) => {
@@ -67,8 +71,15 @@ class Auth extends Component {
     return isValid;
   };
 
-  render() {
+  orderHandler = async event => {
     const { formItems } = this.state;
+    const { getAuth } = this.props;
+    event.preventDefault();
+    this.setState({ loading: true });
+  };
+
+  render() {
+    const { formItems, loading } = this.state;
 
     const formElementArray = Object.keys(authForm).map(formItem => {
       return {
@@ -83,7 +94,7 @@ class Auth extends Component {
       };
     });
 
-    const form = formElementArray.map(({ id, config }) => (
+    let form = formElementArray.map(({ id, config }) => (
       <Input
         key={id}
         handleInputChange={event => {
@@ -92,7 +103,10 @@ class Auth extends Component {
         {...config}
       />
     ));
-    // ! this.orderHandler need to setup
+
+    if (loading) {
+      form = <Spinner />;
+    }
     return (
       <div>
         <form onSubmit={this.orderHandler}>
@@ -105,4 +119,7 @@ class Auth extends Component {
     );
   }
 }
-export default Auth;
+
+const mapDispatchToProps = { getAuth: postAuthThunk };
+
+export default connect(null, mapDispatchToProps)(Auth);
