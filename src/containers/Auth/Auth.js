@@ -37,6 +37,7 @@ class Auth extends Component {
       },
     },
     loading: false,
+    isSignedUp: true,
   };
 
   handleInputChange = ({ target: { value } }, id) => {
@@ -78,8 +79,14 @@ class Auth extends Component {
     this.setState({ loading: true });
   };
 
+  SwitchAuthModeHandler = () => {
+    this.setState(prevState => {
+      return { isSignedUp: !prevState.isSignedUp };
+    });
+  };
+
   render() {
-    const { formItems, loading } = this.state;
+    const { formItems, loading, canSubmit, isSignedUp } = this.state;
 
     const formElementArray = Object.keys(authForm).map(formItem => {
       return {
@@ -113,6 +120,9 @@ class Auth extends Component {
           {form}
           <Button type="submit" btnType="Success">
             SUBMIT
+          </Button>
+          <Button btnType="Danger" clicked={this.SwitchAuthModeHandler}>
+            SWITCH TO {isSignedUp ? 'SINGIN' : 'SINGUP'}
           </Button>
         </form>
       </div>
