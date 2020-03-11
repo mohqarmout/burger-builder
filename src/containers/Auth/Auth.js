@@ -95,14 +95,16 @@ class Auth extends Component {
         password: { value: password },
       },
       canSubmit,
+      isSignedUp,
     } = this.state;
 
     event.preventDefault();
     this.setState({ loading: true });
 
     if (canSubmit) {
+      console.log(isSignedUp);
+      await getAuth(email, password, isSignedUp);
       this.setState({ loading: false });
-      await getAuth(email, password);
     }
   };
 
