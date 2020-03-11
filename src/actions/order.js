@@ -24,10 +24,11 @@ export const postOrederThunk = ordersData => async (dispatch, _, { axios }) => {
   }
 };
 
+// eslint-disable-next-line consistent-return
 export const getOrederThunk = () => async (dispatch, _, { axios }) => {
   try {
     const { data, status } = await axios.get('orders.json');
-    if (status === 200) {
+    if (status === 200 && data && Object.keys(data).length !== 0) {
       const cache = [];
       Object.keys(data).forEach(orderID => {
         const { orederDate, ...rest } = data[orderID];
@@ -36,6 +37,6 @@ export const getOrederThunk = () => async (dispatch, _, { axios }) => {
       return dispatch(fetchOrder(cache));
     }
   } catch (error) {
-    return error;
+    return error; // ! must dispatch an error
   }
 };

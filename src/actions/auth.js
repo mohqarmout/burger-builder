@@ -2,11 +2,12 @@ import axios from 'axios';
 import { makeSynActionCreator } from 'utils';
 
 export const authActionNames = {
-  postAuth: 'POST_AUTHu',
+  postAuthSuccess: 'POST_AUTHU_SUCCESS',
+  postAuthFail: 'POST_AUTHU_FAIL',
 };
 
-const purchaseBurger = makeSynActionCreator(
-  authActionNames.postAuth,
+const authSeccess = makeSynActionCreator(
+  authActionNames.postAuthSuccess,
   'authData',
 );
 
