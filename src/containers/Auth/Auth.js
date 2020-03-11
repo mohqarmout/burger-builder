@@ -5,6 +5,7 @@ import Button from 'components/UI/Button/Button';
 import Spinner from 'components/UI/Spinner/Spinner';
 import Input from 'components/UI/Input/Input';
 import { objectFactory } from '../BurgerBuilder/Checkout/ContacrData/ContactData';
+import classes from './Auth.module.css';
 
 const authForm = {
   email: objectFactory({
@@ -31,11 +32,12 @@ class Auth extends Component {
       },
       password: {
         value: '',
-        validation: { required: true },
+        validation: { required: true, minLength: 6, maxLength: 8 },
         valid: false,
         touched: false,
       },
     },
+    canSubmit: false,
     loading: false,
   };
 
@@ -53,6 +55,19 @@ class Auth extends Component {
         },
       },
     });
+    // eslint-disable-next-line no-shadow
+    this.setState(({ formItems }) => ({
+      canSubmit: this.updateCanSubmitState(formItems),
+    }));
+  };
+
+  updateCanSubmitState = formValues => {
+    const cache = [];
+
+    Object.keys(formValues).forEach(formItem => {
+      formValues[formItem].validation && cache.push(formValues[formItem].valid);
+    });
+    return cache.every(item => item);
   };
 
   checkValidity = (value, rule) => {
@@ -71,15 +86,27 @@ class Auth extends Component {
     return isValid;
   };
 
-  orderHandler = async event => {
-    const { formItems } = this.state;
+  submitHandler = async event => {
     const { getAuth } = this.props;
+    const {
+      formItems: {
+        email: { value: email },
+        password: { value: password },
+      },
+      canSubmit,
+    } = this.state;
+
     event.preventDefault();
     this.setState({ loading: true });
+
+    if (canSubmit) {
+      this.setState({ loading: false });
+      await getAuth(email, password);
+    }
   };
 
   render() {
-    const { formItems, loading } = this.state;
+    const { formItems, loading, canSubmit } = this.state;
 
     const formElementArray = Object.keys(authForm).map(formItem => {
       return {
@@ -108,10 +135,10 @@ class Auth extends Component {
       form = <Spinner />;
     }
     return (
-      <div>
-        <form onSubmit={this.orderHandler}>
+      <div className={classes.Auth}>
+        <form onSubmit={this.submitHandler}>
           {form}
-          <Button type="submit" btnType="Success">
+          <Button active={canSubmit} type="submit" btnType="Success">
             SUBMIT
           </Button>
         </form>
