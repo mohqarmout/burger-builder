@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { burgerActionNames, orderActionNames } from 'actions';
+import { burgerActionNames, orderActionNames, authActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 import { getUnique } from 'utils';
 
@@ -66,7 +66,34 @@ const BurgerBuilder = (
   }
 };
 
+const AuthReducer = (
+  state = {
+    token: null,
+    userId: null,
+    error: null,
+  },
+  { type, payload },
+) => {
+  switch (type) {
+    case authActionNames.postAuthSuccess:
+      return {
+        ...state,
+        error: null,
+        token: payload.authData.idToken,
+        userId: payload.authData.kind,
+      };
+    case authActionNames.postAuthFail:
+      return {
+        ...state,
+        error: payload.error,
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   BurgerBuilder,
   order,
+  AuthReducer,
 });
