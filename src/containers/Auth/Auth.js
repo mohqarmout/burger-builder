@@ -97,11 +97,9 @@ class Auth extends Component {
       canSubmit,
       isSignedUp,
     } = this.state;
-
     event.preventDefault();
-    this.setState({ loading: true });
-
     if (canSubmit) {
+      this.setState({ loading: true });
       await getAuth(email, password, isSignedUp);
       this.setState({ loading: false });
     }
@@ -115,6 +113,7 @@ class Auth extends Component {
 
   render() {
     const { formItems, loading, canSubmit, isSignedUp } = this.state;
+    const { authError } = this.props;
 
     const formElementArray = Object.keys(authForm).map(formItem => {
       return {
@@ -138,7 +137,19 @@ class Auth extends Component {
         {...config}
       />
     ));
+    let errorMessage = null;
 
+    if (authError) {
+      errorMessage = (
+        <p
+          style={{
+            color: 'red',
+          }}
+        >
+          {authError.message}
+        </p>
+      );
+    }
     if (loading) {
       form = <Spinner />;
     }
@@ -153,6 +164,7 @@ class Auth extends Component {
             SWITCH TO {isSignedUp ? 'SINGIN' : 'SINGUP'}
           </Button>
         </form>
+        {errorMessage}
       </div>
     );
   }
@@ -160,4 +172,10 @@ class Auth extends Component {
 
 const mapDispatchToProps = { getAuth: postAuthThunk };
 
-export default connect(null, mapDispatchToProps)(Auth);
+const mapStateToProps = ({ auth: { error } }) => {
+  return {
+    authError: error,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

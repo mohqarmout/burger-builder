@@ -3,7 +3,7 @@ import { burgerActionNames, orderActionNames, authActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 import { getUnique } from 'utils';
 
-const order = (state = [], { type, payload }) => {
+const orderReducer = (state = [], { type, payload }) => {
   switch (type) {
     // case orderActionNames.postOrder:
     //   return getUnique(
@@ -66,7 +66,7 @@ const BurgerBuilder = (
   }
 };
 
-const AuthReducer = (
+const authReducer = (
   state = {
     token: null,
     userId: null,
@@ -80,7 +80,7 @@ const AuthReducer = (
         ...state,
         error: null,
         token: payload.authData.idToken,
-        userId: payload.authData.kind,
+        userId: payload.authData.localId,
       };
     case authActionNames.postAuthFail:
       return {
@@ -94,6 +94,6 @@ const AuthReducer = (
 
 export default combineReducers({
   BurgerBuilder,
-  order,
-  AuthReducer,
+  order: orderReducer,
+  auth: authReducer,
 });
