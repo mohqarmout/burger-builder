@@ -4,6 +4,7 @@ import { makeSynActionCreator } from 'utils';
 export const authActionNames = {
   postAuthSuccess: 'POST_AUTHU_SUCCESS',
   postAuthFail: 'POST_AUTHU_FAIL',
+  logout: 'AUTHU_LOGOUT',
 };
 
 const authSeccess = makeSynActionCreator(
@@ -11,11 +12,20 @@ const authSeccess = makeSynActionCreator(
   'authData',
 );
 
+const AuthLogout = makeSynActionCreator(authActionNames.logout);
+
+const checkAuthTimeOutThunk = timeOut => dispatch => {
+  setTimeout(() => {
+    dispatch(AuthLogout());
+  }, timeOut);
+};
+
 const authfail = makeSynActionCreator(authActionNames.postAuthFail, 'error');
 
 export const postAuthThunk = (email, password, isSingUp) => async (
   dispatch,
   _,
+  // eslint-disable-next-line consistent-return
 ) => {
   let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_APP_KEY}`;
 
@@ -29,8 +39,10 @@ export const postAuthThunk = (email, password, isSingUp) => async (
       password,
       returnSecureToken: true,
     });
+    // !  I think this could lead to error
     console.log(data);
-    return dispatch(authSeccess(data));
+    dispatch(authSeccess(data));
+    dispatch(checkAuthTimeOutThunk(data.expiresIn));
   } catch (error) {
     console.log(error);
     return dispatch(authfail(error));

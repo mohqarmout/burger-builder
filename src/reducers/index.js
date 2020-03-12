@@ -87,6 +87,12 @@ const authReducer = (
         ...state,
         error: payload.error,
       };
+    case authActionNames.logout:
+      return {
+        ...state,
+        token: null,
+        userId: null,
+      };
     default:
       return state;
   }
