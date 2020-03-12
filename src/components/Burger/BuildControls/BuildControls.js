@@ -17,6 +17,7 @@ const buildControls = ({
   purchasable,
   ordered,
   price,
+  authenticated,
 }) => (
   <div className={classes.BuildControls}>
     <p>
@@ -37,7 +38,7 @@ const buildControls = ({
       onClick={ordered}
       type="button"
     >
-      ORDER NOW
+      {authenticated ? 'ORDER NOW' : 'Please Sign Up'}
     </button>
   </div>
 );
