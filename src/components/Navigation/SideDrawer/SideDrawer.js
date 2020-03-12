@@ -6,7 +6,7 @@ import classes from './SideDrawer.module.css';
 import Backdrop from '../../UI/Backdrop/Backdrop';
 
 const sideDrawer = props => {
-  const { open, closed } = props;
+  const { open, closed, isAuthenticated } = props;
   const attachedClasses = [classes.SideDrawer, classes.Close];
   if (open) {
     attachedClasses.splice(1, 1, classes.Open);
@@ -19,7 +19,7 @@ const sideDrawer = props => {
           <Logo />
         </div>
         <nav>
-          <NavigationItems />
+          <NavigationItems isAuthenticated={isAuthenticated} />
         </nav>
       </div>
     </>

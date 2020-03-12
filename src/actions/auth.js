@@ -12,12 +12,12 @@ const authSeccess = makeSynActionCreator(
   'authData',
 );
 
-const AuthLogout = makeSynActionCreator(authActionNames.logout);
+export const authLogout = makeSynActionCreator(authActionNames.logout);
 
 const checkAuthTimeOutThunk = timeOut => dispatch => {
   setTimeout(() => {
-    dispatch(AuthLogout());
-  }, timeOut);
+    dispatch(authLogout());
+  }, timeOut * 1000);
 };
 
 const authfail = makeSynActionCreator(authActionNames.postAuthFail, 'error');
@@ -40,11 +40,10 @@ export const postAuthThunk = (email, password, isSingUp) => async (
       returnSecureToken: true,
     });
     // !  I think this could lead to error
-    console.log(data);
+
     dispatch(authSeccess(data));
     dispatch(checkAuthTimeOutThunk(data.expiresIn));
   } catch (error) {
-    console.log(error);
     return dispatch(authfail(error));
   }
 };
