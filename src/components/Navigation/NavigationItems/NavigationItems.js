@@ -8,7 +8,9 @@ const navigationItems = ({ isAuthenticated }) => (
     <NavigationItem exact link="/">
       Burger Builder
     </NavigationItem>
-    <NavigationItem link="/orders">Orders</NavigationItem>
+    {isAuthenticated ? (
+      <NavigationItem link="/orders">Orders</NavigationItem>
+    ) : null}
     {isAuthenticated ? (
       <NavigationItem link="/logout">logout</NavigationItem>
     ) : (
