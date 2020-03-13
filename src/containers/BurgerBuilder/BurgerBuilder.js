@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {
   addIngredientAction,
   removeIngredientAction,
+  authSetRedirectPath,
   inintIngredientThunk,
 } from 'actions';
 import axios from 'axiosInstances';
@@ -21,6 +22,8 @@ export const INGREDIENT_PRICES = {
   bacon: 0.7,
 };
 
+// let visted = false;
+
 class BurgerBuilder extends Component {
   state = {
     purchasing: false,
@@ -29,13 +32,16 @@ class BurgerBuilder extends Component {
 
   async componentDidMount() {
     const { inintIngredient } = this.props;
+    // if (!visted) {
+    //   visted = true;
     try {
-      await inintIngredient();
+      await inintIngredient(); // ! hmmmm I think this is a mighty ptoblem
     } catch (error) {
       this.setState({
         error: true,
       });
     }
+    // }
   }
 
   componentDidUpdate(_, { ingredients: prevIngredients }) {
@@ -72,10 +78,12 @@ class BurgerBuilder extends Component {
     const {
       history: { push },
       authenticated,
+      setRedirectPath,
     } = this.props;
     if (authenticated) {
-    this.setState({ purchasing: true });
+      this.setState({ purchasing: true });
     } else {
+      setRedirectPath('/checkout');
       push('/auth');
     }
   };
@@ -167,6 +175,7 @@ const mapDispatchToProps = {
   addIngredient: addIngredientAction,
   removeIngredient: removeIngredientAction,
   inintIngredient: inintIngredientThunk,
+  setRedirectPath: authSetRedirectPath,
 };
 
 export default connect(

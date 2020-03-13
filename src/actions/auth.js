@@ -5,22 +5,26 @@ export const authActionNames = {
   postAuthSuccess: 'POST_AUTHU_SUCCESS',
   postAuthFail: 'POST_AUTHU_FAIL',
   logout: 'AUTHU_LOGOUT',
+  setRedirectPath: 'SET_REDIRECT_PATH',
 };
 
 const authSeccess = makeSynActionCreator(
   authActionNames.postAuthSuccess,
   'authData',
 );
+const authfail = makeSynActionCreator(authActionNames.postAuthFail, 'error');
 
 export const authLogout = makeSynActionCreator(authActionNames.logout);
+export const authSetRedirectPath = makeSynActionCreator(
+  authActionNames.setRedirectPath,
+  'path',
+);
 
 const checkAuthTimeOutThunk = timeOut => dispatch => {
   setTimeout(() => {
     dispatch(authLogout());
   }, timeOut * 1000);
 };
-
-const authfail = makeSynActionCreator(authActionNames.postAuthFail, 'error');
 
 export const postAuthThunk = (email, password, isSingUp) => async (
   dispatch,

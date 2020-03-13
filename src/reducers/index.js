@@ -29,6 +29,7 @@ const BurgerBuilder = (
   state = {
     ingredients: null,
     totalPrice: 4,
+    building: false,
   },
   { type, payload },
 ) => {
@@ -41,6 +42,7 @@ const BurgerBuilder = (
           ...state.ingredients,
           [payload.ingredient]: state.ingredients[payload.ingredient] + 1,
         },
+        building: true,
       };
     case burgerActionNames.removeIngredient:
       return {
@@ -50,6 +52,7 @@ const BurgerBuilder = (
           ...state.ingredients,
           [payload.ingredient]: state.ingredients[payload.ingredient] - 1,
         },
+        building: true,
       };
     case burgerActionNames.setIngredients:
       return {
@@ -59,6 +62,7 @@ const BurgerBuilder = (
           ...payload.ingredients,
         },
         totalPrice: 4,
+        building: false,
       };
 
     default:
@@ -71,6 +75,7 @@ const authReducer = (
     token: null,
     userId: null,
     error: null,
+    authRedirect: '/',
   },
   { type, payload },
 ) => {
@@ -92,6 +97,11 @@ const authReducer = (
         ...state,
         token: null,
         userId: null,
+      };
+    case authActionNames.setRedirectPath:
+      return {
+        ...state,
+        authRedirect: payload.path,
       };
     default:
       return state;

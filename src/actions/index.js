@@ -1,9 +1,15 @@
 export {
+  burgerActionNames,
   addIngredientAction,
   removeIngredientAction,
-  burgerActionNames,
   inintIngredientThunk,
 } from './burgerBurger';
 
 export { orderActionNames, postOrederThunk, getOrederThunk } from './order';
-export { authActionNames, postAuthThunk, authLogout } from './auth';
+
+export {
+  authActionNames,
+  postAuthThunk,
+  authLogout,
+  authSetRedirectPath,
+} from './auth';

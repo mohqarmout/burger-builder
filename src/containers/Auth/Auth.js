@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { postAuthThunk } from 'actions';
+import { postAuthThunk, authSetRedirectPath } from 'actions';
 import Button from 'components/UI/Button/Button';
 import Spinner from 'components/UI/Spinner/Spinner';
 import Input from 'components/UI/Input/Input';
@@ -42,6 +42,15 @@ class Auth extends Component {
     loading: false,
     isSignedUp: true,
   };
+
+  componentDidMount() {
+    const { buildingBurger } = this.props;
+    if (buildingBurger) {
+      authSetRedirectPath('/checkout');
+    } else {
+      authSetRedirectPath('/');
+    }
+  }
 
   handleInputChange = ({ target: { value } }, id) => {
     const { formItems } = this.state;
@@ -114,7 +123,7 @@ class Auth extends Component {
 
   render() {
     const { formItems, loading, canSubmit, isSignedUp } = this.state;
-    const { authError, authenticated } = this.props;
+    const { authError, authenticated, authRedirect } = this.props;
 
     const formElementArray = Object.keys(authForm).map(formItem => {
       return {
@@ -156,7 +165,7 @@ class Auth extends Component {
     }
     return (
       <div className={classes.Auth}>
-        {authenticated ? <Redirect to="/" /> : null}
+        {authenticated ? <Redirect to={authRedirect} /> : null}
         <form onSubmit={this.submitHandler}>
           {form}
           <Button active={canSubmit} type="submit" btnType="Success">
@@ -172,12 +181,17 @@ class Auth extends Component {
   }
 }
 
-const mapDispatchToProps = { getAuth: postAuthThunk };
+const mapDispatchToProps = { getAuth: postAuthThunk, authSetRedirectPath };
 
-const mapStateToProps = ({ auth: { error, token } }) => {
+const mapStateToProps = ({
+  auth: { error, token, authRedirect },
+  BurgerBuilder: { building },
+}) => {
   return {
     authError: error,
     authenticated: Boolean(token),
+    buildingBurger: building,
+    authRedirect,
   };
 };
 
