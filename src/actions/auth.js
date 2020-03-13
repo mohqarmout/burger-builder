@@ -8,18 +8,22 @@ export const authActionNames = {
   setRedirectPath: 'SET_REDIRECT_PATH',
 };
 
+// ! I need it To store
 const authSeccess = makeSynActionCreator(
   authActionNames.postAuthSuccess,
-  'authData',
+  'idToken',
+  'localId',
 );
 const authfail = makeSynActionCreator(authActionNames.postAuthFail, 'error');
 
 export const authLogout = makeSynActionCreator(authActionNames.logout);
+
 export const authSetRedirectPath = makeSynActionCreator(
   authActionNames.setRedirectPath,
   'path',
 );
 
+// ! I need it To store
 const checkAuthTimeOutThunk = timeOut => dispatch => {
   setTimeout(() => {
     dispatch(authLogout());
@@ -43,11 +47,31 @@ export const postAuthThunk = (email, password, isSingUp) => async (
       password,
       returnSecureToken: true,
     });
-    // !  I think this could lead to error
 
-    dispatch(authSeccess(data));
+    // ? data.expiresIn in second not in milliseconds
+    const expirationDate = new Date(
+      new Date().getTime() + data.expiresIn * 1000,
+    );
+
+    localStorage.setItem('token', data.idToken);
+    localStorage.setItem('userId', data.localId);
+    localStorage.setItem('expirationDate', expirationDate);
+
+    dispatch(authSeccess(data.idToken, data.localId));
     dispatch(checkAuthTimeOutThunk(data.expiresIn));
   } catch (error) {
     return dispatch(authfail(error));
+  }
+};
+
+export const checkAuthTimeOut = () => dispatch => {
+  const token = localStorage.getItem('token');
+  const localId = localStorage.getItem('userId');
+  const expirationDate = new Date(localStorage.getItem('expirationDate'));
+
+  if (new Date() > expirationDate.getTime()) {
+    dispatch(authLogout(token, localId));
+  } else {
+    dispatch(authSeccess(token));
   }
 };

@@ -9,6 +9,7 @@ export { orderActionNames, postOrederThunk, getOrederThunk } from './order';
 
 export {
   authActionNames,
+  checkAuthTimeOut,
   postAuthThunk,
   authLogout,
   authSetRedirectPath,

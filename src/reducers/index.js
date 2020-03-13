@@ -84,8 +84,8 @@ const authReducer = (
       return {
         ...state,
         error: null,
-        token: payload.authData.idToken,
-        userId: payload.authData.localId,
+        token: payload.idToken,
+        userId: payload.localId,
       };
     case authActionNames.postAuthFail:
       return {
@@ -93,6 +93,7 @@ const authReducer = (
         error: payload.error,
       };
     case authActionNames.logout:
+      localStorage.clear(); // clear the all Storage
       return {
         ...state,
         token: null,
