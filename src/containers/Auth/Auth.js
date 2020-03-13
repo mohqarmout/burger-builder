@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { postAuthThunk } from 'actions';
 import Button from 'components/UI/Button/Button';
@@ -113,7 +114,7 @@ class Auth extends Component {
 
   render() {
     const { formItems, loading, canSubmit, isSignedUp } = this.state;
-    const { authError } = this.props;
+    const { authError, authenticated } = this.props;
 
     const formElementArray = Object.keys(authForm).map(formItem => {
       return {
@@ -155,6 +156,7 @@ class Auth extends Component {
     }
     return (
       <div className={classes.Auth}>
+        {authenticated ? <Redirect to="/" /> : null}
         <form onSubmit={this.submitHandler}>
           {form}
           <Button active={canSubmit} type="submit" btnType="Success">
@@ -172,9 +174,10 @@ class Auth extends Component {
 
 const mapDispatchToProps = { getAuth: postAuthThunk };
 
-const mapStateToProps = ({ auth: { error } }) => {
+const mapStateToProps = ({ auth: { error, token } }) => {
   return {
     authError: error,
+    authenticated: Boolean(token),
   };
 };
 
