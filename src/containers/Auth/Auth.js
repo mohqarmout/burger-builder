@@ -111,7 +111,8 @@ class Auth extends Component {
     if (canSubmit) {
       this.setState({ loading: true });
       await getAuth(email, password, isSignedUp);
-      this.setState({ loading: false });
+      // this.setState({ loading: false });
+      // ! next time mange to add the loading state and error to redux
     }
   };
 

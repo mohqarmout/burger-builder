@@ -8,7 +8,6 @@ export const authActionNames = {
   setRedirectPath: 'SET_REDIRECT_PATH',
 };
 
-// ! I need it To store
 const authSeccess = makeSynActionCreator(
   authActionNames.postAuthSuccess,
   'idToken',
@@ -23,8 +22,8 @@ export const authSetRedirectPath = makeSynActionCreator(
   'path',
 );
 
-// ! I need it To store
 const checkAuthTimeOutThunk = timeOut => dispatch => {
+  // * setTimeout uses milliseconds
   setTimeout(() => {
     dispatch(authLogout());
   }, timeOut * 1000);
@@ -56,7 +55,6 @@ export const postAuthThunk = (email, password, isSingUp) => async (
     localStorage.setItem('token', data.idToken);
     localStorage.setItem('userId', data.localId);
     localStorage.setItem('expirationDate', expirationDate);
-
     dispatch(authSeccess(data.idToken, data.localId));
     dispatch(checkAuthTimeOutThunk(data.expiresIn));
   } catch (error) {
@@ -69,9 +67,17 @@ export const checkAuthTimeOut = () => dispatch => {
   const localId = localStorage.getItem('userId');
   const expirationDate = new Date(localStorage.getItem('expirationDate'));
 
-  if (new Date() > expirationDate.getTime()) {
-    dispatch(authLogout(token, localId));
-  } else {
-    dispatch(authSeccess(token));
+  if (token) {
+    if (new Date().getTime() > expirationDate.getTime()) {
+      dispatch(authLogout());
+    } else {
+      dispatch(authSeccess(token, localId));
+
+      dispatch(
+        checkAuthTimeOutThunk(
+          (expirationDate.getTime() - new Date().getTime()) / 1000,
+        ),
+      );
+    }
   }
 };
