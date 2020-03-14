@@ -22,8 +22,6 @@ export const INGREDIENT_PRICES = {
   bacon: 0.7,
 };
 
-// let visted = false;
-
 class BurgerBuilder extends Component {
   state = {
     purchasing: false,
@@ -32,8 +30,6 @@ class BurgerBuilder extends Component {
 
   async componentDidMount() {
     const { inintIngredient } = this.props;
-    // if (!visted) {
-    //   visted = true;
     try {
       await inintIngredient(); // ! hmmmm I think this is a mighty ptoblem
     } catch (error) {
@@ -41,7 +37,6 @@ class BurgerBuilder extends Component {
         error: true,
       });
     }
-    // }
   }
 
   componentDidUpdate(_, { ingredients: prevIngredients }) {

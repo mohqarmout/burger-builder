@@ -10,12 +10,11 @@ import Layout from './components/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 
 const App = props => {
-  const { Authenticated } = props;
+  const { Authenticated, checkAuth } = props;
 
   useEffect(() => {
-    const { checkAuth } = props;
     checkAuth();
-  }, [props]);
+  }, [checkAuth]);
 
   let route = (
     <>

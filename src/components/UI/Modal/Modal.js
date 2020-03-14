@@ -13,8 +13,7 @@ const modal = ({ show, modalClosed, children }) => {
 
   return (
     <>
-      <Backdrop show={show} clicked={modalClosed} /> {/* div ? null */}
-      {/* It will be above the screen  */}
+      <Backdrop show={show} clicked={modalClosed} />
       <div className={attachedClasses.join(' ')}>{children}</div>
     </>
   );
