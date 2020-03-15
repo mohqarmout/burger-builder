@@ -10,7 +10,7 @@ import Layout from './components/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 
 const App = props => {
-  const { Authenticated, checkAuth } = props;
+  const { Authenticated, checkAuth, authRedirect } = props;
 
   useEffect(() => {
     checkAuth();
@@ -18,35 +18,40 @@ const App = props => {
 
   let route = (
     <>
-      <Route path="/auth" component={Auth} />
-      <Route exact path="/" component={BurgerBuilder} />
-      <Redirect to="/" />
+      <Switch>
+        <Route exact path="/auth" component={Auth} />
+        <Route exact path="/" component={BurgerBuilder} />
+        <Route path="/orders" component={Orders} />
+        <Route render={() => <Redirect to="/" />} />
+      </Switch>
     </>
   );
 
   if (Authenticated) {
     route = (
       <>
-        <Route path="/checkout" component={Checkout} />
-        <Route path="/orders" component={Orders} />
-        <Route path="/logout" component={Logout} />
-        <Route exact path="/" component={BurgerBuilder} />
-        <Redirect to="/" />
+        <Switch>
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/orders" component={Orders} />
+          <Route path="/logout" component={Logout} />
+          <Route exact path="/" component={BurgerBuilder} />
+          <Redirect to={authRedirect} />
+          <Route render={() => <Redirect to="/" />} />
+        </Switch>
       </>
     );
   }
   return (
     <div>
-      <Layout>
-        <Switch>{route}</Switch>
-      </Layout>
+      <Layout>{route}</Layout>
     </div>
   );
 };
 
-const mapStateToProps = ({ auth: { token } }) => {
+const mapStateToProps = ({ auth: { token, authRedirect } }) => {
   return {
     Authenticated: Boolean(token),
+    authRedirect,
   };
 };
 

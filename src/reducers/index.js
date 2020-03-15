@@ -93,11 +93,12 @@ const authReducer = (
         error: payload.error,
       };
     case authActionNames.logout:
-      localStorage.clear(); // clear the all Storage
+      localStorage.clear();
       return {
         ...state,
         token: null,
         userId: null,
+        authRedirect: '/',
       };
     case authActionNames.setRedirectPath:
       return {
