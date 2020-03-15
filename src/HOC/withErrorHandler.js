@@ -46,9 +46,11 @@ const withErrorHandler = (WarppedComponent, axios) =>
       this.axiosResponse = axios.interceptors.response.use(
         res => res,
         error => {
-          this.setState({
-            error,
-          });
+          if (this.mounted) {
+            this.setState({
+              error,
+            });
+          }
           return Promise.reject(error);
         },
       );
