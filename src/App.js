@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Auth from 'containers/Auth/Auth';
@@ -12,9 +12,7 @@ import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 const App = props => {
   const { Authenticated, checkAuth, authRedirect } = props;
 
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+  useRef(checkAuth());
 
   let route = (
     <>
@@ -36,7 +34,6 @@ const App = props => {
           <Route path="/logout" component={Logout} />
           <Route exact path="/" component={BurgerBuilder} />
           <Redirect to={authRedirect} />
-          <Route render={() => <Redirect to="/" />} />
         </Switch>
       </>
     );
