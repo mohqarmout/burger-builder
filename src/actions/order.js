@@ -13,10 +13,19 @@ const purchaseBurger = makeSynActionCreator(
 
 const fetchOrder = makeSynActionCreator(orderActionNames.getPost, 'orders');
 
-export const postOrederThunk = ordersData => async (dispatch, _, { axios }) => {
+export const postOrederThunk = ordersData => async (
+  dispatch,
+  getState,
+  { axios },
+) => {
+  const {
+    auth: { userId },
+  } = getState();
+
   try {
     const { data } = await axios.post('orders.json', {
       ...ordersData,
+      userId,
     });
     return dispatch(purchaseBurger(data.name, ordersData));
   } catch (err) {
@@ -25,9 +34,14 @@ export const postOrederThunk = ordersData => async (dispatch, _, { axios }) => {
 };
 
 // eslint-disable-next-line consistent-return
-export const getOrederThunk = () => async (dispatch, _, { axios }) => {
+export const getOrederThunk = () => async (dispatch, getState, { axios }) => {
+  const {
+    auth: { userId, token },
+  } = getState();
+  const queryParams = `orders.json?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+
   try {
-    const { data, status } = await axios.get('orders.json');
+    const { data, status } = await axios.get(queryParams);
     if (status === 200 && data && Object.keys(data).length !== 0) {
       const cache = [];
       Object.keys(data).forEach(orderID => {
