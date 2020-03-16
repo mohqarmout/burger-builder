@@ -8,7 +8,7 @@ import Order from 'components/Order/Order';
 
 class Orders extends Component {
   state = {
-    loading: false, //! UI state
+    loading: false,
   };
 
   async componentDidMount() {
@@ -16,16 +16,8 @@ class Orders extends Component {
     this.setState({
       loading: true,
     });
-
-    try {
-      await fetchOrder();
-
-      this.setState({ loading: false });
-    } catch (error) {
-      this.setState({
-        loading: false,
-      });
-    }
+    await fetchOrder();
+    this.setState({ loading: false });
   }
 
   render() {

@@ -12,11 +12,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 10 });
-
-const store = createStore(
+let store = createStore(
   rootReducer,
   composeEnhancers(applyMiddleware(thunk.withExtraArgument({ axios }))),
 );
+
+if (process.env.NODE_ENV !== 'development') {
+  store = createStore(rootReducer);
+}
 
 ReactDOM.render(
   <Provider store={store}>

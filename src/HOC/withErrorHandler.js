@@ -13,32 +13,44 @@ const withErrorHandler = (WarppedComponent, axios) =>
       error: false,
     };
 
+    componentDidMount() {
+      this.mounted = true;
+    }
+
     componentWillUnmount() {
       axios.interceptors.request.eject(this.axiosRequest);
       axios.interceptors.response.eject(this.axiosResponse);
+      this.mounted = false;
     }
 
     setinterceptors = () => {
       this.axiosRequest = axios.interceptors.request.use(
         req => {
-          this.setState({
-            error: null,
-          });
+          if (this.mounted) {
+            this.setState({
+              error: null,
+            });
+          }
+
           return req;
         },
         error => {
-          this.setState({
-            error,
-          });
+          if (this.mounted) {
+            this.setState({
+              error,
+            });
+          }
           return Promise.reject(error);
         },
       );
       this.axiosResponse = axios.interceptors.response.use(
         res => res,
         error => {
-          this.setState({
-            error,
-          });
+          if (this.mounted) {
+            this.setState({
+              error,
+            });
+          }
           return Promise.reject(error);
         },
       );

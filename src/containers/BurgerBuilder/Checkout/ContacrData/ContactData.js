@@ -8,7 +8,7 @@ import Button from 'components/UI/Button/Button';
 import Input from 'components/UI/Input/Input';
 import classes from './ContactData.module.css';
 
-const objectFactory = ({
+export const objectFactory = ({
   elementtype = 'input',
   placeholder,
   option,
@@ -210,10 +210,10 @@ class ContactData extends Component {
         id: formItem,
         config: {
           value: formValues[formItem].value,
-          ...orderForm[formItem],
           valid: formValues[formItem].valid,
           shouldValidate: formValues[formItem].validation,
           touched: formValues[formItem].touched,
+          ...orderForm[formItem],
         },
       };
     });

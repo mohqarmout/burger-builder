@@ -13,10 +13,19 @@ const purchaseBurger = makeSynActionCreator(
 
 const fetchOrder = makeSynActionCreator(orderActionNames.getPost, 'orders');
 
-export const postOrederThunk = ordersData => async (dispatch, _, { axios }) => {
+export const postOrederThunk = ordersData => async (
+  dispatch,
+  getState,
+  { axios },
+) => {
+  const {
+    auth: { userId },
+  } = getState();
+
   try {
     const { data } = await axios.post('orders.json', {
       ...ordersData,
+      userId,
     });
     return dispatch(purchaseBurger(data.name, ordersData));
   } catch (err) {
@@ -24,10 +33,16 @@ export const postOrederThunk = ordersData => async (dispatch, _, { axios }) => {
   }
 };
 
-export const getOrederThunk = () => async (dispatch, _, { axios }) => {
+// eslint-disable-next-line consistent-return
+export const getOrederThunk = () => async (dispatch, getState, { axios }) => {
+  const {
+    auth: { userId, token },
+  } = getState();
+  const queryParams = `orders.json?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+
   try {
-    const { data, status } = await axios.get('orders.json');
-    if (status === 200) {
+    const { data, status } = await axios.get(queryParams);
+    if (status === 200 && data && Object.keys(data).length !== 0) {
       const cache = [];
       Object.keys(data).forEach(orderID => {
         const { orederDate, ...rest } = data[orderID];
@@ -36,19 +51,6 @@ export const getOrederThunk = () => async (dispatch, _, { axios }) => {
       return dispatch(fetchOrder(cache));
     }
   } catch (error) {
-    return error;
+    return error; // ! must dispatch an error
   }
 };
-
-/* 
-
-
-0: {id: "-M1scqwSYACJYnJoukr4", ingredients: {…}, price: 4}
-1: {id: "-M1seSW_-wgBiz4Eiy5m", ingredients: {…}, price: 4}
-2: {id: "-M1sf2BevqHVzIQHyUQr", ingredients: {…}, price: 4}
-3: {id: "-M1sfj3ButRMtxeH9yj0", ingredients: {…}, price: 5.6000000000000005}
-4: {id: "-M1sn3uhv96sJ2tafTcy", ingredients: {…}, price: 6.9}
-5: {id: "-M1sozSh2euOSb6YmHIF", ingredients: {…}, price: 6.9}
-
-
-*/

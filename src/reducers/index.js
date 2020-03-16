@@ -1,22 +1,25 @@
 import { combineReducers } from 'redux';
-import { burgerActionNames, orderActionNames } from 'actions';
+import { burgerActionNames, orderActionNames, authActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 import { getUnique } from 'utils';
 
-const order = (state = [], { type, payload }) => {
+const orderReducer = (state = [], { type, payload }) => {
   switch (type) {
-    case orderActionNames.postOrder:
-      return [
-        ...state,
-        ...[
-          {
-            id: payload.id,
-            ordersData: payload.ordersData,
-          },
-        ],
-      ];
+    // case orderActionNames.postOrder:
+    //   return getUnique(
+    //     [
+    //       ...state,
+    //       ...[
+    //         {
+    //           id: payload.id,
+    //           ordersData: payload.ordersData,
+    //         },
+    //       ],
+    //     ],
+    //     'id',
+    //   );
     case orderActionNames.getPost:
-      return getUnique([...state, ...payload.orders], 'id'); //
+      return getUnique([...state, ...payload.orders], 'id');
     default:
       return state;
   }
@@ -26,6 +29,7 @@ const BurgerBuilder = (
   state = {
     ingredients: null,
     totalPrice: 4,
+    building: false,
   },
   { type, payload },
 ) => {
@@ -38,6 +42,7 @@ const BurgerBuilder = (
           ...state.ingredients,
           [payload.ingredient]: state.ingredients[payload.ingredient] + 1,
         },
+        building: true,
       };
     case burgerActionNames.removeIngredient:
       return {
@@ -47,6 +52,7 @@ const BurgerBuilder = (
           ...state.ingredients,
           [payload.ingredient]: state.ingredients[payload.ingredient] - 1,
         },
+        building: true,
       };
     case burgerActionNames.setIngredients:
       return {
@@ -56,6 +62,7 @@ const BurgerBuilder = (
           ...payload.ingredients,
         },
         totalPrice: 4,
+        building: false,
       };
 
     default:
@@ -63,7 +70,48 @@ const BurgerBuilder = (
   }
 };
 
+const authReducer = (
+  state = {
+    token: null,
+    userId: null,
+    error: null,
+    authRedirect: '/',
+  },
+  { type, payload },
+) => {
+  switch (type) {
+    case authActionNames.postAuthSuccess:
+      return {
+        ...state,
+        error: null,
+        token: payload.idToken,
+        userId: payload.localId,
+      };
+    case authActionNames.postAuthFail:
+      return {
+        ...state,
+        error: payload.error,
+      };
+    case authActionNames.logout:
+      localStorage.clear();
+      return {
+        ...state,
+        token: null,
+        userId: null,
+        authRedirect: '/',
+      };
+    case authActionNames.setRedirectPath:
+      return {
+        ...state,
+        authRedirect: payload.path,
+      };
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   BurgerBuilder,
-  order,
+  order: orderReducer,
+  auth: authReducer,
 });

@@ -4,8 +4,7 @@ import classes from './Order.module.css';
 const order = ({ ingredinets, price }) => {
   const ingredient = [];
 
-  // eslint-disable-next-line array-callback-return
-  Object.keys(ingredinets).map(ingredinetName => {
+  Object.keys(ingredinets).forEach(ingredinetName => {
     ingredient.push({
       name: ingredinetName,
       amount: ingredinets[ingredinetName],
