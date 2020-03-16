@@ -1,13 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useRef, Suspense, lazy } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Auth from 'containers/Auth/Auth';
-import Logout from 'containers/Auth/Logout/Logout';
-import Checkout from 'containers/BurgerBuilder/Checkout/checkout';
 import Orders from 'containers/Orders/Orders';
 import { checkAuthTimeOut } from 'actions';
+import Spinner from 'components/UI/Spinner/Spinner';
 import Layout from './components/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+
+const Logout = lazy(() => import('containers/Auth/Logout/Logout'));
+const Checkout = lazy(() =>
+  import('containers/BurgerBuilder/Checkout/checkout'),
+);
 
 const App = props => {
   const { Authenticated, checkAuth, authRedirect } = props;
@@ -29,11 +33,13 @@ const App = props => {
     route = (
       <>
         <Switch>
-          <Route path="/checkout" component={Checkout} />
-          <Route path="/orders" component={Orders} />
-          <Route path="/logout" component={Logout} />
-          <Route exact path="/" component={BurgerBuilder} />
-          <Redirect to={authRedirect} />
+          <Suspense fallback={<Spinner />}>
+            <Route path="/checkout" component={Checkout} />
+            <Route path="/orders" component={Orders} />
+            <Route path="/logout" component={Logout} />
+            <Route exact path="/" component={BurgerBuilder} />
+            <Redirect to={authRedirect} />
+          </Suspense>
         </Switch>
       </>
     );
