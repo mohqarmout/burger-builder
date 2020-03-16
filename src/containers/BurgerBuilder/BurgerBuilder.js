@@ -31,7 +31,7 @@ class BurgerBuilder extends Component {
   async componentDidMount() {
     const { inintIngredient } = this.props;
     try {
-      await inintIngredient(); // ! hmmmm I think this is a mighty ptoblem
+      await inintIngredient();
     } catch (error) {
       this.setState({
         error: true,

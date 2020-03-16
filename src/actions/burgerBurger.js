@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
+/* eslint-disable consistent-return */
 import { makeSynActionCreator } from 'utils';
 
 export const burgerActionNames = {
@@ -22,7 +22,6 @@ export const setIngredientAction = makeSynActionCreator(
   'ingredients',
 );
 
-// eslint-disable-next-line consistent-return
 export const inintIngredientThunk = () => async (
   dispatch,
   getState,
