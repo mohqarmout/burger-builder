@@ -36,7 +36,8 @@ module.exports = {
       'always',
       { ignoreClassFields: true }
     ],
-    'react/prop-types': [0]
+    'react/prop-types': [0],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }]
   },
   settings: {
     'import/resolver': {
