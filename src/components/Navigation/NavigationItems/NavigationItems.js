@@ -8,15 +8,16 @@ const navigationItems = ({ isAuthenticated, closed }) => (
     <NavigationItem exact link="/">
       Burger Builder
     </NavigationItem>
+
     {isAuthenticated ? (
-      <NavigationItem closed={closed} link="/orders">
-        Orders
-      </NavigationItem>
-    ) : null}
-    {isAuthenticated ? (
-      <NavigationItem closed={closed} link="/logout">
-        logout
-      </NavigationItem>
+      <>
+        <NavigationItem closed={closed} link="/orders">
+          Orders
+        </NavigationItem>
+        <NavigationItem closed={closed} link="/logout">
+          logout
+        </NavigationItem>
+      </>
     ) : (
       <NavigationItem closed={closed} link="/auth">
         authenticate
