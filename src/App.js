@@ -1,4 +1,4 @@
-import React, { useRef, Suspense, lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Auth from 'containers/Auth/Auth';
@@ -13,10 +13,10 @@ const Checkout = lazy(() =>
   import('containers/BurgerBuilder/Checkout/checkout'),
 );
 
-const App = props => {
+export const App = props => {
   const { Authenticated, checkAuth, authRedirect } = props;
 
-  useRef(checkAuth());
+  checkAuth();
 
   let route = (
     <>
