@@ -1,17 +1,76 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import configureMockStore from 'redux-mock-store';
 import { mount, shallow } from 'enzyme';
-// import findByTestAttr from 'test/utils/findByTestAttr';
-import { App } from './App';
+import { MemoryRouter } from 'react-router-dom';
+import thunk from 'redux-thunk';
+import BurgerBuilder from 'containers/BurgerBuilder/BurgerBuilder';
+import Layout from 'components/Layout/Layout';
+import { UnconnectedApp } from './App';
 
-const setup = (props = {}) => {
-  const wrapper = shallow(<App {...props} />);
+const checkAuth = jest.fn();
+const mockStore = configureMockStore([thunk]);
+let store;
+const ininState = {
+  BurgerBuilder: {
+    ingredients: {
+      salad: 0,
+      bacon: 0,
+      cheese: 0,
+      meat: 0,
+    },
+    totalPrice: 4,
+    building: false,
+  },
+  order: [],
+  auth: {
+    token: null,
+    userId: null,
+    error: null,
+    authRedirect: '/',
+  },
+};
+
+const setup = (props = { checkAuth }) => {
+  const wrapper = shallow(<UnconnectedApp {...props} />);
   return wrapper;
 };
 
-describe('Test App container ', () => {
+const routerReduxSetup = (state, route, props = { checkAuth }) => {
+  return mount(
+    <Provider store={state}>
+      <MemoryRouter initialEntries={[`${route}`]} initialIndex={0}>
+        <UnconnectedApp {...props} />
+      </MemoryRouter>
+    </Provider>,
+  );
+};
+const setStoreState = initialState => {
+  store = mockStore(initialState);
+  store.dispatch = jest.fn();
+};
+
+describe('test connected app container', () => {
+  beforeEach(() => {
+    checkAuth.mockClear();
+  });
+  test('should render the BurgerBuilder component', () => {
+    setStoreState(ininState);
+    const wrapper = routerReduxSetup(store, '/');
+    expect(wrapper.find(BurgerBuilder)).toHaveLength(1);
+  });
+});
+
+describe('Test App container', () => {
+  beforeEach(() => {
+    checkAuth.mockClear();
+  });
   test('should call checkAuth on app before mount the app', () => {
-    const checkAuth = jest.fn();
     setup({ checkAuth });
     expect(checkAuth).toHaveBeenCalled();
+  });
+  test('always render component layout', () => {
+    const wrapper = setup();
+    expect(wrapper.find(Layout)).toHaveLength(1);
   });
 });

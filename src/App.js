@@ -5,15 +5,15 @@ import Auth from 'containers/Auth/Auth';
 import Orders from 'containers/Orders/Orders';
 import { checkAuthTimeOut } from 'actions';
 import Spinner from 'components/UI/Spinner/Spinner';
-import Layout from './components/Layout/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import Layout from 'components/Layout/Layout';
+import BurgerBuilder from 'containers/BurgerBuilder/BurgerBuilder';
 
 const Logout = lazy(() => import('containers/Auth/Logout/Logout'));
 const Checkout = lazy(() =>
   import('containers/BurgerBuilder/Checkout/checkout'),
 );
 
-export const App = props => {
+export const UnconnectedApp = props => {
   const { Authenticated, checkAuth, authRedirect } = props;
 
   checkAuth();
@@ -59,4 +59,4 @@ const mapStateToProps = ({ auth: { token, authRedirect } }) => {
 };
 
 const mapDispatchToProps = { checkAuth: checkAuthTimeOut };
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(UnconnectedApp);
