@@ -3,11 +3,13 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import { mount, shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
+import axios from 'axios';
 import thunk from 'redux-thunk';
 import BurgerBuilder from 'containers/BurgerBuilder/BurgerBuilder';
 import Layout from 'components/Layout/Layout';
 import { UnconnectedApp } from './App';
 
+// jest.mock('axios');
 const checkAuth = jest.fn();
 const mockStore = configureMockStore([thunk]);
 let store;
@@ -55,6 +57,15 @@ describe('test connected app container', () => {
     checkAuth.mockClear();
   });
   test('should render the BurgerBuilder component', () => {
+    jest.spyOn(axios, 'get').mockResolvedValue({
+      data: {
+        salad: 0,
+        bacon: 0,
+        cheese: 0,
+        meat: 0,
+      },
+      status: 200,
+    });
     setStoreState(ininState);
     const wrapper = routerReduxSetup(store, '/');
     expect(wrapper.find(BurgerBuilder)).toHaveLength(1);
