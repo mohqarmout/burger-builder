@@ -4,11 +4,12 @@ import configureMockStore from 'redux-mock-store';
 import { mount, shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
 import thunk from 'redux-thunk';
-import BurgerBuilder from 'containers/BurgerBuilder/BurgerBuilder';
+import { BurgerBuilder } from 'containers/BurgerBuilder/BurgerBuilder';
+import { Auth } from 'containers/Auth/Auth';
 import Layout from 'components/Layout/Layout';
+
 import { UnconnectedApp } from './App';
 
-// jest.mock('axios');
 const checkAuth = jest.fn();
 const mockStore = configureMockStore([thunk]);
 let store;
@@ -27,6 +28,20 @@ const ininState = {
   },
 };
 
+const customAuthState = {
+  BurgerBuilder: {
+    ingredients: null,
+    totalPrice: 4,
+    building: false,
+  },
+  order: [],
+  auth: {
+    token: true,
+    userId: true,
+    error: true,
+    authRedirect: '/',
+  },
+};
 const setup = (props = { checkAuth }) => {
   const wrapper = shallow(<UnconnectedApp {...props} />);
   return wrapper;
@@ -41,6 +56,7 @@ const routerReduxSetup = (state, route, props = { checkAuth }) => {
     </Provider>,
   );
 };
+
 const setStoreState = initialState => {
   store = mockStore(initialState);
   store.dispatch = jest.fn();
@@ -50,10 +66,22 @@ describe('test connected app container', () => {
   beforeEach(() => {
     checkAuth.mockClear();
   });
-  test('should render the BurgerBuilder component', () => {
+
+  test('should render the BurgerBuilder component', async () => {
     setStoreState(ininState);
-    const wrapper = routerReduxSetup(store, '/');
+    const wrapper = await routerReduxSetup(store, '/');
     expect(wrapper.find(BurgerBuilder)).toHaveLength(1);
+  });
+
+  test(`should render the auth on '/auth' route `, () => {
+    setStoreState(ininState);
+    const wrapper = routerReduxSetup(store, '/auth');
+    expect(wrapper.find(Auth)).toHaveLength(1);
+  });
+  test(`should not render the auth on '/auth' route `, () => {
+    setStoreState(customAuthState);
+    const wrapper = routerReduxSetup(store, '/auth');
+    expect(wrapper.find(Auth)).toHaveLength(0);
   });
 });
 

@@ -22,7 +22,7 @@ const authForm = {
     htmlFor: 'password',
   }),
 };
-class Auth extends Component {
+export class Auth extends Component {
   state = {
     formItems: {
       email: {
