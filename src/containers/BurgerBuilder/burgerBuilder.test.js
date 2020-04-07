@@ -2,8 +2,6 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import Modal from 'components/UI/Modal/Modal';
 import Spinner from 'components/UI/Spinner/Spinner';
-// import findByTestAttr from 'test/utils/findByTestAttr';
-
 import { BurgerBuilder } from './BurgerBuilder';
 
 const setup = props => {
