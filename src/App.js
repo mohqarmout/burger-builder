@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default */
 import React, { Suspense, lazy } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';

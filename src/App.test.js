@@ -59,10 +59,9 @@ const routerReduxSetup = (state, route, props = { checkAuth }) => {
 
 const setStoreState = initialState => {
   store = mockStore(initialState);
-  store.dispatch = jest.fn();
 };
 
-describe('test connected app container', () => {
+describe('test connected app container[integration-test]', () => {
   beforeEach(() => {
     checkAuth.mockClear();
   });
@@ -82,6 +81,12 @@ describe('test connected app container', () => {
     setStoreState(customAuthState);
     const wrapper = routerReduxSetup(store, '/auth');
     expect(wrapper.find(Auth)).toHaveLength(0);
+    expect(wrapper.find(BurgerBuilder)).toHaveLength(1);
+  });
+  test(`should redirect to '/' when undefined route match`, () => {
+    setStoreState(customAuthState);
+    const wrapper = routerReduxSetup(store, '/undefined');
+    expect(wrapper.find(BurgerBuilder)).toHaveLength(1);
   });
 });
 
