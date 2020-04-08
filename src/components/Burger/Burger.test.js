@@ -1,4 +1,4 @@
-import setupWrapper from 'test/helpers/setupWrapper';
+import setupShallowWrapper from 'test/helpers/setupShallowWrapper';
 import BurgerIngredient from 'components/Burger/BurgerIngredient/BurgerIngredient';
 import Burger from './Burger';
 
@@ -12,15 +12,15 @@ const props = {
 };
 
 test('BurgerBuilder render with out error', () => {
-  const wrapper = setupWrapper(Burger, props);
+  const wrapper = setupShallowWrapper(Burger, props);
   expect(wrapper.find('div').exists()).toBe(true);
 });
 test('should at lest contains four ', () => {
-  const wrapper = setupWrapper(Burger, props);
+  const wrapper = setupShallowWrapper(Burger, props);
   expect(wrapper.find(BurgerIngredient)).toHaveLength(2);
 });
 test('should show add ingredients on empty burger', () => {
-  const wrapper = setupWrapper(Burger, props);
+  const wrapper = setupShallowWrapper(Burger, props);
   expect(wrapper.find('p').text()).toContain(
     'Please start adding ingredients!',
   );

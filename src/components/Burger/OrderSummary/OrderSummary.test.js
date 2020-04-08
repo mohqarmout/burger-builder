@@ -1,4 +1,4 @@
-import setupWrapper from 'test/helpers/setupWrapper';
+import setupShallowWrapper from 'test/helpers/setupShallowWrapper';
 import OrderSummary from './OrderSummary';
 
 const props = {
@@ -14,16 +14,16 @@ const props = {
 };
 
 test('BurgerBuilder render with out error', () => {
-  const wrapper = setupWrapper(OrderSummary, props);
+  const wrapper = setupShallowWrapper(OrderSummary, props);
   expect(wrapper.text()).toContain(
     'A delicious burger with the following ingredients',
   );
 });
 test('should render four [li] ', () => {
-  const wrapper = setupWrapper(OrderSummary, props);
+  const wrapper = setupShallowWrapper(OrderSummary, props);
   expect(wrapper.find('li')).toHaveLength(4);
 });
 test('should display the passed price rounded to 2', () => {
-  const wrapper = setupWrapper(OrderSummary, props);
+  const wrapper = setupShallowWrapper(OrderSummary, props);
   expect(wrapper.find('strong').text()).toContain('10.55');
 });
