@@ -11,6 +11,7 @@ const props = {
     cheese: true,
     meat: true,
   },
+  ordered: jest.fn(),
 };
 test('BuildControls should render with out error', () => {
   const wrapper = setupWrapper(BuildControls, props);
@@ -27,4 +28,9 @@ test(`should round the value of price to tow number`, () => {
 test(`should render four BuildControl`, () => {
   const wrapper = setupWrapper(BuildControls, props);
   expect(wrapper.find(BuildControl)).toHaveLength(4);
+});
+test(`should call call event handelr for button click`, () => {
+  const wrapper = setupWrapper(BuildControls, props);
+  wrapper.find('button').simulate('click');
+  expect(props.ordered).toHaveBeenCalled();
 });
