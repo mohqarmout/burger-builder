@@ -98,6 +98,7 @@ export class Auth extends Component {
   };
 
   submitHandler = async event => {
+    event.preventDefault();
     const { getAuth } = this.props;
     const {
       formItems: {
@@ -107,7 +108,6 @@ export class Auth extends Component {
       canSubmit,
       isSignedUp,
     } = this.state;
-    event.preventDefault();
     if (canSubmit) {
       this.setState({ loading: true });
       await getAuth(email, password, isSignedUp);
