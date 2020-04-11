@@ -11,12 +11,11 @@ import BurgerBuilder from 'containers/BurgerBuilder/BurgerBuilder';
 
 const Logout = lazy(() => import('containers/Auth/Logout/Logout'));
 const Checkout = lazy(() =>
-  import('containers/BurgerBuilder/Checkout/checkout'),
+  import('containers/BurgerBuilder/Checkout/Checkout'),
 );
 
 export const UnconnectedApp = props => {
   const { Authenticated, checkAuth, authRedirect } = props;
-
   checkAuth();
 
   let route = (
