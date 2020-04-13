@@ -16,24 +16,8 @@ const order = [
     userId: 'sSBEAtHQQ4eeoaUpMbXPZVdLPoD2',
   },
 ];
-const res = {
-  '-M2RnN2n3wKhGH4UpwlL': {
-    ingredients: { bacon: 1, cheese: 1, meat: 1, salad: 1 },
-    orederDate: {
-      city: 'test',
-      country: 'test',
-      deliveryMethod: 'fastest',
-      email: 'test@test.com',
-      name: 'test',
-      street: 'test',
-      zipCode: '12345',
-    },
-    price: 6.9,
-    userId: 'sSBEAtHQQ4eeoaUpMbXPZVdLPoD2',
-  },
-};
 const props = {
-  fetchOrder: jest.fn().mockResolvedValue(res),
+  fetchOrder: jest.fn(),
   data: order,
 };
 
