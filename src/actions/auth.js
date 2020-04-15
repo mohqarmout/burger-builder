@@ -2,36 +2,38 @@ import axios from 'axios';
 import { makeSynActionCreator } from 'utils';
 
 export const authActionNames = {
-  postAuthSuccess: 'POST_AUTHU_SUCCESS',
-  postAuthFail: 'POST_AUTHU_FAIL',
-  logout: 'AUTHU_LOGOUT',
-  setRedirectPath: 'SET_REDIRECT_PATH',
+  POST_AUTH_SUCCESS: 'POST_AUTHU_SUCCESS',
+  POST_AUTH_FAIL: 'POST_AUTHU_FAIL',
+  LOGOUT: 'AUTHU_LOGOUT',
+  SET_REDIRECT_PATH: 'SET_REDIRECT_PATH',
 };
 
-const authSeccess = makeSynActionCreator(
-  authActionNames.postAuthSuccess,
+export const authSeccess = makeSynActionCreator(
+  authActionNames.POST_AUTH_SUCCESS,
   'idToken',
   'localId',
 );
-const authfail = makeSynActionCreator(authActionNames.postAuthFail, 'error');
-
-export const authLogout = makeSynActionCreator(authActionNames.logout);
-
+export const authfail = makeSynActionCreator(
+  authActionNames.POST_AUTH_FAIL,
+  'error',
+);
+export const authLogout = makeSynActionCreator(authActionNames.LOGOUT);
 export const authSetRedirectPath = makeSynActionCreator(
-  authActionNames.setRedirectPath,
+  authActionNames.SET_REDIRECT_PATH,
   'path',
 );
 
-const checkAuthTimeOutThunk = timeOut => dispatch => {
+export const checkAuthTimeOutThunk = timeOut => dispatch => {
   // * setTimeout uses milliseconds
-  setTimeout(() => {
-    dispatch(authLogout());
-  }, timeOut * 1000);
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(dispatch(authLogout()));
+    }, timeOut * 1000);
+  });
 };
 
 export const postAuthThunk = (email, password, isSingUp) => async (
   dispatch,
-  _,
   // eslint-disable-next-line consistent-return
 ) => {
   let url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_APP_KEY}`;

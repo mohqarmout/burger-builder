@@ -18,7 +18,7 @@ const orderReducer = (state = [], { type, payload }) => {
     //     ],
     //     'id',
     //   );
-    case orderActionNames.getPost:
+    case orderActionNames.GET_ORDER:
       return getUnique([...state, ...payload.orders], 'id');
     default:
       return state;
@@ -80,19 +80,19 @@ const authReducer = (
   { type, payload },
 ) => {
   switch (type) {
-    case authActionNames.postAuthSuccess:
+    case authActionNames.POST_AUTH_SUCCESS:
       return {
         ...state,
         error: null,
         token: payload.idToken,
         userId: payload.localId,
       };
-    case authActionNames.postAuthFail:
+    case authActionNames.POST_AUTH_FAIL:
       return {
         ...state,
         error: payload.error,
       };
-    case authActionNames.logout:
+    case authActionNames.LOGOUT:
       localStorage.clear();
       return {
         ...state,
@@ -100,7 +100,7 @@ const authReducer = (
         userId: null,
         authRedirect: '/',
       };
-    case authActionNames.setRedirectPath:
+    case authActionNames.SET_REDIRECT_PATH:
       return {
         ...state,
         authRedirect: payload.path,
