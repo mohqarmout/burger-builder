@@ -3,7 +3,20 @@ import { burgerActionNames, orderActionNames, authActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 import { getUnique } from 'utils';
 
-const orderReducer = (state = [], { type, payload }) => {
+const orderInitState = [];
+const burgerInitState = {
+  ingredients: null,
+  totalPrice: 4,
+  building: false,
+};
+const authInitState = {
+  token: null,
+  userId: null,
+  error: null,
+  authRedirect: '/',
+};
+
+const orderReducer = (state = orderInitState, { type, payload }) => {
   switch (type) {
     case orderActionNames.GET_ORDER:
       return getUnique([...state, ...payload.orders], 'id');
@@ -12,14 +25,7 @@ const orderReducer = (state = [], { type, payload }) => {
   }
 };
 
-const BurgerBuilder = (
-  state = {
-    ingredients: null,
-    totalPrice: 4,
-    building: false,
-  },
-  { type, payload },
-) => {
+const BurgerBuilder = (state = burgerInitState, { type, payload }) => {
   switch (type) {
     case burgerActionNames.ADD_INGREDIENT:
       return {
@@ -57,15 +63,7 @@ const BurgerBuilder = (
   }
 };
 
-const authReducer = (
-  state = {
-    token: null,
-    userId: null,
-    error: null,
-    authRedirect: '/',
-  },
-  { type, payload },
-) => {
+const authReducer = (state = authInitState, { type, payload }) => {
   switch (type) {
     case authActionNames.POST_AUTH_SUCCESS:
       return {
