@@ -5,19 +5,6 @@ import { getUnique } from 'utils';
 
 const orderReducer = (state = [], { type, payload }) => {
   switch (type) {
-    // case orderActionNames.postOrder:
-    //   return getUnique(
-    //     [
-    //       ...state,
-    //       ...[
-    //         {
-    //           id: payload.id,
-    //           ordersData: payload.ordersData,
-    //         },
-    //       ],
-    //     ],
-    //     'id',
-    //   );
     case orderActionNames.GET_ORDER:
       return getUnique([...state, ...payload.orders], 'id');
     default:
@@ -34,7 +21,7 @@ const BurgerBuilder = (
   { type, payload },
 ) => {
   switch (type) {
-    case burgerActionNames.addIngredient:
+    case burgerActionNames.ADD_INGREDIENT:
       return {
         ...state,
         totalPrice: state.totalPrice + INGREDIENT_PRICES[payload.ingredient],
@@ -44,7 +31,7 @@ const BurgerBuilder = (
         },
         building: true,
       };
-    case burgerActionNames.removeIngredient:
+    case burgerActionNames.REMOVE_INGREDIENT:
       return {
         ...state,
         totalPrice: state.totalPrice - INGREDIENT_PRICES[payload.ingredient],
@@ -54,7 +41,7 @@ const BurgerBuilder = (
         },
         building: true,
       };
-    case burgerActionNames.setIngredients:
+    case burgerActionNames.SET_INGREDIENTS:
       return {
         ...state,
         ingredients: {

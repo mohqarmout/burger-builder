@@ -2,23 +2,23 @@
 import { makeSynActionCreator } from 'utils';
 
 export const burgerActionNames = {
-  addIngredient: 'ADD_INGREDIENT',
-  removeIngredient: 'REMOVE_INGREDIENT',
-  setIngredients: 'SET_INGREDIENTS',
+  ADD_INGREDIENT: 'ADD_INGREDIENT',
+  REMOVE_INGREDIENT: 'REMOVE_INGREDIENT',
+  SET_INGREDIENTS: 'SET_INGREDIENTS',
 };
 
 export const addIngredientAction = makeSynActionCreator(
-  burgerActionNames.addIngredient,
+  burgerActionNames.ADD_INGREDIENT,
   'ingredient',
 );
 
 export const removeIngredientAction = makeSynActionCreator(
-  burgerActionNames.removeIngredient,
+  burgerActionNames.REMOVE_INGREDIENT,
   'ingredient',
 );
 
 export const setIngredientAction = makeSynActionCreator(
-  burgerActionNames.setIngredients,
+  burgerActionNames.SET_INGREDIENTS,
   'ingredients',
 );
 
