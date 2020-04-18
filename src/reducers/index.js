@@ -85,7 +85,7 @@ const authReducer = (state = authInitState, { type, payload }) => {
         userId: null,
         authRedirect: '/',
       };
-    case authActionNames.SET_REDIRECT_PATH:
+    case authActionNames.ROUTE_WITH_REDIRECT_PATH:
       return {
         ...state,
         authRedirect: payload.path,

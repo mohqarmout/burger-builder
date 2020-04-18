@@ -53,7 +53,7 @@ test('should create error action with error as a payload', () => {
 });
 test('should create auth redirect action to redirect to correct path', () => {
   const expectedAction = {
-    type: authActionNames.SET_REDIRECT_PATH,
+    type: authActionNames.ROUTE_WITH_REDIRECT_PATH,
     payload: {
       path: '/',
     },
@@ -72,7 +72,7 @@ test('create AUTHU_LOGOUT action', async () => {
 test('should run after 1 milliseconds', async () => {
   jest.useFakeTimers();
   const store = mockStore({});
-  store.dispatch(checkAuthTimeOutThunk(1));
+  store.dispatch(checkAuthTimeOutThunk({ seconds: 1 }));
   expect(setTimeout).toHaveBeenCalledTimes(1);
   expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1000);
 });

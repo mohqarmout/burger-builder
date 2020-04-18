@@ -5,7 +5,7 @@ export const authActionNames = {
   POST_AUTH_SUCCESS: 'POST_AUTHU_SUCCESS',
   POST_AUTH_FAIL: 'POST_AUTHU_FAIL',
   LOGOUT: 'AUTHU_LOGOUT',
-  SET_REDIRECT_PATH: 'SET_REDIRECT_PATH',
+  ROUTE_WITH_REDIRECT_PATH: 'ROUTE_WITH_REDIRECT_PATH',
 };
 
 export const authSeccess = makeSynActionCreator(
@@ -19,16 +19,16 @@ export const authfail = makeSynActionCreator(
 );
 export const authLogout = makeSynActionCreator(authActionNames.LOGOUT);
 export const authSetRedirectPath = makeSynActionCreator(
-  authActionNames.SET_REDIRECT_PATH,
+  authActionNames.ROUTE_WITH_REDIRECT_PATH,
   'path',
 );
 
-export const checkAuthTimeOutThunk = timeOut => dispatch => {
+export const checkAuthTimeOutThunk = ({ seconds }) => dispatch => {
   // * setTimeout uses milliseconds
   return new Promise(resolve => {
     setTimeout(() => {
       resolve(dispatch(authLogout()));
-    }, timeOut * 1000);
+    }, seconds * 1000);
   });
 };
 
@@ -58,7 +58,7 @@ export const postAuthThunk = (email, password, isSingUp) => async (
     localStorage.setItem('userId', data.localId);
     localStorage.setItem('expirationDate', expirationDate);
     dispatch(authSeccess(data.idToken, data.localId));
-    dispatch(checkAuthTimeOutThunk(data.expiresIn));
+    dispatch(checkAuthTimeOutThunk({ seconds: data.expiresIn }));
   } catch (error) {
     return dispatch(authfail(error));
   }
@@ -74,11 +74,10 @@ export const checkAuthTimeOut = () => dispatch => {
       dispatch(authLogout());
     } else {
       dispatch(authSeccess(token, localId));
-
       dispatch(
-        checkAuthTimeOutThunk(
-          (expirationDate.getTime() - new Date().getTime()) / 1000,
-        ),
+        checkAuthTimeOutThunk({
+          seconds: (expirationDate.getTime() - new Date().getTime()) / 1000,
+        }),
       );
     }
   }
