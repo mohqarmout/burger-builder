@@ -76,7 +76,7 @@ const orderForm = {
     ],
   }),
 };
-class ContactData extends Component {
+export class ContactData extends Component {
   state = {
     formValues: {
       name: {

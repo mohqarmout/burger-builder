@@ -3,38 +3,31 @@ import { burgerActionNames, orderActionNames, authActionNames } from 'actions';
 import { INGREDIENT_PRICES } from 'containers/BurgerBuilder/BurgerBuilder';
 import { getUnique } from 'utils';
 
-const orderReducer = (state = [], { type, payload }) => {
+const orderInitState = [];
+const burgerInitState = {
+  ingredients: null,
+  totalPrice: 4,
+  building: false,
+};
+const authInitState = {
+  token: null,
+  userId: null,
+  error: null,
+  authRedirect: '/',
+};
+
+const orderReducer = (state = orderInitState, { type, payload }) => {
   switch (type) {
-    // case orderActionNames.postOrder:
-    //   return getUnique(
-    //     [
-    //       ...state,
-    //       ...[
-    //         {
-    //           id: payload.id,
-    //           ordersData: payload.ordersData,
-    //         },
-    //       ],
-    //     ],
-    //     'id',
-    //   );
-    case orderActionNames.getPost:
+    case orderActionNames.GET_ORDER:
       return getUnique([...state, ...payload.orders], 'id');
     default:
       return state;
   }
 };
 
-const BurgerBuilder = (
-  state = {
-    ingredients: null,
-    totalPrice: 4,
-    building: false,
-  },
-  { type, payload },
-) => {
+const BurgerBuilder = (state = burgerInitState, { type, payload }) => {
   switch (type) {
-    case burgerActionNames.addIngredient:
+    case burgerActionNames.ADD_INGREDIENT:
       return {
         ...state,
         totalPrice: state.totalPrice + INGREDIENT_PRICES[payload.ingredient],
@@ -44,7 +37,7 @@ const BurgerBuilder = (
         },
         building: true,
       };
-    case burgerActionNames.removeIngredient:
+    case burgerActionNames.REMOVE_INGREDIENT:
       return {
         ...state,
         totalPrice: state.totalPrice - INGREDIENT_PRICES[payload.ingredient],
@@ -54,7 +47,7 @@ const BurgerBuilder = (
         },
         building: true,
       };
-    case burgerActionNames.setIngredients:
+    case burgerActionNames.SET_INGREDIENTS:
       return {
         ...state,
         ingredients: {
@@ -70,29 +63,21 @@ const BurgerBuilder = (
   }
 };
 
-const authReducer = (
-  state = {
-    token: null,
-    userId: null,
-    error: null,
-    authRedirect: '/',
-  },
-  { type, payload },
-) => {
+const authReducer = (state = authInitState, { type, payload }) => {
   switch (type) {
-    case authActionNames.postAuthSuccess:
+    case authActionNames.POST_AUTH_SUCCESS:
       return {
         ...state,
         error: null,
         token: payload.idToken,
         userId: payload.localId,
       };
-    case authActionNames.postAuthFail:
+    case authActionNames.POST_AUTH_FAIL:
       return {
         ...state,
         error: payload.error,
       };
-    case authActionNames.logout:
+    case authActionNames.LOGOUT:
       localStorage.clear();
       return {
         ...state,
@@ -100,7 +85,7 @@ const authReducer = (
         userId: null,
         authRedirect: '/',
       };
-    case authActionNames.setRedirectPath:
+    case authActionNames.ROUTE_WITH_REDIRECT_PATH:
       return {
         ...state,
         authRedirect: payload.path,

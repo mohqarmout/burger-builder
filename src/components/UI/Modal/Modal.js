@@ -4,9 +4,7 @@ import classes from './Modal.module.css';
 import Backdrop from '../Backdrop/Backdrop';
 
 const modal = ({ show, modalClosed, children }) => {
-  // show ==> boolean default of false
   const attachedClasses = [classes.Modal, classes.Close];
-
   if (show) {
     attachedClasses.splice(1, 1, classes.Show);
   }

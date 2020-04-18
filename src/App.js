@@ -1,22 +1,22 @@
-import React, { useRef, Suspense, lazy } from 'react';
+/* eslint-disable import/no-named-as-default */
+import React, { Suspense, lazy } from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Auth from 'containers/Auth/Auth';
 import Orders from 'containers/Orders/Orders';
 import { checkAuthTimeOut } from 'actions';
 import Spinner from 'components/UI/Spinner/Spinner';
-import Layout from './components/Layout/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import Layout from 'components/Layout/Layout';
+import BurgerBuilder from 'containers/BurgerBuilder/BurgerBuilder';
 
 const Logout = lazy(() => import('containers/Auth/Logout/Logout'));
 const Checkout = lazy(() =>
-  import('containers/BurgerBuilder/Checkout/checkout'),
+  import('containers/BurgerBuilder/Checkout/Checkout'),
 );
 
-const App = props => {
+export const UnconnectedApp = props => {
   const { Authenticated, checkAuth, authRedirect } = props;
-
-  useRef(checkAuth());
+  checkAuth();
 
   let route = (
     <>
@@ -59,4 +59,4 @@ const mapStateToProps = ({ auth: { token, authRedirect } }) => {
 };
 
 const mapDispatchToProps = { checkAuth: checkAuthTimeOut };
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(UnconnectedApp);

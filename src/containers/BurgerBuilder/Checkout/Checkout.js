@@ -1,10 +1,11 @@
+/* eslint-disable import/no-named-as-default */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
-import CheckoutSummary from 'components/Order/checkoutSummary/checkoutSummary';
+import CheckoutSummary from 'components/Order/checkoutSummary/CheckoutSummary';
 import ContactData from './ContacrData/ContactData';
 
-class Checkout extends Component {
+export class Checkout extends Component {
   // we need oldschool method ==> because of the initaly null ingredients
   // constructor(props) {
   //   super(props);
@@ -48,6 +49,7 @@ class Checkout extends Component {
     const {
       match: { path },
     } = this.props;
+
     let checkoutSummary = (
       <div>
         <CheckoutSummary
@@ -55,7 +57,10 @@ class Checkout extends Component {
           checkoutContinue={this.checkoutContinueHandler}
           ingredients={ingredients}
         />
-        <Route path={`${path}/contact-data`} component={ContactData} />
+        <Route
+          path={`${path}/contact-data`}
+          render={props => <ContactData {...props} />}
+        />
       </div>
     );
 

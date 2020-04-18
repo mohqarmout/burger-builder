@@ -6,7 +6,7 @@ import Spinner from 'components/UI/Spinner/Spinner';
 import axios from 'axiosInstances';
 import Order from 'components/Order/Order';
 
-class Orders extends Component {
+export class Orders extends Component {
   state = {
     loading: false,
   };

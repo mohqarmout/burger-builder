@@ -16,4 +16,3 @@ const navigationItem = ({ children, link, exact, closed }) => (
 );
 
 export default navigationItem;
-// onKeyPress={closed}

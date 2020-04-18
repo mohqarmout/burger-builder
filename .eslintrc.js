@@ -10,7 +10,9 @@ module.exports = {
     'prettier',
     'prettier/react',
     'plugin:jsx-a11y/recommended',
-    'plugin:react-redux/recommended'
+    'plugin:react-redux/recommended',
+    'plugin:jest/recommended',
+    'plugin:jest/style'
   ],
   globals: {
     Atomics: 'readonly',
@@ -23,7 +25,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: ['react', 'prettier', 'jsx-a11y', 'react-redux'],
+  plugins: ['react', 'prettier', 'jsx-a11y', 'react-redux', 'jest'],
   rules: {
     'prettier/prettier': ['error', { singleQuote: true, trailingComma: 'all' }],
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
@@ -34,7 +36,8 @@ module.exports = {
       'always',
       { ignoreClassFields: true }
     ],
-    'react/prop-types': [0]
+    'react/prop-types': [0],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }]
   },
   settings: {
     'import/resolver': {

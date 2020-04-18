@@ -22,7 +22,7 @@ const authForm = {
     htmlFor: 'password',
   }),
 };
-class Auth extends Component {
+export class Auth extends Component {
   state = {
     formItems: {
       email: {
@@ -98,6 +98,7 @@ class Auth extends Component {
   };
 
   submitHandler = async event => {
+    event.preventDefault();
     const { getAuth } = this.props;
     const {
       formItems: {
@@ -107,7 +108,6 @@ class Auth extends Component {
       canSubmit,
       isSignedUp,
     } = this.state;
-    event.preventDefault();
     if (canSubmit) {
       this.setState({ loading: true });
       await getAuth(email, password, isSignedUp);

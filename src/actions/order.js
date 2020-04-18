@@ -1,17 +1,20 @@
 import { makeSynActionCreator } from 'utils';
 
 export const orderActionNames = {
-  postOrder: 'POST_ORDER',
-  getPost: 'GET_ORDER',
+  POST_ORDER: 'POST_ORDER',
+  GET_ORDER: 'GET_ORDER',
 };
 
-const purchaseBurger = makeSynActionCreator(
-  orderActionNames.postOrder,
+export const purchaseBurger = makeSynActionCreator(
+  orderActionNames.POST_ORDER,
   'id',
   'ordersData',
 );
 
-const fetchOrder = makeSynActionCreator(orderActionNames.getPost, 'orders');
+export const fetchOrder = makeSynActionCreator(
+  orderActionNames.GET_ORDER,
+  'orders',
+);
 
 export const postOrederThunk = ordersData => async (
   dispatch,
