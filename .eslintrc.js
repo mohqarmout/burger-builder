@@ -37,6 +37,7 @@ module.exports = {
     ],
     'react/prop-types': [0],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'no-use-before-define': ['error', false],
   },
   settings: {
     'import/resolver': {

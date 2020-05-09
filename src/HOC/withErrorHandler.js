@@ -1,77 +1,56 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import Modal from 'components/UI/Modal/Modal';
 
-const withErrorHandler = (WarppedComponent, axios) =>
-  class ErrorHoc extends Component {
-    constructor(props) {
-      super(props);
-      this.setinterceptors();
-    }
-
-    state = {
-      error: false,
-    };
-
-    componentDidMount() {
-      this.mounted = true;
-    }
-
-    componentWillUnmount() {
-      axios.interceptors.request.eject(this.axiosRequest);
-      axios.interceptors.response.eject(this.axiosResponse);
-      this.mounted = false;
-    }
-
-    setinterceptors = () => {
-      this.axiosRequest = axios.interceptors.request.use(
-        req => {
-          if (this.mounted) {
-            this.setState({
-              error: null,
-            });
-          }
-
-          return req;
-        },
-        error => {
-          if (this.mounted) {
-            this.setState({
-              error,
-            });
-          }
-          return Promise.reject(error);
-        },
-      );
-      this.axiosResponse = axios.interceptors.response.use(
-        res => res,
-        error => {
-          if (this.mounted) {
-            this.setState({
-              error,
-            });
-          }
-          return Promise.reject(error);
-        },
-      );
-    };
-
-    errorHandler = () => {
-      this.setState({
-        error: false,
-      });
-    };
-
-    render() {
-      const { error } = this.state;
-      return (
-        <>
-          <Modal modalClosed={this.errorHandler} show={error}>
-            {error ? error.message : null}
-          </Modal>
-          <WarppedComponent {...this.props} />
-        </>
-      );
-    }
+const withErrorHandler = (WarppedComponent, axios) => props => {
+  let mounted = useRef();
+  let axiosRequest = null;
+  let axiosResponse = null;
+  const errorHandler = () => {
+    setError(false);
   };
+  const [error, setError] = useState(false);
+  axiosRequest = axios.interceptors.request.use(
+    req => {
+      if (mounted.current) {
+        setError(null);
+      }
+      return req;
+    },
+    error => {
+      if (mounted.current) {
+        setError(error);
+      }
+      return Promise.reject(error);
+    },
+  );
+  axiosResponse = axios.interceptors.response.use(
+    res => res,
+    error => {
+      if (mounted.current) {
+        setError(error);
+      }
+      return Promise.reject(error);
+    },
+  );
+  useEffect(() => {
+    mounted.current = true;
+  });
+  useEffect(() => {
+    return () => {
+      axios.interceptors.request.eject(axiosRequest);
+      axios.interceptors.response.eject(axiosResponse);
+      mounted.current = false;
+    };
+  });
+  return (
+    <>
+      <Modal modalClosed={errorHandler} show={error}>
+        {error ? error.message : null}
+      </Modal>
+      <WarppedComponent {...props} />
+    </>
+  );
+};
+
 export default withErrorHandler;
