@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { getOrederThunk } from 'actions';
 import withErrorHandler from 'HOC/withErrorHandler';
@@ -6,33 +6,29 @@ import Spinner from 'components/UI/Spinner/Spinner';
 import axios from 'axiosInstances';
 import Order from 'components/Order/Order';
 
-export class Orders extends Component {
-  state = {
-    loading: false,
-  };
+export const Orders = props => {
+  const [loading, setlLoading] = useState(false);
+  const { data, fetchOrder } = props;
 
-  async componentDidMount() {
-    const { fetchOrder } = this.props;
-    this.setState({
-      loading: true,
-    });
-    await fetchOrder();
-    this.setState({ loading: false });
-  }
+  useEffect(() => {
+    (async () => {
+      setlLoading(false);
+      await fetchOrder();
+      setlLoading(true);
+    })();
+  }, [fetchOrder]);
 
-  render() {
-    const { loading } = this.state;
-    const { data } = this.props;
-
-    let orders = data.map(({ id, ingredients = {}, price }) => {
+  let orders = useMemo(() => {
+    data.map(({ id, ingredients = {}, price }) => {
       return <Order key={id} price={price} ingredinets={ingredients} />;
     });
-    if (loading) {
-      orders = <Spinner />;
-    }
-    return <div>{orders}</div>;
+  }, [data]);
+
+  if (loading) {
+    orders = <Spinner />;
   }
-}
+  return <div>{orders}</div>;
+};
 
 const mapStateToProps = ({ order }) => {
   return { data: order };
