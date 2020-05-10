@@ -13,8 +13,8 @@ export const Orders = props => {
     setlLoading(true);
     (async () => {
       await fetchOrder();
+      setlLoading(false);
     })();
-    setlLoading(false);
   }, [fetchOrder]);
   let orders = React.useMemo(
     () =>

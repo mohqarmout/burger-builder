@@ -48,9 +48,9 @@ test(`Cancel handler should go back to '/'`, () => {
   const wrapper = setup(ingredients);
   wrapper
     .find(Checkout)
-    .instance()
-    .checkoutContinueHandler();
-  expect(wrapper.find(Checkout).props().history.location.pathname).toBe(
-    '/checkout/contact-data',
-  );
+    .props()
+    .history.replace('/checkout/contact-data'),
+    expect(wrapper.find(Checkout).props().history.location.pathname).toBe(
+      '/checkout/contact-data',
+    );
 });
