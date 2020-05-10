@@ -39,9 +39,9 @@ export const postOrederThunk = ordersData => async (
 // eslint-disable-next-line consistent-return
 export const getOrederThunk = () => async (dispatch, getState, { axios }) => {
   const {
-    auth: { userId, token },
+    auth: { token },
   } = getState();
-  const queryParams = `orders.json?auth=${token}"`;
+  const queryParams = `orders.json?auth=${token}`;
 
   try {
     const { data, status } = await axios.get(queryParams);
