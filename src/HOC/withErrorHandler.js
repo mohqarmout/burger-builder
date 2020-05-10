@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Modal from 'components/UI/Modal/Modal';
 
 const withErrorHandler = (WarppedComponent, axios) => props => {
-  let mounted = useRef();
+  let mounted = useRef(null);
   let axiosRequest = null;
   let axiosResponse = null;
   const errorHandler = () => {
@@ -35,8 +35,6 @@ const withErrorHandler = (WarppedComponent, axios) => props => {
   );
   useEffect(() => {
     mounted.current = true;
-  });
-  useEffect(() => {
     return () => {
       axios.interceptors.request.eject(axiosRequest);
       axios.interceptors.response.eject(axiosResponse);
