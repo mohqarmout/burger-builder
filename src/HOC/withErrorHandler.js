@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 
 import Modal from 'components/UI/Modal/Modal';
 
 const withErrorHandler = (WarppedComponent, axios) => props => {
-  let mounted = useRef(null);
+  let mounted = React.useRef(null);
   let axiosRequest = null;
   let axiosResponse = null;
   const errorHandler = () => {
     setError(false);
   };
-  const [error, setError] = useState(false);
+  const [error, setError] = React.useState(false);
+  console.log(Boolean(error))
   axiosRequest = axios.interceptors.request.use(
     req => {
       if (mounted.current) {
@@ -33,7 +34,7 @@ const withErrorHandler = (WarppedComponent, axios) => props => {
       return Promise.reject(error);
     },
   );
-  useEffect(() => {
+  React.useEffect(() => {
     mounted.current = true;
     return () => {
       axios.interceptors.request.eject(axiosRequest);

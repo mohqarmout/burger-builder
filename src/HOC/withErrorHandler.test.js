@@ -5,7 +5,6 @@ import Modal from 'components/UI/Modal/Modal';
 import withErrorHandler from 'HOC/withErrorHandler';
 import axios from 'axios';
 
-
 const TestComponent = props => {
   return <h1>TestComponent</h1>;
 };
@@ -20,8 +19,8 @@ test('should render TestComponent and Modal', () => {
 test('should view error message on the Model', () => {
   jest
     .spyOn(React, 'useState')
-    .mockReturnValue([{ error: { message: 'Well !!!' } }]);
+    .mockReturnValue([{   message: 'Well !!!'  }]);
   const wrapper = setupMountWrapper(HOC);
-
+  console.log(wrapper.find(Modal).debug());
   expect(wrapper.find(Modal).text()).toContain('Well !!!');
 });
