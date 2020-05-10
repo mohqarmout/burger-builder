@@ -8,19 +8,16 @@ import axios from 'axios';
 const TestComponent = props => {
   return <h1>TestComponent</h1>;
 };
-
 const HOC = withErrorHandler(TestComponent, axios);
 test('should render TestComponent and Modal', () => {
   const wrapper = setupMountWrapper(HOC);
   expect(wrapper.find(Modal)).toHaveLength(1);
   expect(wrapper.find(TestComponent)).toHaveLength(1);
 });
-
 test('should view error message on the Model', () => {
   jest
     .spyOn(React, 'useState')
     .mockReturnValue([{   message: 'Well !!!'  }]);
   const wrapper = setupMountWrapper(HOC);
-  console.log(wrapper.find(Modal).debug());
   expect(wrapper.find(Modal).text()).toContain('Well !!!');
 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { getOrederThunk } from 'actions';
 import withErrorHandler from 'HOC/withErrorHandler';
@@ -7,23 +7,22 @@ import axios from 'axiosInstances';
 import Order from 'components/Order/Order';
 
 export const Orders = props => {
-  const [loading, setlLoading] = useState(false);
+  const [loading, setlLoading] = React.useState(false);
   const { data, fetchOrder } = props;
-
-  useEffect(() => {
+  React.useEffect(() => {
+    setlLoading(true);
     (async () => {
-      setlLoading(false);
       await fetchOrder();
-      setlLoading(true);
     })();
+    setlLoading(false);
   }, [fetchOrder]);
-
-  let orders = useMemo(() => {
-    data.map(({ id, ingredients = {}, price }) => {
-      return <Order key={id} price={price} ingredinets={ingredients} />;
-    });
-  }, [data]);
-
+  let orders = React.useMemo(
+    () =>
+      data.map(({ id, ingredients = {}, price }) => {
+        return <Order key={id} price={price} ingredinets={ingredients} />;
+      }),
+    [data],
+  );
   if (loading) {
     orders = <Spinner />;
   }

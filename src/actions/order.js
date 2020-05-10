@@ -41,7 +41,7 @@ export const getOrederThunk = () => async (dispatch, getState, { axios }) => {
   const {
     auth: { userId, token },
   } = getState();
-  const queryParams = `orders.json?auth=${token}&orderBy="userId"&equalTo="${userId}"`;
+  const queryParams = `orders.json?auth=${token}"`;
 
   try {
     const { data, status } = await axios.get(queryParams);

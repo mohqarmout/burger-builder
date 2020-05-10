@@ -10,7 +10,6 @@ const withErrorHandler = (WarppedComponent, axios) => props => {
     setError(false);
   };
   const [error, setError] = React.useState(false);
-  console.log(Boolean(error))
   axiosRequest = axios.interceptors.request.use(
     req => {
       if (mounted.current) {
