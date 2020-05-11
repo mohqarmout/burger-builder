@@ -4,6 +4,50 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import { mount } from 'enzyme';
 import Spinner from 'components/UI/Spinner/Spinner';
 import { ContactData } from './ContactData';
+import Button from 'components/UI/Button/Button';
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
+const mockedFormVlues = {
+  name: {
+    value: '',
+    validation: { required: true },
+    valid: false,
+    touched: false,
+  },
+  street: {
+    value: '',
+    validation: { required: true },
+    valid: false,
+    touched: false,
+  },
+  zipCode: {
+    value: '',
+    validation: { required: true, minLength: 5, maxLength: 5 },
+    valid: false,
+    touched: false,
+  },
+  city: {
+    value: '',
+    validation: { required: true },
+    valid: false,
+    touched: false,
+  },
+  country: {
+    value: '',
+    validation: { required: true },
+    valid: false,
+    touched: false,
+  },
+  email: {
+    value: '',
+    validation: { required: true },
+    valid: false,
+    touched: false,
+  },
+  deliveryMethod: { value: 'hmmm' },
+};
 
 const props = {
   ingredients: {},
@@ -41,24 +85,40 @@ const fireInputEvent = (wrapper, inputValues = []) => {
 };
 
 test('renders without error', () => {
-  const wrapper = setupShallowWrapper(ContactData, props);
+  const wrapper = setup();
   expect(wrapper).toHaveLength(1);
 });
-
 test('order button should be disabled unlees canSubmit state is true ', () => {
-  const wrapper = setupShallowWrapper(ContactData, props);
-  expect(wrapper.find('button').props().active).toBe(false);
-  wrapper.setState({ canSubmit: true });
-  expect(wrapper.find('button').props().active).toBe(true);
+  const wrapper = setup();
+  expect(wrapper.find(Button).props().active).toBe(false);
+  jest
+    .spyOn(React, 'useState')
+    .mockReturnValueOnce([mockedFormVlues])
+    .mockReturnValueOnce([false])
+    .mockReturnValueOnce([true]);
+  const mockedStateWrapper = setup();
+  expect(
+    mockedStateWrapper
+      .find('button')
+      .at(0)
+      .props().active,
+  ).toBe(true);
 });
-
 test('should view the spinner on loading', () => {
-  const wrapper = setupShallowWrapper(ContactData, props);
-  wrapper.setState({ loading: true });
+  jest
+    .spyOn(React, 'useState')
+    .mockReturnValueOnce([mockedFormVlues])
+    .mockReturnValueOnce([true]);
+  const wrapper = setup();
   expect(wrapper.find(Spinner)).toHaveLength(1);
 });
+test('orders should be active and fire the handler on passed validation', async () => {
+  jest
+    .spyOn(React, 'useState')
+    .mockReturnValueOnce([mockedFormVlues, jest.fn()])
+    .mockReturnValueOnce([false, jest.fn()])
+    .mockReturnValueOnce([true, jest.fn()]);
 
-test('orders should be active and fire the handler on passed validation', () => {
   const wrapper = setup(ContactData);
   fireInputEvent(wrapper, [
     'test',
@@ -68,10 +128,9 @@ test('orders should be active and fire the handler on passed validation', () => 
     'Palestine',
     'test@test.test',
   ]);
-  wrapper.find('form').simulate('submit');
+  await wrapper.find('form').simulate('submit');
   expect(props.postOreder).toHaveBeenCalled();
 });
-
 test('', () => {
   props.postOreder.mockClear();
   const wrapper = setup(ContactData);

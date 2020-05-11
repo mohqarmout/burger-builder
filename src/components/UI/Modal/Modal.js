@@ -18,10 +18,3 @@ const modal = ({ show, modalClosed, children }) => {
 };
 
 export default memo(modal);
-
-// another way to do so  -_-
-//
-// style={{
-//   transform: show ? 'translateY(0)' : 'translateY(-100vh)',
-//   opacity: show ? '1' : '0',
-// }}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { postOrederThunk } from 'actions';
 import Spinner from 'components/UI/Spinner/Spinner';
@@ -76,57 +76,58 @@ const orderForm = {
     ],
   }),
 };
-export class ContactData extends Component {
-  state = {
-    formValues: {
-      name: {
-        value: '',
-        validation: { required: true },
-        valid: false,
-        touched: false,
-      },
-      street: {
-        value: '',
-        validation: { required: true },
-        valid: false,
-        touched: false,
-      },
-      zipCode: {
-        value: '',
-        validation: { required: true, minLength: 5, maxLength: 5 },
-        valid: false,
-        touched: false,
-      },
-      city: {
-        value: '',
-        validation: { required: true },
-        valid: false,
-        touched: false,
-      },
-      country: {
-        value: '',
-        validation: { required: true },
-        valid: false,
-        touched: false,
-      },
-      email: {
-        value: '',
-        validation: { required: true },
-        valid: false,
-        touched: false,
-      },
-      deliveryMethod: { value: 'fastest' },
+export const ContactData = props => {
+  const [formValues, setFormValues] = React.useState({
+    name: {
+      value: '',
+      validation: { required: true },
+      valid: false,
+      touched: false,
     },
-    loading: false,
-    canSubmit: false,
-  };
+    street: {
+      value: '',
+      validation: { required: true },
+      valid: false,
+      touched: false,
+    },
+    zipCode: {
+      value: '',
+      validation: { required: true, minLength: 5, maxLength: 5 },
+      valid: false,
+      touched: false,
+    },
+    city: {
+      value: '',
+      validation: { required: true },
+      valid: false,
+      touched: false,
+    },
+    country: {
+      value: '',
+      validation: { required: true },
+      valid: false,
+      touched: false,
+    },
+    email: {
+      value: '',
+      validation: { required: true },
+      valid: false,
+      touched: false,
+    },
+    deliveryMethod: { value: 'fastest' },
+  });
 
-  orderHandler = async event => {
+  const [loading, setLoading] = React.useState(false);
+  const [canSubmit, setcanSubmit] = React.useState(false);
+  const {
+    ingredients,
+    totalPrice,
+    postOreder,
+    history: { push },
+  } = props;
+  const orderHandler = async event => {
     event.preventDefault();
-    this.setState({ loading: true });
-    const { push } = this.props.history;
-    const { ingredients, totalPrice, postOreder } = this.props;
-    const { formValues, canSubmit } = this.state;
+    setLoading(true);
     const cache = {};
     Object.keys(formValues).forEach(key => {
       cache[key] = formValues[key].value;
@@ -139,55 +140,46 @@ export class ContactData extends Component {
     if (canSubmit) {
       try {
         await postOreder(orders);
-        this.setState({ loading: false });
+        setLoading(false);
         push('/');
       } catch (err) {
-        this.setState({ loading: false });
+        setLoading(false);
       }
     }
   };
 
-  handleInputChange = ({ target: { value } }, id) => {
-    const { formValues } = this.state;
+  const handleInputChange = useCallback(({ target: { value } }, id) => {
     const { validation } = formValues[id];
     if (id === 'deliveryMethod') {
-      this.setState({
-        formValues: {
-          ...formValues,
-          [id]: {
-            value,
-          },
+      setFormValues({
+        ...formValues,
+        [id]: {
+          value,
         },
       });
     } else {
-      this.setState({
-        formValues: {
-          ...formValues,
-          [id]: {
-            value,
-            validation,
-            valid: this.checkValidity(value, validation),
-            touched: true,
-          },
+      setFormValues({
+        ...formValues,
+        [id]: {
+          value,
+          validation,
+          valid: checkValidity(value, validation),
+          touched: true,
         },
       });
     }
-    // eslint-disable-next-line no-shadow
-    this.setState(({ formValues }) => ({
-      canSubmit: this.updateCanSubmitState(formValues),
-    }));
-  };
+    setcanSubmit(updateCanSubmitState(formValues));
+  }, [formValues]);
 
-  updateCanSubmitState = formValues => {
+  const updateCanSubmitState = formValues => {
     const cache = [];
-
     Object.keys(formValues).forEach(formItem => {
       formValues[formItem].validation && cache.push(formValues[formItem].valid);
     });
     return cache.every(item => item);
   };
 
-  checkValidity = (value, rule) => {
+  const checkValidity = (value, rule) => {
     let isValid = true;
     if (rule.required) {
       isValid = value.trim() !== '' && isValid;
@@ -203,27 +195,30 @@ export class ContactData extends Component {
     return isValid;
   };
 
-  render() {
-    const { loading, formValues, canSubmit } = this.state;
-    const formElementArray = Object.keys(orderForm).map(formItem => {
-      return {
-        id: formItem,
-        config: {
-          value: formValues[formItem].value,
-          valid: formValues[formItem].valid,
-          shouldValidate: formValues[formItem].validation,
-          touched: formValues[formItem].touched,
-          ...orderForm[formItem],
-        },
-      };
-    });
-    let form = (
-      <form onSubmit={this.orderHandler}>
+  const formElementArray = useMemo(
+    () =>
+      Object.keys(orderForm).map(formItem => {
+        return {
+          id: formItem,
+          config: {
+            value: formValues[formItem].value,
+            valid: formValues[formItem].valid,
+            shouldValidate: formValues[formItem].validation,
+            touched: formValues[formItem].touched,
+            ...orderForm[formItem],
+          },
+        };
+      }),
+    [formValues],
+  );
+  let form = useMemo(
+    () => (
+      <form onSubmit={orderHandler}>
         {formElementArray.map(({ id, config }) => (
           <Input
             key={id}
             handleInputChange={event => {
-              this.handleInputChange(event, id);
+              handleInputChange(event, id);
             }}
             {...config}
           />
@@ -232,20 +227,20 @@ export class ContactData extends Component {
           ORDER
         </Button>
       </form>
-    );
-
-    if (loading) {
-      form = <Spinner />;
-    }
-
-    return (
-      <div className={classes.ContactData}>
-        <h4>Enter your Contact data</h4>
-        {form}
-      </div>
-    );
+    ),
+    // eslint-disable-next-line
+    [formElementArray],
+  );
+  if (loading) {
+    form = <Spinner />;
   }
-}
+  return (
+    <div className={classes.ContactData}>
+      <h4>Enter your Contact data</h4>
+      {form}
+    </div>
+  );
+};
 const mapDispatchToProps = {
   postOreder: postOrederThunk,
 };
