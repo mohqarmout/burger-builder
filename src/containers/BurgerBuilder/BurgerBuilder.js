@@ -24,8 +24,8 @@ export const INGREDIENT_PRICES = {
 };
 
 export const BurgerBuilder = props => {
-  const [purchasing, setBurchasing] = React.useState(false);
-  const [error, setError] = React.useState(false);
+  const [purchasing, setBurchasing] = useState(false);
+  const [error, setError] = useState(false);
 
   const isMounted = useIsMounted();
   const {
@@ -69,6 +69,7 @@ export const BurgerBuilder = props => {
       setRedirectPath('/checkout');
       push('/auth');
     }
+     // eslint-disable-next-line
   }, [authenticated]);
 
   const updatePurchaseState = useCallback(() => {
