@@ -147,7 +147,7 @@ export const ContactData = props => {
       }
     }
   };
-
+// @greg -- I think useCallback Implements Closure !! 
   const handleInputChange = useCallback(({ target: { value } }, id) => {
     const { validation } = formValues[id];
     if (id === 'deliveryMethod') {

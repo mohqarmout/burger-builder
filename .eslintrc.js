@@ -13,7 +13,7 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:jest/style',
     'plugin:prettier/recommended',
-    "plugin:react-hooks/recommended"
+    'plugin:react-hooks/recommended',
   ],
   globals: {
     Atomics: 'readonly',
@@ -26,7 +26,14 @@ module.exports = {
     ecmaVersion: 2020,
     sourceType: 'module',
   },
-  plugins: ['react', 'prettier', 'jsx-a11y', 'react-redux', 'jest'],
+  plugins: [
+    'react',
+    'prettier',
+    'jsx-a11y',
+    'react-redux',
+    'jest',
+    'react-hooks',
+  ],
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/state-in-constructor': [0, 'always'],
@@ -39,6 +46,8 @@ module.exports = {
     'react/prop-types': [0],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-use-before-define': ['error', false],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
   settings: {
     'import/resolver': {
