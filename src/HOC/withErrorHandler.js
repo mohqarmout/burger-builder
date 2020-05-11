@@ -1,9 +1,10 @@
 import React from 'react';
+import useIsMounted from 'hooks/useIsMounted';
 
 import Modal from 'components/UI/Modal/Modal';
 
 const withErrorHandler = (WarppedComponent, axios) => props => {
-  let mounted = React.useRef(null);
+  const ismountd = useIsMounted();
   let axiosRequest = null;
   let axiosResponse = null;
   const errorHandler = () => {
@@ -12,13 +13,13 @@ const withErrorHandler = (WarppedComponent, axios) => props => {
   const [error, setError] = React.useState(false);
   axiosRequest = axios.interceptors.request.use(
     req => {
-      if (mounted.current) {
+      if (ismountd.current) {
         setError(null);
       }
       return req;
     },
     error => {
-      if (mounted.current) {
+      if (ismountd.current) {
         setError(error);
       }
       return Promise.reject(error);
@@ -27,18 +28,16 @@ const withErrorHandler = (WarppedComponent, axios) => props => {
   axiosResponse = axios.interceptors.response.use(
     res => res,
     error => {
-      if (mounted.current) {
+      if (ismountd.current) {
         setError(error);
       }
       return Promise.reject(error);
     },
   );
   React.useEffect(() => {
-    mounted.current = true;
     return () => {
       axios.interceptors.request.eject(axiosRequest);
       axios.interceptors.response.eject(axiosResponse);
-      mounted.current = false;
     };
   });
   return (
