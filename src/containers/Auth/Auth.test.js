@@ -1,21 +1,29 @@
+import React from 'react';
 import setupShallowWrapper from 'test/helpers/setupShallowWrapper';
 import setupMountWrapper from 'test/helpers/setupMountWrapper';
 import Spinner from 'components/UI/Spinner/Spinner';
 
 import { Auth } from './Auth';
 
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
 test('renders without error', () => {
   const wrapper = setupShallowWrapper(Auth);
   expect(wrapper).toHaveLength(1);
 });
 test('view an error on error state', () => {
+  jest
+    .spyOn(React, 'useState')
+    .mockReturnValueOnce([false])
+    .mockReturnValueOnce([true]);
   const wrapper = setupShallowWrapper(Auth);
-  wrapper.setState({ loading: true });
   expect(wrapper.find(Spinner)).toHaveLength(1);
 });
 test('show SINGUP as default state', () => {
   const wrapper = setupMountWrapper(Auth);
-  expect(wrapper.text()).toContain('SINGIN');
+  expect(wrapper.text()).toContain('SUBMITSWITCH TO SINGUP');
 });
 test('toggle signin signout ', () => {
   const wrapper = setupMountWrapper(Auth);
@@ -23,12 +31,12 @@ test('toggle signin signout ', () => {
     .find('button')
     .at(2)
     .simulate('click');
-  expect(wrapper.text()).toContain('SINGUP');
+  expect(wrapper.text()).toContain('SUBMITSWITCH TO SINGIN');
   wrapper
     .find('button')
     .at(2)
     .simulate('click');
-  expect(wrapper.text()).toContain('SINGIN');
+  expect(wrapper.text()).toContain('SUBMITSWITCH TO SINGUP');
 });
 test('should submit when input pass the validation', () => {
   const getAuth = jest.fn();
@@ -50,7 +58,6 @@ test('should submit when input pass the validation', () => {
     .debug();
   expect(getAuth).toHaveBeenCalled();
 });
-
 test('should view the error coming form redux store', () => {
   const wrapper = setupMountWrapper(Auth, {
     authError: { message: 'test.test.test' },

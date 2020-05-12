@@ -44,9 +44,7 @@ export const BurgerBuilder = props => {
       try {
         await inintIngredient();
       } catch (error) {
-        if (isMounted.current) {
-          setError(true);
-        }
+        isMounted.current && setError(true);
       }
     })();
     // eslint-disable-next-line
@@ -69,7 +67,7 @@ export const BurgerBuilder = props => {
       setRedirectPath('/checkout');
       push('/auth');
     }
-     // eslint-disable-next-line
+    // eslint-disable-next-line
   }, [authenticated]);
 
   const updatePurchaseState = useCallback(() => {

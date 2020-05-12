@@ -14,8 +14,8 @@ export const Orders = props => {
   React.useEffect(() => {
     setlLoading(true);
     (async () => {
+      await fetchOrder();
       if (ismountd.current) {
-        await fetchOrder();
         setlLoading(false);
       }
     })();

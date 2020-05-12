@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import useIsMounted from 'hooks/useIsMounted';
 import { postAuthThunk, authSetRedirectPath } from 'actions';
 import Button from 'components/UI/Button/Button';
 import Spinner from 'components/UI/Spinner/Spinner';
@@ -22,66 +23,52 @@ const authForm = {
     htmlFor: 'password',
   }),
 };
-export class Auth extends Component {
-  state = {
-    formItems: {
-      email: {
-        value: '',
-        validation: { required: true },
-        valid: false,
-        touched: false,
-      },
-      password: {
-        value: '',
-        validation: { required: true, minLength: 6, maxLength: 8 },
-        valid: false,
-        touched: false,
-      },
+export const Auth = props => {
+  const [formItems, setFormItems] = useState({
+    email: {
+      value: '',
+      validation: { required: true },
+      valid: false,
+      touched: false,
     },
-    canSubmit: false,
-    loading: false,
-    isSignedUp: true,
-  };
+    password: {
+      value: '',
+      validation: { required: true, minLength: 6, maxLength: 8 },
+      valid: false,
+      touched: false,
+    },
+  });
 
-  componentDidMount() {
-    const { buildingBurger } = this.props;
+  const [canSubmit, setCanSumbit] = React.useState(false);
+  const [loading, setloading] = React.useState(false);
+  const [isSignedUp, setisSignedUp] = React.useState(false);
+  const isMounted = useIsMounted();
+
+  const {
+    authError,
+    authenticated,
+    authRedirect,
+    buildingBurger,
+    getAuth,
+  } = props;
+
+  useEffect(() => {
     if (buildingBurger) {
       authSetRedirectPath('/checkout');
     } else {
       authSetRedirectPath('/');
     }
-  }
+  }, [buildingBurger]);
 
-  handleInputChange = ({ target: { value } }, id) => {
-    const { formItems } = this.state;
-    const { validation } = formItems[id];
-    this.setState({
-      formItems: {
-        ...formItems,
-        [id]: {
-          value,
-          validation,
-          valid: this.checkValidity(value, validation),
-          touched: true,
-        },
-      },
-    });
-    // eslint-disable-next-line no-shadow
-    this.setState(({ formItems }) => ({
-      canSubmit: this.updateCanSubmitState(formItems),
-    }));
-  };
-
-  updateCanSubmitState = formValues => {
+  const updateCanSubmitState = formValues => {
     const cache = [];
-
     Object.keys(formValues).forEach(formItem => {
       formValues[formItem].validation && cache.push(formValues[formItem].valid);
     });
     return cache.every(item => item);
   };
 
-  checkValidity = (value, rule) => {
+  const checkValidity = (value, rule) => {
     let isValid = true;
     if (rule.required) {
       isValid = value.trim() !== '' && isValid;
@@ -97,90 +84,119 @@ export class Auth extends Component {
     return isValid;
   };
 
-  submitHandler = async event => {
-    event.preventDefault();
-    const { getAuth } = this.props;
-    const {
-      formItems: {
+  const handleInputChange = useCallback(
+    ({ target: { value } }, id) => {
+      const { validation } = formItems[id];
+      setFormItems({
+        ...formItems,
+        [id]: {
+          value,
+          validation,
+          valid: checkValidity(value, validation),
+          touched: true,
+        },
+      });
+      setCanSumbit(
+        updateCanSubmitState({
+          ...formItems,
+          [id]: {
+            value,
+            validation,
+            valid: checkValidity(value, validation),
+            touched: true,
+          },
+        }),
+      );
+    },
+    [formItems],
+  );
+
+  const submitHandler = useCallback(
+    async event => {
+      event.preventDefault();
+
+      const {
         email: { value: email },
         password: { value: password },
-      },
-      canSubmit,
-      isSignedUp,
-    } = this.state;
-    if (canSubmit) {
-      this.setState({ loading: true });
-      await getAuth(email, password, isSignedUp);
-      // this.setState({ loading: false });
-      // ! next time mange to add the loading state and error to redux
-    }
-  };
+      } = formItems;
+      if (canSubmit) {
+        await getAuth(email, password, isSignedUp);
+        isMounted.current && setloading(true);
+      }
+    },
+    // eslint-disable-next-line
+    [formItems, canSubmit],
+  );
 
-  SwitchAuthModeHandler = () => {
-    this.setState(prevState => {
-      return { isSignedUp: !prevState.isSignedUp };
-    });
-  };
+  const SwitchAuthModeHandler = useCallback(() => {
+    setisSignedUp(!isSignedUp);
+  }, [isSignedUp]);
 
-  render() {
-    const { formItems, loading, canSubmit, isSignedUp } = this.state;
-    const { authError, authenticated, authRedirect } = this.props;
+  const formElementArray = useMemo(
+    () =>
+      Object.keys(authForm).map(formItem => {
+        return {
+          id: formItem,
+          config: {
+            value: formItems[formItem].value,
+            valid: formItems[formItem].valid,
+            shouldValidate: formItems[formItem].validation,
+            touched: formItems[formItem].touched,
+            ...authForm[formItem],
+          },
+        };
+      }),
+    [formItems],
+  );
 
-    const formElementArray = Object.keys(authForm).map(formItem => {
-      return {
-        id: formItem,
-        config: {
-          value: formItems[formItem].value,
-          valid: formItems[formItem].valid,
-          shouldValidate: formItems[formItem].validation,
-          touched: formItems[formItem].touched,
-          ...authForm[formItem],
-        },
-      };
-    });
+  let form = useMemo(
+    () => (
+      <>
+        {formElementArray.map(({ id, config }) => (
+          <Input
+            key={id}
+            handleInputChange={event => {
+              handleInputChange(event, id);
+            }}
+            {...config}
+          />
+        ))}
+      </>
+    ),
+    [formElementArray, handleInputChange],
+  );
+  let errorMessage = null;
 
-    let form = formElementArray.map(({ id, config }) => (
-      <Input
-        key={id}
-        handleInputChange={event => {
-          this.handleInputChange(event, id);
+  if (authError) {
+    errorMessage = (
+      <p
+        style={{
+          color: 'red',
         }}
-        {...config}
-      />
-    ));
-    let errorMessage = null;
-
-    if (authError) {
-      errorMessage = (
-        <p
-          style={{
-            color: 'red',
-          }}
-        >
-          {authError.message}
-        </p>
-      );
-    }
-    if (loading) {
-      form = <Spinner />;
-    }
-    return (
-      <div className={classes.Auth}>
-        {authenticated ? <Redirect to={authRedirect} /> : null}
-        <form onSubmit={this.submitHandler}>
-          {form}
-          <Button active={canSubmit} type="submit" btnType="Success">
-            SUBMIT
-          </Button>
-          <Button btnType="Danger" clicked={this.SwitchAuthModeHandler}>
-            SWITCH TO {isSignedUp ? 'SINGIN' : 'SINGUP'}
-          </Button>
-        </form>
-        {errorMessage}
-      </div>
+      >
+        {authError.message}
+      </p>
     );
   }
-}
+  if (loading) {
+    form = <Spinner />;
+  }
+  return (
+    <div className={classes.Auth}>
+      {authenticated ? <Redirect to={authRedirect} /> : null}
+      <form onSubmit={submitHandler}>
+        {form}
+        <Button active={canSubmit} type="submit" btnType="Success">
+          SUBMIT
+        </Button>
+        <Button btnType="Danger" clicked={SwitchAuthModeHandler}>
+          SWITCH TO {isSignedUp ? 'SINGIN' : 'SINGUP'}
+        </Button>
+      </form>
+      {errorMessage}
+    </div>
+  );
+};
 
 const mapDispatchToProps = { getAuth: postAuthThunk, authSetRedirectPath };
 

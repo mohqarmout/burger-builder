@@ -147,29 +147,32 @@ export const ContactData = props => {
       }
     }
   };
-// @greg -- I think useCallback Implements Closure !! 
-  const handleInputChange = useCallback(({ target: { value } }, id) => {
-    const { validation } = formValues[id];
-    if (id === 'deliveryMethod') {
-      setFormValues({
-        ...formValues,
-        [id]: {
-          value,
-        },
-      });
-    } else {
-      setFormValues({
-        ...formValues,
-        [id]: {
-          value,
-          validation,
-          valid: checkValidity(value, validation),
-          touched: true,
-        },
-      });
-    }
-    setcanSubmit(updateCanSubmitState(formValues));
-  }, [formValues]);
+  // @greg -- I think useCallback Implements Closure !! ===> I think it close over formItem
+  const handleInputChange = useCallback(
+    ({ target: { value } }, id) => {
+      const { validation } = formValues[id];
+      if (id === 'deliveryMethod') {
+        setFormValues({
+          ...formValues,
+          [id]: {
+            value,
+          },
+        });
+      } else {
+        setFormValues({
+          ...formValues,
+          [id]: {
+            value,
+            validation,
+            valid: checkValidity(value, validation),
+            touched: true,
+          },
+        });
+      }
+      setcanSubmit(updateCanSubmitState(formValues));
+    },
+    [formValues],
+  );
 
   const updateCanSubmitState = formValues => {
     const cache = [];
