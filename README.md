@@ -7,9 +7,9 @@
 
 ## **User Journey**
 
-The user will be able to build a burger and the app will be able to calculate the price and store the orders in the cloud, also will bea apple to view its order from the cloud.
-
-The user will not be able to purchase the burger unless he is signed in, but he can build one.
+- The user will be able to build a burger and the app will be able to calculate the price and store the orders in the cloud, also will bea apple to view its order from the cloud.
+- New user Will be applied to create account and start using the app
+- The user will not be able to purchase the burger unless he is signed in, but he can build one.
 
 ## **Technologies** :computer:
 
@@ -35,16 +35,6 @@ The user will not be able to purchase the burger unless he is signed in, but he 
 2. Add `REACT_APP_FIREBASE_KEY` for your realtime database
 
 ### database schema
+![burger-builder database schema](https://i.imgur.com/MezVHd5.png)
 
-```json
-{
-  "ingredient": {
-    "bacon": 0,
-    "cheese": 0,
-    "meat": 0,
-    "salad": 0
-  }
-}
-```
-
-> firebase will also create an order field to store the orders
+> firebase will also create an order field to store the order
