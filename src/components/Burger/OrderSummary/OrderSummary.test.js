@@ -10,7 +10,7 @@ const props = {
   },
   price: 10.555,
   purchaseCancelled: jest.fn(),
-  purchaseContinued: jest.fn().mockImplementation(() => {}),
+  purchaseContinued: jest.fn(),
 };
 
 test('BurgerBuilder render with out error', () => {

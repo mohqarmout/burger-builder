@@ -1,10 +1,10 @@
-import setupShallowWrapper from 'test/helpers/setupShallowWrapper';
+import injectRouter from 'test/utils/injectRouter';
 import { Logout } from './Logout';
 
 const logout = jest.fn();
 
 test('renders without error', () => {
-  const wrapper = setupShallowWrapper(Logout, { logout });
+  const wrapper = injectRouter(Logout, { logout }, '/logout');
   expect(wrapper).toHaveLength(1);
 });
 

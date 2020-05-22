@@ -1,7 +1,13 @@
+import React from 'react';
 import setupShallowWrapper from 'test/helpers/setupShallowWrapper';
+import setupMountWrapper from 'test/helpers/setupMountWrapper';
 import Spinner from 'components/UI/Spinner/Spinner';
 import Order from 'components/Order/Order';
 import { Orders } from './Orders';
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 const order = [
   {
@@ -20,17 +26,17 @@ const props = {
   fetchOrder: jest.fn(),
   data: order,
 };
-
 test('renders without error', () => {
   const wrapper = setupShallowWrapper(Orders, props);
   expect(wrapper).toHaveLength(1);
 });
 test('should view spinner on loading state', () => {
-  const wrapper = setupShallowWrapper(Orders, props);
+  jest.spyOn(React, 'useState').mockReturnValue([true, jest.fn()]);
+  const wrapper = setupMountWrapper(Orders, props);
   expect(wrapper.find(Spinner)).toHaveLength(1);
 });
 test('should view at least one Order component', () => {
   const wrapper = setupShallowWrapper(Orders, props);
-  wrapper.setState({ loading: false });
+  jest.spyOn(React, 'useState').mockReturnValue([false, jest.fn()]);
   expect(wrapper.find(Order)).toHaveLength(1);
 });
