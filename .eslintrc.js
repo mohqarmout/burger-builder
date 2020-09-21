@@ -7,13 +7,13 @@ module.exports = {
   extends: [
     'airbnb',
     'react-app',
-    'prettier/react',
     'plugin:jsx-a11y/recommended',
     'plugin:react-redux/recommended',
     'plugin:jest/recommended',
     'plugin:jest/style',
     'plugin:prettier/recommended',
     'plugin:react-hooks/recommended',
+    'prettier/react',
   ],
   globals: {
     Atomics: 'readonly',
