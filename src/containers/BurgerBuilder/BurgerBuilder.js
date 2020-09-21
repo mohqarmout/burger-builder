@@ -24,7 +24,7 @@ export const INGREDIENT_PRICES = {
 };
 
 export const BurgerBuilder = props => {
-  const [purchasing, setBurchasing] = useState(false);
+  const [purchasing, setPurchasing] = useState(false);
   const [error, setError] = useState(false);
 
   const isMounted = useIsMounted();
@@ -47,27 +47,27 @@ export const BurgerBuilder = props => {
         isMounted.current && setError(true);
       }
     })();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const purchaseContinueHandler = useCallback(() => {
     push('/checkout');
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const purchaseCancelHandler = useCallback(() => {
-    setBurchasing(false);
-    // eslint-disable-next-line
+    setPurchasing(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const purchaseHandler = useCallback(() => {
     if (authenticated) {
-      setBurchasing(true);
+      setPurchasing(true);
     } else {
       setRedirectPath('/checkout');
       push('/auth');
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authenticated]);
 
   const updatePurchaseState = useCallback(() => {
@@ -79,41 +79,38 @@ export const BurgerBuilder = props => {
     return sum > 0;
   }, [ingredients]);
 
-  let orderSummary = null;
-  let burger = <Spinner />;
-
   const disabledInfo = useMemo(() => {
     return {
       ...ingredients,
     };
   }, [ingredients]);
 
-  if (ingredients) {
-    orderSummary = (
-      <OrderSummary
-        ingredients={ingredients}
+  let orderSummary = ingredients ? (
+    <OrderSummary
+      ingredients={ingredients}
+      price={totalPrice}
+      purchaseContinued={purchaseContinueHandler}
+      purchaseCancelled={purchaseCancelHandler}
+    />
+  ) : (
+    <Spinner />
+  );
+  let burger = ingredients ? (
+    <>
+      <Burger ingredients={ingredients} />
+      <BuildControls
+        ingredientAdded={addIngredient}
+        ingredientRemoved={removeIngredient}
+        disabled={disabledInfo}
+        purchasable={updatePurchaseState()}
+        ordered={purchaseHandler}
         price={totalPrice}
-        purchaseContinued={purchaseContinueHandler}
-        purchaseCancelled={purchaseCancelHandler}
+        authenticated={authenticated}
       />
-    );
-    burger = (
-      <>
-        <Burger ingredients={ingredients} />
-        <BuildControls
-          ingredientAdded={addIngredient}
-          ingredientRemoved={removeIngredient}
-          disabled={disabledInfo}
-          purchasable={updatePurchaseState()}
-          ordered={purchaseHandler}
-          price={totalPrice}
-          authenticated={authenticated}
-        />
-      </>
-    );
-  } else {
-    orderSummary = <Spinner />;
-  }
+    </>
+  ) : (
+    <Spinner />
+  );
 
   if (error) {
     burger = <p>sorry something went wrong</p>;
