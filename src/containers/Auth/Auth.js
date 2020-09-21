@@ -46,7 +46,7 @@ export const Auth = props => {
 
   const {
     authError,
-    authenticated,
+    isAuthenticated,
     authRedirect,
     buildingBurger,
     getAuth,
@@ -124,7 +124,7 @@ export const Auth = props => {
         isMounted.current && setloading(true);
       }
     },
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [formItems, canSubmit],
   );
 
@@ -183,7 +183,7 @@ export const Auth = props => {
   }
   return (
     <div className={classes.Auth}>
-      {authenticated ? <Redirect to={authRedirect} /> : null}
+      {isAuthenticated ? <Redirect to={authRedirect} /> : null}
       <form onSubmit={submitHandler}>
         {form}
         <Button active={canSubmit} type="submit" btnType="Success">
@@ -206,7 +206,7 @@ const mapStateToProps = ({
 }) => {
   return {
     authError: error,
-    authenticated: Boolean(token),
+    isAuthenticated: Boolean(token),
     buildingBurger: building,
     authRedirect,
   };
