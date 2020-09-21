@@ -46,7 +46,7 @@ export const Auth = props => {
 
   const {
     authError,
-    authenticated,
+    isAuthenticated,
     authRedirect,
     buildingBurger,
     getAuth,
@@ -113,18 +113,21 @@ export const Auth = props => {
 
   const submitHandler = useCallback(
     async event => {
-      event.preventDefault();
-
-      const {
-        email: { value: email },
-        password: { value: password },
-      } = formItems;
-      if (canSubmit) {
-        await getAuth(email, password, isSignedUp);
-        isMounted.current && setloading(true);
+      try {
+        event.preventDefault();
+        const {
+          email: { value: email },
+          password: { value: password },
+        } = formItems;
+        if (canSubmit) {
+          await getAuth(email, password, isSignedUp);
+          isMounted.current && setloading(true);
+        }
+      } catch (error) {
+        setloading(false);
       }
     },
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [formItems, canSubmit],
   );
 
@@ -165,25 +168,22 @@ export const Auth = props => {
     ),
     [formElementArray, handleInputChange],
   );
-  let errorMessage = null;
+  let errorMessage = authError ? (
+    <p
+      style={{
+        color: 'red',
+      }}
+    >
+      Please check your info
+    </p>
+  ) : null;
 
-  if (authError) {
-    errorMessage = (
-      <p
-        style={{
-          color: 'red',
-        }}
-      >
-        {authError.message}
-      </p>
-    );
-  }
   if (loading) {
     form = <Spinner />;
   }
   return (
     <div className={classes.Auth}>
-      {authenticated ? <Redirect to={authRedirect} /> : null}
+      {isAuthenticated ? <Redirect to={authRedirect} /> : null}
       <form onSubmit={submitHandler}>
         {form}
         <Button active={canSubmit} type="submit" btnType="Success">
@@ -206,7 +206,7 @@ const mapStateToProps = ({
 }) => {
   return {
     authError: error,
-    authenticated: Boolean(token),
+    isAuthenticated: Boolean(token),
     buildingBurger: building,
     authRedirect,
   };

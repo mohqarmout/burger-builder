@@ -97,10 +97,13 @@ test('create POST AUTH SUCCESS action once the app is loaded and the token still
 });
 
 test('create POST_AUTHU_FAIL action', async () => {
-  const error = new Error('Async error');
+  const error = new Error('Auth Error');
   const store = mockStore({});
-  axios.post.mockRejectedValue(error);
-  await store.dispatch(postAuthThunk('test@test.com', '123456', 'true'));
-  expect(localStorage.getItem('token')).toBeNull();
-  expect(store.getActions()[0]).toEqual(authfail(error));
+  try {
+    axios.post.mockRejectedValue(error);
+    await store.dispatch(postAuthThunk('test@test.com', '123456', 'true'));
+  } catch (error) {
+    expect(localStorage.getItem('token')).toBeNull();
+    expect(store.getActions()[0]).toEqual(authfail(error));
+  }
 });

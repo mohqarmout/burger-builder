@@ -2,8 +2,17 @@
 
 ## **Team Members**
 
-- [Greg Westneat](https://github.com/leggomuhgreggo) (The boss down here)
-- [Mohammed Qarmout](https://github.com/FadiAlamassi)
+- [Greg Westneat](https://github.com/leggomuhgreggo)
+- [Mohammed Qarmout](https://github.com/Mohammed-Q96)
+
+## **Live demo deployed in firebase**
+
+> https://react-my-burger-a3016.web.app/
+
+**Here login credentials**
+
+- _Email_ : test@test.com
+- _password_ :123456
 
 ## **User Journey**
 
@@ -35,6 +44,7 @@
 2. Add `REACT_APP_FIREBASE_KEY` for your realtime database
 
 ### database schema
+
 ![burger-builder database schema](https://i.imgur.com/MezVHd5.png)
 
 > firebase will also create an order field to store the order
