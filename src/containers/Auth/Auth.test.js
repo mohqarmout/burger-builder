@@ -62,5 +62,5 @@ test('should view the error coming form redux store', () => {
   const wrapper = setupMountWrapper(Auth, {
     authError: { message: 'test.test.test' },
   });
-  expect(wrapper.text()).toContain('test.test.test');
+  expect(wrapper.text()).toContain('Please check your info');
 });

@@ -60,7 +60,8 @@ export const postAuthThunk = (email, password, isSingUp) => async (
     dispatch(authSeccess(data.idToken, data.localId));
     dispatch(checkAuthTimeOutThunk({ seconds: data.expiresIn }));
   } catch (error) {
-    return dispatch(authfail(error));
+    dispatch(authfail(error));
+    throw new Error('Auth Error');
   }
 };
 
