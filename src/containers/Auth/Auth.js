@@ -190,7 +190,7 @@ export const Auth = props => {
           SUBMIT
         </Button>
         <Button btnType="Danger" clicked={SwitchAuthModeHandler}>
-          SWITCH TO {isSignedUp ? 'SINGIN' : 'SINGUP'}
+          SWITCH TO {isSignedUp ? 'SIGN IN' : 'SIGN UP'}
         </Button>
       </form>
       {errorMessage}
