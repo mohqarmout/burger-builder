@@ -23,7 +23,7 @@ test('view an error on error state', () => {
 });
 test('show SINGUP as default state', () => {
   const wrapper = setupMountWrapper(Auth);
-  expect(wrapper.text()).toContain('SUBMITSWITCH TO SINGUP');
+  expect(wrapper.text()).toContain('SUBMITSWITCH TO SIGN UP');
 });
 test('toggle signin signout ', () => {
   const wrapper = setupMountWrapper(Auth);
@@ -31,12 +31,12 @@ test('toggle signin signout ', () => {
     .find('button')
     .at(2)
     .simulate('click');
-  expect(wrapper.text()).toContain('SUBMITSWITCH TO SINGIN');
+  expect(wrapper.text()).toContain('SUBMITSWITCH TO SIGN IN');
   wrapper
     .find('button')
     .at(2)
     .simulate('click');
-  expect(wrapper.text()).toContain('SUBMITSWITCH TO SINGUP');
+  expect(wrapper.text()).toContain('SUBMITSWITCH TO SIGN UP');
 });
 test('should submit when input pass the validation', () => {
   const getAuth = jest.fn();
