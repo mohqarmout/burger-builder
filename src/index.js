@@ -18,7 +18,7 @@ let store = createStore(
 );
 
 if (process.env.NODE_ENV !== 'development') {
-  store = createStore(rootReducer);
+  store = createStore(rootReducer, applyMiddleware(thunk));
 }
 
 ReactDOM.render(
