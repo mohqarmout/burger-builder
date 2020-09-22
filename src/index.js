@@ -18,7 +18,10 @@ let store = createStore(
 );
 
 if (process.env.NODE_ENV !== 'development') {
-  store = createStore(rootReducer, thunk.withExtraArgument({ axios }));
+  store = createStore(
+    rootReducer,
+    applyMiddleware(thunk.withExtraArgument({ axios })),
+  );
 }
 
 ReactDOM.render(
