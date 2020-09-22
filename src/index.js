@@ -11,16 +11,18 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 10 });
-let store = createStore(
-  rootReducer,
-  composeEnhancers(applyMiddleware(thunk.withExtraArgument({ axios }))),
-);
+let store;
 
 if (process.env.NODE_ENV !== 'development') {
   store = createStore(
     rootReducer,
     applyMiddleware(thunk.withExtraArgument({ axios })),
+  );
+} else {
+  const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 10 });
+  store = createStore(
+    rootReducer,
+    composeEnhancers(applyMiddleware(thunk.withExtraArgument({ axios }))),
   );
 }
 
